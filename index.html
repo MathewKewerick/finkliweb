@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="cs">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Finkli — Finanční klinika</title>
+  <meta name="description" content="Finance postavené na plánu, systému a péči v čase. Nejsme postavení na prodeji produktů, ale na dlouhodobé spolupráci a péči." />
+
+  <meta name="theme-color" content="#F4FFF9" />
+
+  <!-- Favicon (SVG mark) -->
+  <link rel="icon" type="image/svg+xml" href="assets/ikona_favicon.svg" />
+  <link rel="apple-touch-icon" href="assets/ikona_favicon.svg" />
+
+  <!-- Google Sans Flex -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:opsz,wght@8..144,100..1000&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- ===== Header ===== -->
+  <header class="header" id="site-header">
+    <div class="header__inner">
+      <a href="#" class="header__brand" aria-label="Finkli — domů">
+        <img src="assets/finkli_logo_dark.svg" alt="Finkli" class="header__logo" />
+      </a>
+
+      <nav class="header__nav" aria-label="Hlavní">
+        <a href="#onas">O nás</a>
+        <a href="#sluzby">Co děláme</a>
+        <a href="#balicky">Balíčky</a>
+        <a href="#pristup">Přístup</a>
+      </nav>
+
+      <a href="#kontakt" class="header__cta header__cta--desktop" data-desktop>Kontakt</a>
+
+      <button class="header__burger" type="button" aria-label="Otevřít menu" aria-controls="mobile-menu" aria-expanded="false">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- ===== Mobile menu overlay ===== -->
+  <div class="mobile-menu" id="mobile-menu" aria-hidden="true">
+    <div class="mobile-menu__top">
+      <a href="#" class="header__brand" aria-label="Finkli — domů">
+        <img src="assets/finkli_logo_dark.svg" alt="Finkli" class="header__logo" />
+      </a>
+      <button class="mobile-menu__close" type="button" aria-label="Zavřít menu">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </button>
+    </div>
+
+    <nav class="mobile-menu__nav" aria-label="Mobilní">
+      <a href="#onas">O nás</a>
+      <a href="#sluzby">Co děláme</a>
+      <a href="#balicky">Balíčky</a>
+      <a href="#pristup">Přístup</a>
+    </nav>
+
+    <a href="#kontakt" class="mobile-menu__cta">Kontakt</a>
+  </div>
+
+  <!-- ===== Hero ===== -->
+  <section class="hero" id="hero">
+    <div class="hero__bg" aria-hidden="true"></div>
+    <img src="assets/finkli_vector_line.svg" alt="" class="hero__deco" aria-hidden="true" />
+
+    <div class="container hero__inner">
+      <div class="hero__copy">
+        <h1 class="h1 hero__title">Finance postavené na&nbsp;plánu, systému a&nbsp;péči v&nbsp;čase.</h1>
+        <p class="hero__sub">
+          Na finance se díváme jako na dlouhodobý proces, ne jednorázové rozhodnutí.
+          <strong>Nejsme postavení na prodeji produktů, ale na dlouhodobé spolupráci a&nbsp;péči.</strong>
+        </p>
+        <div class="hero__actions">
+          <a href="#pristup" class="btn btn--secondary">Zjistit, jak spolupráce funguje</a>
+          <a href="#kontakt" class="btn btn--primary">Nezávazná konzultace</a>
+        </div>
+      </div>
+
+      <!-- Situations: in-hero "hook" — gives the visitor an instant reason to engage.
+           Clicking a chip starts the diagnostic flow (script.js → diagnostic). -->
+      <div class="hero__situations" id="situace">
+        <div class="diagnostic" id="diagnostic">
+
+          <!-- VIEW 1: Chip selection (default) -->
+          <div class="diagnostic__view is-active" data-view="chips">
+            <h2 class="h2 hero__situations-title">Začněte tím, co je Vám nejbližší.</h2>
+            <p class="diagnostic__hint">Během pár kliknutí zjistíte, co by Vám nemělo uniknout a&nbsp;jaký další krok může dávat&nbsp;smysl.</p>
+
+            <div class="situations__grid">
+              <button type="button" class="chip chip--filled" data-situation="0">Chci konečně přehled o&nbsp;svých financích</button>
+              <button type="button" class="chip" data-situation="1">Řeším hypotéku, úvěr nebo refinancování</button>
+              <button type="button" class="chip" data-situation="2">Čeká mě velké životní rozhodnutí</button>
+              <button type="button" class="chip chip--filled" data-situation="3">Mám produkty, ale nevím zda fungují správně</button>
+              <button type="button" class="chip" data-situation="4">Podnikám a&nbsp;chci mít finance i&nbsp;důchod pod kontrolou</button>
+              <button type="button" class="chip chip--filled" data-situation="5">Začínám investovat</button>
+              <button type="button" class="chip" data-situation="6">Mám pojištění, ale nevím zda mě skutečně chrání</button>
+              <button type="button" class="chip chip--filled" data-situation="7">Začínám a&nbsp;chci to dělat správně</button>
+            </div>
+          </div>
+
+          <!-- VIEW 2: Diagnostic card (questions / result / thanks) -->
+          <div class="diagnostic__view diagnostic__card" data-view="card">
+
+            <header class="diagnostic__top">
+              <button type="button" class="diagnostic__back" data-action="back">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span>Zpět na výběr situace</span>
+              </button>
+            </header>
+
+            <!-- Progress (centered) → situation label (centered) → question step -->
+            <div class="diagnostic__progress" data-progress data-current="1" aria-label="Krok 1 ze 3">
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+
+            <p class="diagnostic__situation-label" data-situation-label></p>
+
+            <!-- Steps container — grid-stacked so card height = max(step heights) -->
+            <div class="diagnostic__steps">
+
+              <!-- STEP: Question -->
+              <div class="diagnostic__step is-active" data-step="question">
+                <div class="diagnostic__question-content" data-question-content>
+                  <h3 class="diagnostic__question" data-question></h3>
+                  <div class="diagnostic__answers">
+                    <button type="button" class="diag-btn diag-btn--yes" data-answer="yes">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path d="M5 12l5 5L20 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+                      </svg>
+                      Ano
+                    </button>
+                    <button type="button" class="diag-btn diag-btn--no" data-answer="no">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/>
+                      </svg>
+                      Ne
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- STEP: Result + lead form -->
+              <div class="diagnostic__step" data-step="result">
+                <div class="diagnostic__result-layout">
+                  <div class="diagnostic__result-copy">
+                    <p class="diagnostic__aha" data-result></p>
+                    <p class="diagnostic__cta-text">
+                      Tohle má smysl projít v&nbsp;souvislostech. Na krátké schůzce se podíváme, co už máte vyřešené, kde může být slabé místo a&nbsp;jaký další krok dává smysl.
+                    </p>
+                  </div>
+                  <form class="diagnostic__form" data-form novalidate>
+                    <label class="diagnostic__field">
+                      <span class="diagnostic__field-label">Váš e-mail</span>
+                      <input type="email" name="email" required placeholder="vas@email.cz" autocomplete="email" />
+                    </label>
+                    <label class="diagnostic__field">
+                      <span class="diagnostic__field-label">Chcete nám k&nbsp;tomu něco doplnit?&nbsp;<span class="diagnostic__field-optional">(nepovinné)</span></span>
+                      <textarea name="note" rows="2" placeholder="Volitelná poznámka…"></textarea>
+                    </label>
+                    <button type="submit" class="btn btn--primary diagnostic__submit">Odeslat</button>
+                  </form>
+                </div>
+              </div>
+
+              <!-- STEP: Thanks -->
+              <div class="diagnostic__step" data-step="thanks">
+                <div class="diagnostic__seal" aria-hidden="true">
+                  <svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M40 6C43.65 6 46.25 9.05 49.4 10.08C52.73 11.18 56.63 10.13 59.28 12.15C61.95 14.2 62.15 18.25 64.2 21.05C66.23 23.83 70 25.25 70.8 28.63C71.6 31.93 69.33 35.25 69.33 38.75C69.33 42.25 71.6 45.58 70.8 48.88C70 52.25 66.23 53.68 64.2 56.45C62.15 59.25 61.95 63.3 59.28 65.35C56.63 67.38 52.73 66.33 49.4 67.43C46.25 68.45 43.65 71.5 40 71.5C36.35 71.5 33.75 68.45 30.6 67.43C27.28 66.33 23.38 67.38 20.73 65.35C18.05 63.3 17.85 59.25 15.8 56.45C13.78 53.68 10 52.25 9.2 48.88C8.4 45.58 10.68 42.25 10.68 38.75C10.68 35.25 8.4 31.93 9.2 28.63C10 25.25 13.78 23.83 15.8 21.05C17.85 18.25 18.05 14.2 20.73 12.15C23.38 10.13 27.28 11.18 30.6 10.08C33.75 9.05 36.35 6 40 6Z" fill="#03D98C"/>
+                    <path d="M25.5 41L35.25 50.5L55 31.5" stroke="#0B2E34" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </div>
+                <h3 class="diagnostic__thanks-title">Děkujeme, ozveme se&nbsp;Vám.</h3>
+                <p class="diagnostic__thanks-sub">Brzy se vrátíme zpět ke&nbsp;všem situacím…</p>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Section: Jak ve Finkli spolupracujeme + cyklus ===== -->
+  <section class="section section--coop" id="onas">
+    <div class="container">
+
+      <div class="section__head">
+        <h2 class="h2 section__title">Jak ve Finkli s&nbsp;klienty spolupracujeme</h2>
+      </div>
+
+      <!-- Merged card: Kdo jsme a co děláme — full container width, editorial 2-col -->
+      <div class="coop-cards">
+        <article class="coop-card coop-card--wide">
+          <h3 class="h3 coop-card__title">Kdo jsme a&nbsp;co děláme</h3>
+          <div class="coop-card__body">
+            <p>
+              Finkli vzniklo z&nbsp;přesvědčení, že finance jsou příliš důležité na&nbsp;to, aby se řešily nahodile, nepravidelně, a&nbsp;že se dají dělat i&nbsp;jinak — partnersky, čestně, transparentně a&nbsp;dlouhodobě. Nechtěli jsme být pouze prodejci produktů, ale skutečnými partnery pro Váš finanční život.
+            </p>
+            <p>
+              Nezačínáme produktem a&nbsp;nekončíme sjednáním. Začínáme pochopením Vaší situace jako celku a&nbsp;teprve podle robustního plánu hledáme konkrétní řešení. Po sjednání s&nbsp;Vámi zůstáváme dál, protože péče o&nbsp;finance je proces, ne jednorázová událost.
+            </p>
+            <p>
+              Naším cílem je být Vaším dlouhodobým partnerem pro finanční život s&nbsp;přehledem, systémem a&nbsp;klidem.
+            </p>
+          </div>
+        </article>
+      </div>
+
+      <!-- Sub-section: V jakých oblastech Vám pomáháme -->
+      <div class="subsection-head" id="oblasti">
+        <h3 class="h3 subsection-head__title">V&nbsp;jakých oblastech Vám pomáháme</h3>
+      </div>
+
+      <div class="areas">
+
+        <article class="area-card">
+          <div class="area-card__icon">
+            <img src="assets/cile_icon.png" alt="" />
+          </div>
+          <div class="area-card__pill">Přání a&nbsp;cíle</div>
+          <div class="area-card__sub">Investice, Penze</div>
+          <div class="area-card__divider" aria-hidden="true"></div>
+          <p class="area-card__text">
+            Skrze investice budujeme <strong>majetek a&nbsp;kapitál, který postupně plní Vaše cíle a&nbsp;přání</strong>, ať už je to vlastní bydlení, finanční nezávislost nebo klidný důchod.
+          </p>
+        </article>
+
+        <article class="area-card">
+          <div class="area-card__icon">
+            <img src="assets/pojisteni_icon.png" alt="" />
+          </div>
+          <div class="area-card__pill">Ochrana</div>
+          <div class="area-card__sub">Pojištění</div>
+          <div class="area-card__divider" aria-hidden="true"></div>
+          <p class="area-card__text">
+            Majetek, příjmy i&nbsp;lidé, na&nbsp;kterých Vám záleží, to vše je třeba chránit. <strong>Pojištění zajišťuje, abyste o&nbsp;to, co budujete, nepřišli</strong> vlivem neočekávaných událostí.
+          </p>
+        </article>
+
+        <article class="area-card">
+          <div class="area-card__icon">
+            <img src="assets/uvery_icon.png" alt="" />
+          </div>
+          <div class="area-card__pill">Financování</div>
+          <div class="area-card__sub">Úvěry</div>
+          <div class="area-card__divider" aria-hidden="true"></div>
+          <p class="area-card__text">
+            <strong>Správně nastavený úvěr umožňuje dosáhnout cíle dříve</strong>, zatímco Vaše vlastní peníze dál pracují ve Váš prospěch. Cizí kapitál jako nástroj, ne jako zátěž.
+          </p>
+        </article>
+
+      </div>
+
+      <!-- Sub-section: Spolupráce v čase + cycle diagram -->
+      <div class="cycle-head">
+        <h3 class="h3 cycle-head__title">Spolupráce ve&nbsp;Finkli v&nbsp;čase</h3>
+        <p class="cycle-head__text">
+          <strong>Většina poradců skončí tam, kde my teprve začínáme.</strong> Péče je to, co odlišuje skutečného dlouhodobého partnera od&nbsp;jednorázového poradce — bez ní plán ztrácí aktuálnost a&nbsp;příležitosti unikají. My&nbsp;jsme tu s&nbsp;Vámi dlouhodobě, ne jen při sjednání.
+        </p>
+      </div>
+
+      <!-- Cycle diagram — static SVG export from Figma + invisible hover zones
+           overlaid on each icon for a subtle green halo on hover.
+           Hotspot %-coords derived from icon rect positions in kolecko.svg viewBox 326×261. -->
+      <figure class="cycle-figure"
+              aria-label="Cyklus spolupráce s klientem — 5 kroků (Analýza, Plán, Výběr produktu, Realizace, Péče a servis) s návratem od péče zpět k analýze">
+        <img src="assets/kolecko_text.svg" alt="" class="cycle-figure__svg" />
+
+        <div class="cycle-figure__hotspots" aria-hidden="true">
+          <span class="cycle-hotspot" style="--x: 50.6%;  --y: 4.8%;"></span>  <!-- 1. Analýza -->
+          <span class="cycle-hotspot" style="--x: 80.1%;  --y: 33.7%;"></span> <!-- 2. Plán -->
+          <span class="cycle-hotspot" style="--x: 70.9%;  --y: 77.4%;"></span> <!-- 3. Výběr produktu -->
+          <span class="cycle-hotspot" style="--x: 28.8%;  --y: 77.2%;"></span> <!-- 4. Realizace -->
+          <span class="cycle-hotspot" style="--x: 19.9%;  --y: 33.8%;"></span> <!-- 5. Péče & servis -->
+        </div>
+      </figure>
+
+      <!-- Note below diagram -->
+      <p class="cycle-note">
+        <strong>Přerušovaná zelená linka</strong> ukazuje, čím se Finkli liší od&nbsp;klasického poradce: cyklus se uzavírá péčí a&nbsp;pokračuje dál. Bez péče zůstává otevřený — a&nbsp;spolupráce končí.
+      </p>
+
+    </div>
+  </section>
+
+  <script src="script.js" defer></script>
+</body>
+</html>

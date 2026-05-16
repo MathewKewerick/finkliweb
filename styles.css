@@ -1,0 +1,1640 @@
+/* ==========================================================================
+   Finkli — Onepager
+   Mobile-first, no dependencies.
+   ========================================================================== */
+
+/* ---------- Design tokens ---------- */
+:root {
+  /* Brand */
+  --brand-dark: #0B2E34;
+  --brand-green: #03D98C;
+  --brand-yellow: #FBD028;
+
+  /* Surfaces */
+  --bg-base: #F4FFF9;
+  --bg-mint-soft: #F3FCF8;
+  --bg-mint-tint: #DDFBF0;
+  --bg-mint-mid: #D8FAEC;
+  --bg-mint-card: #EAFBF4;
+  --bg-white: #FFFFFF;
+  --bg-white-glass: rgba(255, 255, 255, 0.72);
+
+  /* Text */
+  --text-base: #0B2E34;
+  --text-muted: rgba(11, 46, 52, 0.7);
+  --text-soft: rgba(11, 46, 52, 0.55);
+
+  /* Borders */
+  --border-soft: rgba(11, 46, 52, 0.08);
+  --border-green-soft: rgba(3, 217, 140, 0.16);
+  --border-green: rgba(3, 217, 140, 0.65);
+
+  /* Shadows */
+  --shadow-sm: 0 4px 14px rgba(11, 46, 52, 0.04);
+  --shadow-md: 0 12px 40px rgba(11, 46, 52, 0.06);
+  --shadow-lg: 0 24px 70px rgba(11, 46, 52, 0.10);
+  --shadow-green: 0 18px 50px rgba(3, 217, 140, 0.18);
+  --shadow-header: 0 8px 30px rgba(11, 46, 52, 0.08);
+  --shadow-header-scroll: 0 14px 40px rgba(11, 46, 52, 0.12);
+
+  /* Radii */
+  --r-sm: 10px;
+  --r-md: 12px;
+  --r-lg: 18px;
+  --r-xl: 22px;
+  --r-2xl: 28px;
+
+  /* Type */
+  --font-sans: 'Google Sans Flex', 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+
+  /* Layout */
+  --container-max: 1200px;
+  --gutter: 20px;
+
+  /* Motion */
+  --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+
+  /* ----- Interactive hover (GLOBAL — tweak here to change everywhere) -----
+     Used by all buttons, chips, CTAs and any "interactive" element.
+     Change these two values and the effect updates across the whole site. */
+  --hover-scale: 1.04;       /* how much the element grows on hover */
+  --hover-duration: 0.28s;   /* how long the hover transition takes */
+}
+
+/* ---------- Reset ---------- */
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--text-base);
+
+  /* ----- Living brand backdrop (GLOBAL — unifies all sections) -----
+     Three soft green radials drift slowly across the viewport, anchored to
+     viewport so the same backdrop appears behind every section.
+     Intensity tuned to match the printed leták — mostly clean mint with
+     just a hint of green at the edges. Pure CSS, GPU-friendly.
+
+     NOTE: a 4th layer that followed the cursor used to live here (alpha 0.07,
+     520×520, position controlled via --mx/--my). Removed on purpose. The
+     matching JS in script.js is commented out (see "Cursor-following
+     backdrop glow"). To bring it back: re-add the radial below as the
+     first layer + an extra 0% 0% slot to background-size, background-position
+     and both keyframe stops, then uncomment the JS block. */
+  background:
+    radial-gradient(55% 50% at 18% 12%, rgba(3, 217, 140, 0.08), transparent 60%),
+    radial-gradient(50% 45% at 85% 88%, rgba(3, 217, 140, 0.06), transparent 60%),
+    radial-gradient(40% 40% at 70% 30%, rgba(3, 217, 140, 0.04), transparent 65%),
+    var(--bg-base);
+  background-attachment: fixed;
+  background-size: 200% 200%, 220% 220%, 200% 200%, 100% 100%;
+  background-position: 0% 0%, 100% 100%, 60% 40%, 0% 0%;
+  animation: bg-drift 55s ease-in-out infinite alternate;
+
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+@keyframes bg-drift {
+  0%   { background-position:   0%   0%, 100% 100%, 60% 40%, 0% 0%; }
+  100% { background-position: 35%  25%,  65%  75%, 30% 65%, 0% 0%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body { animation: none; }
+}
+
+img, svg { display: block; max-width: 100%; }
+button { font: inherit; cursor: pointer; }
+a { color: inherit; text-decoration: none; }
+
+h1, h2, h3, p { margin: 0; }
+
+::selection {
+  background: var(--brand-green);
+  color: var(--brand-dark);
+}
+
+/* ---------- Typography scale (mobile-first, clamp scales up) ---------- */
+.h1 {
+  font-size: clamp(38px, 7.5vw, 64px);
+  line-height: 1.02;
+  letter-spacing: -0.035em;
+  font-weight: 600;
+  color: var(--brand-dark);
+}
+.h2 {
+  font-size: clamp(28px, 5vw, 44px);
+  line-height: 1.08;
+  letter-spacing: -0.03em;
+  font-weight: 600;
+  color: var(--brand-dark);
+}
+.h3 {
+  font-size: clamp(22px, 3vw, 26px);
+  line-height: 1.18;
+  letter-spacing: -0.02em;
+  font-weight: 600;
+  color: var(--brand-dark);
+}
+/* Lead paragraph — bigger than body (16 px), proportional to H1/H2.
+   Use on hero subtitle and section intros where you want emphasis. */
+.lead {
+  font-size: 18px;
+  line-height: 1.6;
+  color: var(--text-base);
+}
+
+@media (min-width: 768px) {
+  .lead { font-size: 19px; }
+}
+.eyebrow {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--brand-dark);
+}
+
+strong { font-weight: 600; }
+
+/* ---------- Layout helpers ---------- */
+.container {
+  width: 100%;
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding-left: var(--gutter);
+  padding-right: var(--gutter);
+}
+
+/* ==========================================================================
+   Header
+   ========================================================================== */
+.header {
+  position: fixed;
+  top: 14px;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  display: flex;
+  justify-content: center;
+  padding: 0 14px;
+  pointer-events: none;
+}
+
+.header__inner {
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+
+  width: 100%;
+  max-width: 640px;
+  padding: 9px 9px 9px 16px;
+
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: saturate(140%) blur(18px);
+  -webkit-backdrop-filter: saturate(140%) blur(18px);
+  border: 1px solid var(--border-soft);
+  border-radius: 16px;
+  box-shadow: var(--shadow-header);
+  transition: box-shadow 0.3s var(--ease), transform 0.3s var(--ease);
+}
+
+.header.is-scrolled .header__inner {
+  box-shadow: var(--shadow-header-scroll);
+}
+
+.header__brand {
+  display: inline-flex;
+  align-items: center;
+  color: var(--brand-dark);
+  flex-shrink: 0;
+}
+
+.header__logo {
+  height: 22px;
+  width: auto;
+  display: block;
+}
+
+@media (min-width: 880px) {
+  .header__logo { height: 24px; }
+}
+
+/* Mobile menu top: logo a bit bigger */
+.mobile-menu__top .header__logo {
+  height: 26px;
+}
+
+.header__nav {
+  display: none;
+}
+
+@media (min-width: 880px) {
+  .header__nav {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+  }
+
+  .header__nav a {
+    padding: 8px 12px;
+    border-radius: 9px;
+    font-size: 13.5px;
+    color: var(--brand-dark);
+    transition: background 0.2s var(--ease), color 0.2s var(--ease);
+  }
+
+  .header__nav a:hover {
+    background: var(--bg-mint-tint);
+  }
+}
+
+.header__cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 9px 16px;
+  background: var(--brand-green);
+  color: var(--brand-dark);
+  font-size: 13.5px;
+  font-weight: 600;
+  border-radius: 10px;
+  /* Uses global --hover-scale / --hover-duration */
+  transition:
+    transform var(--hover-duration) var(--ease),
+    box-shadow var(--hover-duration) var(--ease);
+  white-space: nowrap;
+}
+
+.header__cta:hover {
+  transform: scale(var(--hover-scale));
+  box-shadow: 0 10px 24px rgba(3, 217, 140, 0.28);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .header__cta { transition: box-shadow 0.2s var(--ease); }
+  .header__cta:hover { transform: none !important; }
+}
+
+/* Mobile hamburger */
+.header__burger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border: 0;
+  background: transparent;
+  color: var(--brand-dark);
+  border-radius: 9px;
+  transition: background 0.2s var(--ease);
+}
+
+.header__burger:hover { background: var(--bg-mint-tint); }
+
+@media (min-width: 880px) {
+  .header__burger { display: none; }
+}
+
+.header__burger svg { width: 20px; height: 20px; }
+
+/* Mobile menu overlay */
+.mobile-menu {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: rgba(244, 255, 249, 0.97);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  transform: translateY(-8px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s var(--ease), transform 0.25s var(--ease);
+}
+
+.mobile-menu.is-open {
+  transform: translateY(0);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.mobile-menu__top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.mobile-menu__close {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  border: 1px solid var(--border-soft);
+  background: var(--bg-white);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--brand-dark);
+}
+
+.mobile-menu__nav {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 16px;
+}
+
+.mobile-menu__nav a {
+  padding: 16px 18px;
+  font-size: 22px;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  color: var(--brand-dark);
+  border-radius: 14px;
+  transition: background 0.2s var(--ease);
+}
+
+.mobile-menu__nav a:active { background: var(--bg-mint-tint); }
+
+.mobile-menu__cta {
+  margin-top: auto;
+  width: 100%;
+  padding: 16px;
+  background: var(--brand-green);
+  color: var(--brand-dark);
+  font-size: 16px;
+  font-weight: 600;
+  text-align: center;
+  border-radius: 14px;
+}
+
+/* ==========================================================================
+   Buttons
+   ========================================================================== */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 15px 22px;
+  font-size: 15px;
+  font-weight: 600;
+  border-radius: 12px;
+  border: 1px solid transparent;
+  /* Visual-only scale on hover — controlled by --hover-scale / --hover-duration in :root */
+  transition:
+    transform var(--hover-duration) var(--ease),
+    background var(--hover-duration) var(--ease),
+    border-color var(--hover-duration) var(--ease),
+    box-shadow var(--hover-duration) var(--ease),
+    color var(--hover-duration) var(--ease);
+  white-space: nowrap;
+  min-height: 50px;
+}
+
+.btn:hover {
+  transform: scale(var(--hover-scale));
+}
+
+.btn--primary {
+  background: var(--brand-green);
+  color: var(--brand-dark);
+  box-shadow: 0 8px 22px rgba(3, 217, 140, 0.18);
+}
+
+.btn--primary:hover {
+  box-shadow: 0 14px 32px rgba(3, 217, 140, 0.28);
+}
+
+.btn--secondary {
+  background: var(--bg-white);
+  color: var(--brand-dark);
+  border-color: var(--border-soft);
+}
+
+.btn--secondary:hover {
+  background: var(--bg-mint-soft);
+  box-shadow: var(--shadow-sm);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn { transition: background 0.2s var(--ease), box-shadow 0.2s var(--ease); }
+  .btn:hover { transform: none !important; }
+}
+
+/* ==========================================================================
+   Hero
+   ========================================================================== */
+.hero {
+  position: relative;
+  overflow: hidden;
+  padding: 100px 0 44px;
+  min-height: 100svh;
+  display: flex;
+  align-items: center;
+}
+
+/* .hero__bg — no longer needed (body's drifting backdrop unifies all sections).
+   Element kept in HTML but rendered as a no-op so the existing markup stays valid. */
+.hero__bg { display: none; }
+
+/* Hero brand decoration — finkli outline F-shape, peeking from right edge.
+   No rotation; matches printed leták style. Subtle scroll parallax via JS.
+
+   Positioning intentionally uses viewport units (vh), NOT percent of hero.
+   This way the deco stays put even when hero grows (e.g. when a textarea
+   inside the diagnostic card is resized). */
+.hero__deco {
+  --parallax-y: 0px;
+  position: absolute;
+  pointer-events: none;
+  user-select: none;
+  display: none;
+  width: auto;
+  height: 60vh;
+  max-height: 480px;
+  top: 20vh;
+  right: -140px;
+  transform: translate3d(0, var(--parallax-y), 0);
+  opacity: 0.95;
+  will-change: transform;
+}
+
+@media (min-width: 1024px) {
+  .hero__deco { display: block; }
+}
+
+@media (min-width: 1280px) {
+  .hero__deco {
+    right: -150px;
+    max-height: 520px;
+  }
+}
+
+@media (min-width: 1600px) {
+  .hero__deco {
+    right: -130px;
+    max-height: 540px;
+  }
+}
+
+/* Accessibility: respect reduced-motion preference */
+@media (prefers-reduced-motion: reduce) {
+  .hero__deco {
+    --parallax-y: 0px !important;
+    transform: none !important;
+  }
+}
+
+.hero__inner {
+  position: relative;
+  width: 100%;
+}
+
+.hero__copy {
+  max-width: 720px;
+}
+
+.hero__title {
+  margin-bottom: 20px;
+}
+
+.hero__sub {
+  max-width: 580px;
+  color: var(--text-base);
+  /* Lead style — slightly bigger than body to feel proportional to H1 */
+  font-size: 18px;
+  line-height: 1.6;
+}
+
+@media (min-width: 768px) {
+  .hero__sub { font-size: 19px; }
+}
+
+.hero__actions {
+  margin-top: 28px;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+
+@media (min-width: 560px) {
+  .hero__actions {
+    grid-template-columns: auto auto;
+    justify-content: flex-start;
+    gap: 12px;
+  }
+}
+
+/* ----- In-hero situations block ("hook") ----- */
+.hero__situations {
+  /* Comfortable air between CTAs above and the situations title below.
+     Not so much that the section feels disconnected, but enough to clearly
+     mark a new beat. */
+  margin-top: 56px;
+  position: relative;
+  z-index: 2; /* above hero deco */
+}
+
+@media (min-width: 768px) {
+  .hero__situations { margin-top: 72px; }
+}
+
+@media (min-width: 1024px) {
+  .hero__situations { margin-top: 84px; }
+}
+
+.hero__situations-title {
+  /* Slightly smaller than the H1, so hierarchy stays clear */
+  font-size: clamp(24px, 3.6vw, 36px);
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  margin-bottom: 12px;
+  max-width: 720px;
+}
+
+.diagnostic__hint {
+  color: var(--text-muted);
+  font-size: 15px;
+  line-height: 1.5;
+  margin: 0 0 22px;
+  /* No max-width — let the hint use the full content column so it fits on one line on desktop */
+}
+
+@media (min-width: 768px) {
+  .hero__situations-title { margin-bottom: 14px; }
+  .diagnostic__hint { font-size: 16px; margin-bottom: 26px; }
+}
+
+/* ==========================================================================
+   Diagnostic — interactive flow that lives where the chips were.
+   Click a chip → chips fade out, card fades in → 3 Yes/No questions →
+   result + lead form → thanks. Back link returns to chips.
+
+   Layout strategy: BOTH views (chips + card) share the same CSS Grid cell.
+   Parent height = max(both views). Switching is a crossfade in place —
+   no section jumping, surrounding layout stays calm.
+   ========================================================================== */
+.diagnostic {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr;
+}
+
+.diagnostic__view {
+  grid-area: 1 / 1;
+  opacity: 0;
+  transform: scale(0.97);
+  visibility: hidden;
+  pointer-events: none;
+  z-index: 1;  /* inactive view sits below active one */
+  transition:
+    opacity 0.4s var(--ease),
+    transform 0.4s var(--ease),
+    visibility 0s linear 0.4s;
+}
+
+.diagnostic__view.is-active {
+  opacity: 1;
+  transform: scale(1);
+  visibility: visible;
+  pointer-events: auto;
+  z-index: 2;  /* active view always on top — guarantees clicks land where intended */
+  transition:
+    opacity 0.4s var(--ease),
+    transform 0.4s var(--ease),
+    visibility 0s linear 0s;
+}
+
+/* ----- The card itself — spans full column width, light & airy ----- */
+.diagnostic__card {
+  /* Soft glass: more transparent so the mint backdrop reads through,
+     near-invisible border, very subtle shadow. Feels like content
+     gently emerging, not a modal popping at you. */
+  background: rgba(255, 255, 255, 0.45);
+  border: 1px solid rgba(11, 46, 52, 0.04);
+  border-radius: 22px;
+  padding: 22px;
+  box-shadow: 0 6px 22px rgba(11, 46, 52, 0.025);
+  backdrop-filter: blur(20px) saturate(140%);
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
+}
+
+@media (min-width: 768px) {
+  .diagnostic__card { padding: 32px; }
+}
+
+@media (min-width: 1024px) {
+  .diagnostic__card { padding: 40px; }
+}
+
+/* ----- Top row: just the back link, left-aligned (escape route) ----- */
+.diagnostic__top {
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 24px;
+}
+
+.diagnostic__back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px 8px 8px;
+  margin-left: -8px;
+  background: transparent;
+  border: 0;
+  border-radius: 10px;
+  color: var(--text-muted);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background var(--hover-duration) var(--ease), color var(--hover-duration) var(--ease);
+}
+
+.diagnostic__back:hover {
+  background: var(--bg-mint-soft);
+  color: var(--brand-dark);
+}
+
+/* Minimalist progress: 3 horizontal segments, centered above the situation label.
+   Each fills with brand green as the user advances through the questions. */
+.diagnostic__progress {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin: 0 auto 22px;
+}
+
+.diagnostic__progress > span {
+  display: block;
+  width: 32px;
+  height: 3px;
+  border-radius: 2px;
+  background: rgba(11, 46, 52, 0.13);
+  transition: background 0.35s var(--ease);
+}
+
+/* Progressively colour segments as user moves through the questions:
+   step 1 → first filled, step 2 → first two filled, step 3 → all filled */
+.diagnostic__progress[data-current="1"] > span:nth-child(-n+1),
+.diagnostic__progress[data-current="2"] > span:nth-child(-n+2),
+.diagnostic__progress[data-current="3"] > span:nth-child(-n+3) {
+  background: var(--brand-green);
+}
+
+@media (min-width: 768px) {
+  .diagnostic__progress > span { width: 40px; height: 3px; }
+}
+
+.diagnostic__situation-label {
+  margin: 0 0 16px;
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--brand-green);
+  text-align: center;
+}
+
+/* ----- Steps wrapper: grid-stack so card height = max(all steps) ----- */
+.diagnostic__steps {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr;
+}
+
+.diagnostic__step {
+  grid-area: 1 / 1;
+  opacity: 0;
+  transform: translateY(6px);
+  visibility: hidden;
+  pointer-events: none;
+  z-index: 1;
+  transition:
+    opacity 0.32s var(--ease),
+    transform 0.32s var(--ease),
+    visibility 0s linear 0.32s;
+}
+
+.diagnostic__step.is-active {
+  opacity: 1;
+  transform: translateY(0);
+  visibility: visible;
+  pointer-events: auto;
+  z-index: 2;
+  transition:
+    opacity 0.32s var(--ease),
+    transform 0.32s var(--ease),
+    visibility 0s linear 0s;
+}
+
+/* In-place question text swap (Q1 → Q2 → Q3 inside the same step) */
+.diagnostic__question-content {
+  transition: opacity 0.28s var(--ease), transform 0.28s var(--ease);
+}
+
+.diagnostic__question-content.is-fading {
+  opacity: 0;
+  transform: translateY(6px);
+}
+
+/* ----- Question step: centered (no icon, no side-by-side layout) ----- */
+.diagnostic__question {
+  margin: 0 auto 26px;
+  max-width: 760px;
+  text-align: center;
+  font-size: clamp(20px, 2.2vw, 26px);
+  line-height: 1.3;
+  letter-spacing: -0.015em;
+  font-weight: 500;
+  color: var(--brand-dark);
+}
+
+@media (min-width: 768px) {
+  .diagnostic__question { margin-bottom: 30px; }
+}
+
+/* Yes / No row — full card width, 50/50 split */
+.diagnostic__answers {
+  /* No max-width — buttons span full card width */
+}
+
+/* ----- Result step: 2-col on wider screens (copy left, form right) ----- */
+.diagnostic__result-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 28px;
+  align-items: start;
+}
+
+@media (min-width: 900px) {
+  .diagnostic__result-layout {
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+  }
+}
+
+.diagnostic__result-copy {
+  min-width: 0;
+}
+
+/* Centered "punchline" text on mobile; left-aligned in the 2-col layout
+   feels more natural next to the form */
+.diagnostic__aha,
+.diagnostic__cta-text {
+  text-align: center;
+}
+
+@media (min-width: 900px) {
+  .diagnostic__aha,
+  .diagnostic__cta-text { text-align: left; }
+}
+
+/* ----- Answer buttons (Yes / No) ----- */
+.diagnostic__answers {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+@media (min-width: 480px) {
+  .diagnostic__answers { gap: 14px; }
+}
+
+.diag-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 54px;
+  padding: 14px 22px;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  cursor: pointer;
+  transition:
+    transform var(--hover-duration) var(--ease),
+    background var(--hover-duration) var(--ease),
+    border-color var(--hover-duration) var(--ease),
+    box-shadow var(--hover-duration) var(--ease);
+}
+
+.diag-btn--yes {
+  background: var(--brand-green);
+  color: var(--brand-dark);
+  box-shadow: 0 8px 22px rgba(3, 217, 140, 0.18);
+}
+
+.diag-btn--yes:hover {
+  transform: scale(var(--hover-scale));
+  box-shadow: 0 14px 32px rgba(3, 217, 140, 0.28);
+}
+
+.diag-btn--no {
+  background: var(--brand-dark);
+  color: #FFFFFF;
+  border-color: var(--brand-dark);
+  box-shadow: 0 8px 22px rgba(11, 46, 52, 0.15);
+}
+
+.diag-btn--no:hover {
+  transform: scale(var(--hover-scale));
+  box-shadow: 0 14px 32px rgba(11, 46, 52, 0.22);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .diag-btn:hover { transform: none !important; }
+}
+
+/* ----- Result step ----- */
+.diagnostic__aha {
+  margin: 0 0 16px;
+  font-size: clamp(20px, 2.4vw, 24px);
+  line-height: 1.3;
+  letter-spacing: -0.02em;
+  font-weight: 600;
+  color: var(--brand-dark);
+}
+
+.diagnostic__cta-text {
+  margin: 0 0 28px;
+  font-size: 16px;
+  line-height: 1.65;
+  color: var(--text-base);
+}
+
+/* ----- Lead form ----- */
+.diagnostic__form {
+  display: grid;
+  gap: 16px;
+}
+
+.diagnostic__field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.diagnostic__field-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-base);
+}
+
+.diagnostic__field-optional {
+  color: var(--text-soft);
+  font-weight: 400;
+}
+
+.diagnostic__form input,
+.diagnostic__form textarea {
+  width: 100%;
+  padding: 14px 16px;
+  font: inherit;
+  font-size: 16px;
+  line-height: 1.4;
+  color: var(--brand-dark);
+  background: var(--bg-white);
+  border: 1px solid var(--border-soft);
+  border-radius: 12px;
+  transition:
+    border-color var(--hover-duration) var(--ease),
+    box-shadow var(--hover-duration) var(--ease),
+    background var(--hover-duration) var(--ease);
+  font-family: inherit;
+}
+
+.diagnostic__form textarea {
+  /* Allow vertical resize but cap it — prevents the diagnostic card (and
+     the whole hero above) from growing unexpectedly */
+  resize: vertical;
+  min-height: 64px;
+  max-height: 180px;
+}
+
+.diagnostic__form input::placeholder,
+.diagnostic__form textarea::placeholder {
+  font-family: inherit;
+  font-weight: 400;
+  color: var(--text-soft);
+  opacity: 1;
+}
+
+.diagnostic__form input:focus,
+.diagnostic__form textarea:focus {
+  outline: none;
+  border-color: var(--brand-green);
+  box-shadow: 0 0 0 4px rgba(3, 217, 140, 0.15);
+  background: #FFFFFF;
+}
+
+.diagnostic__form input:invalid:not(:placeholder-shown) {
+  border-color: rgba(204, 51, 29, 0.55);
+}
+
+.diagnostic__submit {
+  margin-top: 4px;
+  justify-self: stretch;
+  width: 100%;
+}
+
+/* ----- Thanks step ----- */
+.diagnostic__step[data-step="thanks"] {
+  text-align: center;
+  padding: 16px 0 8px;
+}
+
+.diagnostic__seal {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 18px;
+  animation: seal-pop 0.6s var(--ease) backwards;
+}
+
+@keyframes seal-pop {
+  0%   { opacity: 0; transform: scale(0.7); }
+  60%  { opacity: 1; transform: scale(1.06); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+.diagnostic__thanks-title {
+  margin: 0 0 6px;
+  font-size: clamp(22px, 2.6vw, 26px);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  font-weight: 600;
+  color: var(--brand-dark);
+}
+
+.diagnostic__thanks-sub {
+  margin: 0;
+  font-size: 15px;
+  color: var(--text-muted);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .diagnostic__view,
+  .diagnostic__step { transition: none !important; }
+  .diagnostic__seal { animation: none; }
+}
+
+/* Hero: mobile = app-feel.
+   On small screens, give the hero copy a soft glass card to feel intentional. */
+@media (max-width: 559px) {
+  .hero {
+    padding: 96px 0 32px;
+    min-height: 92svh;
+    align-items: stretch;
+  }
+  .hero__inner {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+  }
+  .hero__copy {
+    border: 1px solid rgba(3, 217, 140, 0.14);
+    background: rgba(255, 255, 255, 0.55);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-radius: 24px;
+    padding: 22px 20px;
+    box-shadow: 0 18px 50px rgba(11, 46, 52, 0.06);
+  }
+  .hero__actions .btn {
+    width: 100%;
+    min-height: 52px;
+  }
+}
+
+/* Tablet/desktop: balanced vertical rhythm — airy but compact enough
+   that the whole hero (claim, CTAs, situations title, hint, 3 chip rows)
+   still fits inside a single 100vh viewport */
+@media (min-width: 560px) {
+  .hero { padding: 112px 0 48px; }
+}
+@media (min-width: 1024px) {
+  .hero { padding: 124px 0 56px; }
+}
+
+/* ==========================================================================
+   Sections — shared rhythm
+   ========================================================================== */
+.section {
+  padding: 64px 0;
+}
+
+@media (min-width: 768px) {
+  .section { padding: 96px 0; }
+}
+
+@media (min-width: 1024px) {
+  .section { padding: 110px 0; }
+}
+
+.section__head {
+  max-width: 760px;
+  margin-bottom: 36px;
+}
+
+.section__head--center {
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
+
+@media (min-width: 768px) {
+  .section__head { margin-bottom: 48px; }
+}
+
+.section__title { margin-bottom: 16px; }
+
+.section__lead {
+  font-size: 16px;
+  line-height: 1.65;
+  color: var(--text-base);
+}
+
+/* ==========================================================================
+   Section: Jak ve Finkli spolupracujeme
+   - 2 cards (Kdo jsme / Co děláme)
+   - cycle diagram (5 steps in pentagon layout + arrows)
+   ========================================================================== */
+
+/* ----- Intro card (merged "Kdo jsme a co děláme") — full container width ----- */
+.coop-cards {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  margin-bottom: 72px;
+}
+
+@media (min-width: 768px) {
+  .coop-cards { margin-bottom: 96px; }
+}
+
+@media (min-width: 1024px) {
+  .coop-cards { margin-bottom: 120px; }
+}
+
+.coop-card {
+  padding: 28px;
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid rgba(11, 46, 52, 0.05);
+  border-radius: 20px;
+  backdrop-filter: blur(20px) saturate(140%);
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
+  box-shadow: 0 6px 22px rgba(11, 46, 52, 0.025);
+}
+
+@media (min-width: 1024px) {
+  .coop-card { padding: 36px; }
+}
+
+.coop-card__title { margin-bottom: 16px; }
+
+.coop-card p {
+  font-size: 16px;
+  line-height: 1.65;
+  color: var(--text-base);
+}
+
+.coop-card p + p { margin-top: 14px; }
+
+/* Wide variant — full container width, editorial 2-col layout:
+   title acts as a left anchor, body text flows on the right. */
+.coop-card--wide {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 18px;
+  padding: 32px 28px;
+}
+
+@media (min-width: 900px) {
+  .coop-card--wide {
+    grid-template-columns: 1fr 1.7fr;
+    column-gap: 56px;
+    padding: 44px 40px;
+    align-items: start;
+  }
+  .coop-card--wide .coop-card__title { margin-bottom: 0; }
+}
+
+@media (min-width: 1200px) {
+  .coop-card--wide {
+    grid-template-columns: 1fr 1.9fr;
+    column-gap: 72px;
+    padding: 52px 48px;
+  }
+}
+
+/* ----- Sub-section heading (used inside a larger section for sub-topics) -----
+   Left-aligned to match hero rhythm and overall site consistency. */
+.subsection-head {
+  text-align: left;
+  max-width: 760px;
+  margin: 0 0 44px;
+}
+
+.subsection-head__title { margin: 0; }
+
+@media (min-width: 768px) {
+  .subsection-head { margin-bottom: 56px; }
+}
+
+/* Generous breathing between sub-sections inside the merged "Jak ve Finkli" block */
+.section--coop .areas { margin-bottom: 80px; }
+
+@media (min-width: 768px) {
+  .section--coop .areas { margin-bottom: 110px; }
+}
+
+@media (min-width: 1024px) {
+  .section--coop .areas { margin-bottom: 130px; }
+}
+
+/* ----- Cycle: intro head — left-aligned to match the rest of the page ----- */
+.cycle-head {
+  text-align: left;
+  max-width: 760px;
+  margin: 0 0 44px;
+}
+
+.cycle-head__title { margin-bottom: 14px; }
+
+.cycle-head__text {
+  font-size: 16px;
+  line-height: 1.65;
+  color: var(--text-base);
+}
+
+@media (min-width: 768px) {
+  .cycle-head { margin-bottom: 56px; }
+}
+
+/* ----- Cycle: static SVG figure + hover hotspots overlay -----
+   Texts inside kolecko.svg are vectorised filled paths (not <text> elements),
+   so size is controlled by overall SVG width. Reduced max-width below brings
+   text to roughly body-text size on each breakpoint. */
+.cycle-figure {
+  position: relative;
+  margin: 0 auto;
+  max-width: 560px;
+  padding: 0;
+}
+
+.cycle-figure__svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+@media (min-width: 768px) {
+  .cycle-figure { max-width: 640px; }
+}
+
+@media (min-width: 1024px) {
+  .cycle-figure { max-width: 720px; }
+}
+
+/* Invisible hover-zones, one per icon. Positions are %-coords inside the
+   SVG viewBox (326×261) converted to %, set via inline --x / --y vars. */
+.cycle-figure__hotspots {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;  /* the container itself is inert */
+}
+
+.cycle-hotspot {
+  position: absolute;
+  top: var(--y);
+  left: var(--x);
+  width: 20%;        /* wider — covers icon and breathes around it */
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  pointer-events: auto;  /* each hotspot listens for hover */
+}
+
+/* Soft filled green glow centred on the icon. Fades smoothly to transparent
+   at the edges so there are no hard borders. */
+.cycle-hotspot::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(3, 217, 140, 0.13) 0%,
+    rgba(3, 217, 140, 0.10) 35%,
+    rgba(3, 217, 140, 0.05) 65%,
+    transparent 95%
+  );
+  opacity: 0;
+  transform: scale(0.88);
+  transition:
+    opacity 0.4s var(--ease),
+    transform 0.45s var(--ease);
+}
+
+.cycle-hotspot:hover::before {
+  opacity: 1;
+  transform: scale(1.08);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cycle-hotspot::before { transition: opacity 0.2s var(--ease); transform: none; }
+  .cycle-hotspot:hover::before { transform: none; }
+}
+
+/* ----- Cycle: TRUE circular layout (5 points × 72°) — DEAD CODE -----
+   Kept for easy revival if we ever want step-by-step animated cycle again.
+   Currently unused — see .cycle-figure above.  ----- ORIGINAL: TRUE circular layout (5 points × 72°) -----
+   Container is a square; each step is absolutely positioned at its angle
+   on an "icon circle" (radius ~35% of container). Icon sits at top of
+   each step block, text expands below — so the ICON centres trace the
+   circle, exactly like in the printed leták. */
+.cycle {
+  position: relative;
+  width: 100%;
+  max-width: 880px;
+  margin: 0 auto;
+}
+
+/* Mobile fallback: vertical stack, no circle */
+.cycle__step {
+  text-align: center;
+  max-width: 320px;
+  margin: 0 auto 32px;
+  position: relative;
+  z-index: 2;  /* above arrows SVG */
+}
+
+@media (min-width: 768px) {
+  /* Switch on the circle layout */
+  .cycle {
+    aspect-ratio: 1 / 1;
+  }
+  .cycle__step {
+    position: absolute;
+    width: 26%;
+    min-width: 200px;
+    max-width: 240px;
+    margin: 0;
+  }
+  /* Icon centre lands on the circle at radius ~35% from container centre */
+  .cycle__step--1 { top: 11%;   left: 50%; transform: translateX(-50%); }
+  .cycle__step--2 { top: 36%;   right: 3%; }
+  .cycle__step--3 { top: 75%;   right: 16%; }
+  .cycle__step--4 { top: 75%;   left: 16%; }
+  .cycle__step--5 { top: 36%;   left: 3%; }
+}
+
+.cycle__icon {
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cycle__icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.cycle__step-title {
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  margin: 0 0 8px;
+  color: var(--brand-dark);
+  line-height: 1.2;
+}
+
+/* Step 5 (Péče) — highlighted as the differentiator */
+.cycle__step--accent .cycle__step-title { color: var(--brand-green); }
+
+.cycle__step-text {
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+/* ----- Cycle: SVG arrows overlay ----- */
+.cycle__arrows {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .cycle__arrows {
+    display: block;
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+  }
+}
+
+/* ===== Step-by-step reveal animation =====
+   Triggered by adding .is-revealed to .cycle (via IntersectionObserver in JS).
+   Sequence: step 1 → arrow 1→2 → step 2 → arrow 2→3 → … → step 5 → dashed 5→1.
+   Once revealed, stays revealed for the entire visit (no replay).            */
+
+/* Initial hidden state */
+.cycle__step {
+  opacity: 0;
+  transform: scale(0.92);
+  transition:
+    opacity 0.55s var(--ease),
+    transform 0.55s var(--ease);
+}
+
+/* Solid arrows: invisible "undrawn" stroke (pathLength="100" normalises lengths) */
+.cycle__arrows path[data-arrow]:not([data-arrow-dashed]) {
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+  transition: stroke-dashoffset 0.5s var(--ease);
+}
+
+/* Dashed return arrow: opacity fade (you can't "draw" a dashed line via dashoffset) */
+.cycle__arrows path[data-arrow-dashed] {
+  opacity: 0;
+  transition: opacity 0.7s var(--ease);
+}
+
+/* === Reveal cascade === */
+.cycle.is-revealed .cycle__step--1 { opacity: 1; transform: scale(1); transition-delay: 0.05s; }
+.cycle.is-revealed .cycle__arrows [data-arrow="1"] { stroke-dashoffset: 0; transition-delay: 0.45s; }
+
+.cycle.is-revealed .cycle__step--2 { opacity: 1; transform: scale(1); transition-delay: 0.80s; }
+.cycle.is-revealed .cycle__arrows [data-arrow="2"] { stroke-dashoffset: 0; transition-delay: 1.20s; }
+
+.cycle.is-revealed .cycle__step--3 { opacity: 1; transform: scale(1); transition-delay: 1.55s; }
+.cycle.is-revealed .cycle__arrows [data-arrow="3"] { stroke-dashoffset: 0; transition-delay: 1.95s; }
+
+.cycle.is-revealed .cycle__step--4 { opacity: 1; transform: scale(1); transition-delay: 2.30s; }
+.cycle.is-revealed .cycle__arrows [data-arrow="4"] { stroke-dashoffset: 0; transition-delay: 2.70s; }
+
+.cycle.is-revealed .cycle__step--5 { opacity: 1; transform: scale(1); transition-delay: 3.05s; }
+.cycle.is-revealed .cycle__arrows [data-arrow="5"][data-arrow-dashed] { opacity: 1; transition-delay: 3.50s; }
+/* Total animation: ~4.2s end-to-end, with last 0.7s being the dashed climax */
+
+/* Reduced motion: skip the cascade, show everything immediately */
+@media (prefers-reduced-motion: reduce) {
+  .cycle__step,
+  .cycle__arrows path {
+    opacity: 1 !important;
+    transform: none !important;
+    stroke-dashoffset: 0 !important;
+    transition: none !important;
+  }
+}
+
+/* ----- Note below diagram — left-aligned for site consistency ----- */
+.cycle-note {
+  margin: 40px 0 0;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--text-muted);
+  max-width: 720px;
+  text-align: left;
+}
+
+@media (min-width: 768px) {
+  .cycle-note { margin-top: 52px; }
+}
+
+/* ==========================================================================
+   Section: V jakých oblastech Vám pomáháme — 3 area cards with coordinated hover
+   ========================================================================== */
+.areas {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+
+@media (min-width: 768px) {
+  .areas {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .areas { gap: 28px; }
+}
+
+.area-card {
+  text-align: center;
+  padding: 32px 24px 36px;
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid rgba(11, 46, 52, 0.05);
+  border-radius: 20px;
+  backdrop-filter: blur(20px) saturate(140%);
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
+  box-shadow: 0 6px 22px rgba(11, 46, 52, 0.025);
+  /* Coordinated hover — multiple inner elements transition together */
+  transition:
+    background var(--hover-duration) var(--ease),
+    border-color var(--hover-duration) var(--ease),
+    box-shadow var(--hover-duration) var(--ease);
+}
+
+.area-card:hover {
+  background: rgba(255, 255, 255, 0.72);
+  border-color: rgba(3, 217, 140, 0.16);
+  box-shadow: 0 18px 44px rgba(3, 217, 140, 0.10);
+}
+
+@media (min-width: 1024px) {
+  .area-card { padding: 40px 28px 44px; }
+}
+
+/* Icon */
+.area-card__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 22px;
+  height: 96px;
+  transition: transform var(--hover-duration) var(--ease);
+}
+
+.area-card__icon img {
+  max-height: 100%;
+  width: auto;
+  display: block;
+}
+
+.area-card:hover .area-card__icon {
+  transform: scale(1.06);
+}
+
+/* Pill badge (Přání a cíle / Ochrana / Financování) */
+.area-card__pill {
+  display: inline-block;
+  padding: 10px 24px;
+  border: 1px solid rgba(11, 46, 52, 0.15);
+  border-radius: 10px;
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--brand-dark);
+  background: transparent;
+  margin-bottom: 18px;
+  transition:
+    border-color var(--hover-duration) var(--ease),
+    background var(--hover-duration) var(--ease);
+}
+
+.area-card:hover .area-card__pill {
+  border-color: var(--brand-green);
+  background: var(--bg-mint-tint);
+}
+
+/* Subtitle (Investice, Penze / Pojištění / Úvěry) */
+.area-card__sub {
+  font-size: 17px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  color: var(--brand-dark);
+  margin-bottom: 20px;
+}
+
+/* Hair-line divider */
+.area-card__divider {
+  width: 72px;
+  height: 1px;
+  margin: 0 auto 20px;
+  background: rgba(11, 46, 52, 0.2);
+  transition: background var(--hover-duration) var(--ease);
+}
+
+.area-card:hover .area-card__divider {
+  background: var(--brand-green);
+}
+
+/* Body text — matches .coop-card p and .cycle-head__text (16 px) for consistency */
+.area-card__text {
+  font-size: 16px;
+  line-height: 1.65;
+  color: var(--text-base);
+  margin: 0;
+}
+
+/* Mobile compaction */
+@media (max-width: 559px) {
+  .area-card { padding: 28px 22px 30px; }
+  .area-card__icon { height: 80px; margin-bottom: 18px; }
+  .area-card__pill { font-size: 16px; padding: 9px 20px; }
+  .area-card__sub { font-size: 16px; margin-bottom: 16px; }
+  .area-card__divider { margin-bottom: 16px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .area-card:hover .area-card__icon { transform: none; }
+}
+
+/* On mobile, show a small dashed "loop back" indicator between step 5 and step 1
+   to communicate the cycle even without the SVG arrows */
+@media (max-width: 767px) {
+  .cycle__step--accent {
+    border-top: 1px dashed var(--brand-green);
+    padding-top: 28px;
+    margin-top: 8px;
+  }
+  .cycle__step--accent::before {
+    content: '↻';
+    display: block;
+    color: var(--brand-green);
+    font-size: 20px;
+    margin-bottom: 8px;
+  }
+}
+
+/* ==========================================================================
+   Situations (chips)
+   ========================================================================== */
+.situations__grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+@media (min-width: 768px) {
+  .situations__grid { gap: 12px; }
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 12px 18px;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.25;
+  color: var(--brand-dark);
+  background: transparent;
+  border: 1px solid var(--border-green);
+  border-radius: 12px;
+  /* Uses global --hover-scale / --hover-duration */
+  transition:
+    transform var(--hover-duration) var(--ease),
+    background var(--hover-duration) var(--ease),
+    border-color var(--hover-duration) var(--ease),
+    box-shadow var(--hover-duration) var(--ease),
+    color var(--hover-duration) var(--ease);
+}
+
+.chip--filled {
+  background: var(--bg-mint-tint);
+  border-color: var(--brand-green);
+  box-shadow: 0 6px 18px rgba(3, 217, 140, 0.06);
+}
+
+.chip:hover {
+  transform: scale(var(--hover-scale));
+  background: var(--bg-mint-tint);
+  border-color: var(--brand-green);
+  box-shadow: 0 10px 26px rgba(3, 217, 140, 0.12);
+  z-index: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chip { transition: background 0.2s var(--ease), box-shadow 0.2s var(--ease); }
+  .chip:hover { transform: none !important; }
+}
+
+/* Mobile: chips full-width and bigger touch target */
+@media (max-width: 559px) {
+  .situations__grid {
+    flex-direction: column;
+  }
+  .chip {
+    width: 100%;
+    padding: 14px 16px;
+    font-size: 15px;
+    border-radius: 14px;
+  }
+}
