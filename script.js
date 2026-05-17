@@ -3,7 +3,17 @@
    - Mobile menu open/close
    - Hero parallax (subtle, RAF-throttled, respects prefers-reduced-motion)
    - Close mobile menu on nav link click + Esc
+   - Web3Forms submission for diagnostic + contact form (shared config below)
 */
+
+/* ----- Web3Forms (shared by both lead forms — diagnostika + kontakt) -----
+   Pokud se klíč v budoucnu změní, stačí přepsat hodnotu KEY na jednom místě
+   a oba formuláře ji okamžitě používají. Endpoint zůstává.            */
+const WEB3FORMS = {
+  ENDPOINT: 'https://api.web3forms.com/submit',
+  KEY: 'ceb00a21-2b48-4280-aaa9-b24f2fcf79d8',
+};
+
 (function () {
   'use strict';
 
@@ -83,9 +93,9 @@
   /* ==========================================================================
      Diagnostic flow
      Chips → card with Q1 (→ Q2 → Q3) → result + lead form → thanks → chips.
-     Pure vanilla JS, no dependencies. Lead payload goes to console for now;
-     to enable Web3Forms in the future, set WEB3FORMS_KEY below and uncomment
-     the fetch() block in submitLead().
+     Pure vanilla JS, no dependencies. Lead form submituje na Web3Forms — viz
+     submitLead() níže. Konfigurace (endpoint + key) je sdílená v konstantě
+     WEB3FORMS nahoře v souboru.
      ========================================================================== */
   (function () {
     const root = document.getElementById('diagnostic');
@@ -167,9 +177,12 @@
       },
     ];
 
-    // ----- TODO: To enable real e-mail submission via Web3Forms, paste your
-    //       access key here. Until then, payload is just console.logged. -----
-    const WEB3FORMS_KEY = ''; // e.g. 'a1b2c3d4-e5f6-7890-abcd-ef1234567890'
+    // ----- Web3Forms config je sdílená v konstantě WEB3FORMS nahoře v souboru.
+    //       Tady už nic ručně neplníme — kdyby se měnil klíč, jeden řádek nahoře.
+
+    // ----- Validation helpers (sdílené i s kontaktním formulářem dole) -----
+    const RE_EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const RE_PHONE_CZ = /^(\+420\s?)?\d{3}\s?\d{3}\s?\d{3}$/;
 
     // ----- DOM refs -----
     const viewChips  = root.querySelector('[data-view="chips"]');
@@ -188,6 +201,18 @@
     const elResult   = root.querySelector('[data-result]');
     const elAnswers  = root.querySelectorAll('[data-answer]');
     const elForm     = root.querySelector('[data-form]');
+    const elFormError = elForm.querySelector('[data-error]');
+
+    function showFormError(msg) {
+      if (!elFormError) return;
+      elFormError.textContent = msg;
+      elFormError.hidden = false;
+    }
+    function clearFormError() {
+      if (!elFormError) return;
+      elFormError.textContent = '';
+      elFormError.hidden = true;
+    }
 
     // ----- State -----
     const state = {
@@ -340,36 +365,42 @@
         state.originalScroll = null;
         setStep('question');  // card reset for next open
         elForm.reset();       // wipe lead-form fields for next visitor
+        clearFormError();     // hide any leftover network/error message
         state.locked = false;
       }, TIMING.viewSwap + 50);
     }
 
     async function submitLead(payload) {
-      // MVP behaviour: console.log + show thanks.
-      // To enable real submission via Web3Forms, fill in WEB3FORMS_KEY above
-      // and uncomment the fetch() block below.
-      console.log('[Finkli diagnostic] payload →', payload);
+      // Pošle payload do Web3Forms. Vrací true při úspěchu, false při chybě.
+      // Pole jsou pojmenovaná česky — Web3Forms je posílá 1:1 do e-mailu,
+      // takže příjemce uvidí přehledný "jméno / telefon / email / situace…" výpis.
+      const qa = payload.answers
+        .map((a, i) => `${i + 1}. ${a.question} → ${a.answer}`)
+        .join('\n');
 
-      /*
-      if (WEB3FORMS_KEY) {
-        try {
-          const formData = new FormData();
-          formData.append('access_key', WEB3FORMS_KEY);
-          formData.append('subject', 'Finkli diagnostika — nový lead');
-          formData.append('from_name', 'Finkli web');
-          formData.append('email', payload.email);
-          formData.append('situation', payload.situation);
-          formData.append('result', payload.result);
-          formData.append('note', payload.note || '(nevyplněno)');
-          formData.append('answers', payload.answers.map(a => `• ${a.question} — ${a.answer}`).join('\n'));
-          await fetch('https://api.web3forms.com/submit', { method: 'POST', body: formData });
-        } catch (err) {
-          console.warn('Web3Forms submission failed:', err);
-        }
+      const fd = new FormData();
+      fd.append('access_key', WEB3FORMS.KEY);
+      fd.append('subject', `Nový lead z diagnostiky – ${payload.name}`);
+      fd.append('from_name', 'Finkli web — diagnostika');
+      fd.append('replyto', payload.email);
+      fd.append('jméno', payload.name);
+      fd.append('telefon', payload.phone || '(nevyplněno)');
+      fd.append('email', payload.email);
+      fd.append('situace', payload.situation);
+      fd.append('otázky_a_odpovědi', qa);
+      fd.append('poznámka', payload.note || '(nevyplněno)');
+      if (payload.botcheck) fd.append('botcheck', payload.botcheck);
+
+      try {
+        const res = await fetch(WEB3FORMS.ENDPOINT, { method: 'POST', body: fd });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json().catch(() => ({}));
+        if (data && data.success === false) throw new Error(data.message || 'Web3Forms rejected');
+        return true;
+      } catch (err) {
+        console.warn('[Finkli diagnostic] Web3Forms submission failed:', err);
+        return false;
       }
-      */
-
-      return Promise.resolve();
     }
 
     // ----- Event wiring -----
@@ -390,23 +421,45 @@
       e.preventDefault();
       if (state.locked) return;
 
-      // Light client-side validation (browser also does the rest)
-      const email = elForm.querySelector('[name="email"]').value.trim();
-      const note  = elForm.querySelector('[name="note"]').value.trim();
-      if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-        elForm.querySelector('[name="email"]').focus();
+      clearFormError();
+
+      const elName  = elForm.querySelector('[name="name"]');
+      const elPhone = elForm.querySelector('[name="phone"]');
+      const elEmail = elForm.querySelector('[name="email"]');
+      const elNote  = elForm.querySelector('[name="note"]');
+
+      const name  = elName.value.trim();
+      const phone = elPhone.value.trim();
+      const email = elEmail.value.trim();
+      const note  = elNote.value.trim();
+
+      // Validace — najdi první neplatné pole, dej focus, end.
+      if (name.length < 2) {
+        elName.focus();
+        return;
+      }
+      if (!email || !RE_EMAIL.test(email)) {
+        elEmail.focus();
+        return;
+      }
+      if (phone && !RE_PHONE_CZ.test(phone)) {
+        elPhone.focus();
         return;
       }
 
       state.locked = true;
 
       const sit = SITUATIONS[state.situationIndex];
+      const botcheck = elForm.querySelector('[name="botcheck"]');
       const payload = {
         situation: sit.title,
         answers: state.answers.slice(),
         result: sit.result,
+        name,
+        phone,
         email,
         note,
+        botcheck: botcheck && botcheck.checked ? 'on' : '',
       };
 
       const submitBtn = elForm.querySelector('button[type="submit"]');
@@ -414,10 +467,17 @@
       submitBtn.textContent = 'Odesílám…';
       submitBtn.disabled = true;
 
-      await submitLead(payload);
+      const ok = await submitLead(payload);
 
       submitBtn.textContent = originalLabel;
       submitBtn.disabled = false;
+
+      if (!ok) {
+        // Síťová / API chyba — formulář zůstává vyplněný, ukážeme zprávu pod tlačítkem.
+        showFormError('Něco se pokazilo, zkuste to prosím znovu nebo nám napište přímo na info@finkli.cz');
+        state.locked = false;
+        return;
+      }
 
       // Show thanks
       setStep('thanks');
@@ -430,6 +490,139 @@
       setTimeout(() => {
         goBackToChips();
       }, TIMING.thanksHold + TIMING.stepSwap);
+    });
+  })();
+
+  /* ==========================================================================
+     Contact form (#contact-form)
+     Wired to Web3Forms. Sdílí konstantu WEB3FORMS (endpoint + key) nahoře
+     v souboru — stejný účet jako diagnostika, jeden řádek pro změnu klíče.
+     ========================================================================== */
+  (function () {
+    const form = document.getElementById('contact-form');
+    if (!form) return;
+
+    // Card-level toggle: layout (head + form) ↔ card-thanks (přes celou kartu).
+    // Stejné UX jako diagnostika — thanks viditelný ~3 s, pak návrat na form.
+    const card       = form.closest('.contact-form-card');
+    const layoutEl   = card && card.querySelector('[data-card-layout]');
+    const thanksEl   = card && card.querySelector('[data-card-thanks]');
+    const submitBtn  = form.querySelector('button[type="submit"]');
+    const errorEl    = form.querySelector('[data-error]');
+
+    // Match diagnostické TIMING.thanksHold (2800) + TIMING.stepSwap (320).
+    const THANKS_DURATION_MS = 3120;
+    let revertTimer = null;
+
+    // ----- Validation (matchuje diagnostiku — stejné regexy) -----
+    const RE_EMAIL    = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const RE_PHONE_CZ = /^(\+420\s?)?\d{3}\s?\d{3}\s?\d{3}$/;
+
+    function showError(msg) {
+      if (!errorEl) return;
+      errorEl.textContent = msg;
+      errorEl.hidden = false;
+    }
+    function clearError() {
+      if (!errorEl) return;
+      errorEl.textContent = '';
+      errorEl.hidden = true;
+    }
+
+    async function submitContact(payload) {
+      const fd = new FormData();
+      fd.append('access_key', WEB3FORMS.KEY);
+      fd.append('subject', `Nový lead z webu – ${payload.name}`);
+      fd.append('from_name', 'Finkli web — kontakt');
+      fd.append('replyto', payload.email);
+      fd.append('jméno', payload.name);
+      fd.append('telefon', payload.phone || '(nevyplněno)');
+      fd.append('email', payload.email);
+      fd.append('zpráva', payload.message);
+      if (payload.botcheck) fd.append('botcheck', payload.botcheck);
+
+      try {
+        const res = await fetch(WEB3FORMS.ENDPOINT, { method: 'POST', body: fd });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json().catch(() => ({}));
+        if (data && data.success === false) throw new Error(data.message || 'Web3Forms rejected');
+        return true;
+      } catch (err) {
+        console.warn('[Finkli contact] Web3Forms submission failed:', err);
+        return false;
+      }
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      clearError();
+
+      const elName    = form.querySelector('[name="name"]');
+      const elEmail   = form.querySelector('[name="email"]');
+      const elPhone   = form.querySelector('[name="phone"]');
+      const elMessage = form.querySelector('[name="message"]');
+
+      const name    = elName.value.trim();
+      const email   = elEmail.value.trim();
+      const phone   = elPhone.value.trim();
+      const message = elMessage.value.trim();
+
+      // Inline validace — fokus na první neplatné pole.
+      if (name.length < 2) {
+        elName.focus();
+        return;
+      }
+      if (!email || !RE_EMAIL.test(email)) {
+        elEmail.focus();
+        return;
+      }
+      if (phone && !RE_PHONE_CZ.test(phone)) {
+        elPhone.focus();
+        return;
+      }
+      if (!message) {
+        elMessage.focus();
+        return;
+      }
+
+      const botcheck = form.querySelector('[name="botcheck"]');
+
+      const originalLabel = submitBtn.textContent;
+      submitBtn.textContent = 'Odesílám…';
+      submitBtn.disabled = true;
+
+      const ok = await submitContact({
+        name,
+        email,
+        phone,
+        message,
+        botcheck: botcheck && botcheck.checked ? 'on' : '',
+      });
+
+      submitBtn.textContent = originalLabel;
+      submitBtn.disabled = false;
+
+      if (!ok) {
+        showError('Něco se pokazilo, zkuste to prosím znovu nebo nám napište přímo na info@finkli.cz');
+        return;
+      }
+
+      // Úspěch — schovat celý layout (head + form), ukázat card-level thanks
+      // přes celou šířku karty. Po ~3 s se vrátí původní form (stejné chování
+      // jako diagnostika).
+      form.reset();
+      clearError();
+      if (layoutEl && thanksEl) {
+        layoutEl.hidden = true;
+        thanksEl.hidden = false;
+
+        if (revertTimer) clearTimeout(revertTimer);
+        revertTimer = setTimeout(() => {
+          thanksEl.hidden = true;
+          layoutEl.hidden = false;
+          revertTimer = null;
+        }, THANKS_DURATION_MS);
+      }
     });
   })();
 

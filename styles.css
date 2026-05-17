@@ -774,35 +774,26 @@ strong { font-weight: 600; }
   /* No max-width — buttons span full card width */
 }
 
-/* ----- Result step: 2-col on wider screens (copy left, form right) ----- */
+/* ----- Result step: copy nahoře přes celou šířku, form pod tím -----
+   Lineární vertikální skládání drží kartu vizuálně nižší a respektuje
+   levé zarovnání napříč webem. Copy má max-width pro čitelnou délku řádků;
+   form může jít celou šířkou karty, aby se 3 krátké boxíky (jméno / telefon /
+   email) v jedné řadě nesmáčkly. */
 .diagnostic__result-layout {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 28px;
+  gap: 24px;
   align-items: start;
-}
-
-@media (min-width: 900px) {
-  .diagnostic__result-layout {
-    grid-template-columns: 1fr 1fr;
-    gap: 40px;
-  }
 }
 
 .diagnostic__result-copy {
   min-width: 0;
+  max-width: 800px;
 }
 
-/* Centered "punchline" text on mobile; left-aligned in the 2-col layout
-   feels more natural next to the form */
 .diagnostic__aha,
 .diagnostic__cta-text {
-  text-align: center;
-}
-
-@media (min-width: 900px) {
-  .diagnostic__aha,
-  .diagnostic__cta-text { text-align: left; }
+  text-align: left;
 }
 
 /* ----- Answer buttons (Yes / No) ----- */
@@ -874,7 +865,9 @@ strong { font-weight: 600; }
 }
 
 .diagnostic__cta-text {
-  margin: 0 0 28px;
+  /* Vertikální mezera ke formu je teď řízená přes .diagnostic__result-layout
+     grid-gap — nepřičítáme tu už další margin-bottom. */
+  margin: 0;
   font-size: 16px;
   line-height: 1.65;
   color: var(--text-base);
@@ -883,13 +876,29 @@ strong { font-weight: 600; }
 /* ----- Lead form ----- */
 .diagnostic__form {
   display: grid;
-  gap: 16px;
+  gap: 14px;
+}
+
+/* Řada 3 krátkých polí (jméno / telefon / email).
+   Mobile: stack 1-col; ≥640px: 3-col v jedné řadě. */
+.diagnostic__form-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+}
+
+@media (min-width: 640px) {
+  .diagnostic__form-row {
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px;
+  }
 }
 
 .diagnostic__field {
   display: flex;
   flex-direction: column;
   gap: 8px;
+  min-width: 0; /* nutné aby se input v gridu mohl smrsknout pod content width */
 }
 
 .diagnostic__field-label {
@@ -922,11 +931,11 @@ strong { font-weight: 600; }
 }
 
 .diagnostic__form textarea {
-  /* Allow vertical resize but cap it — prevents the diagnostic card (and
-     the whole hero above) from growing unexpectedly */
+  /* Wide, ale nízký box — uživatel poznámku obvykle nepíše dlouhou.
+     Mírný vertikální resize ponechán pro případ, kdy by chtěl víc místa. */
   resize: vertical;
-  min-height: 64px;
-  max-height: 180px;
+  min-height: 52px;
+  max-height: 140px;
 }
 
 .diagnostic__form input::placeholder,
@@ -1048,6 +1057,21 @@ strong { font-weight: 600; }
   .section { padding: 110px 0; }
 }
 
+/* "Jak ve Finkli spolupracujeme" sits directly under the hero — pull it
+   closer so the page doesn't feel like there's a gap between the opening
+   pitch and the first content block. */
+.section--coop {
+  padding-top: 32px;
+}
+
+@media (min-width: 768px) {
+  .section--coop { padding-top: 48px; }
+}
+
+@media (min-width: 1024px) {
+  .section--coop { padding-top: 56px; }
+}
+
 .section__head {
   max-width: 760px;
   margin-bottom: 36px;
@@ -1082,16 +1106,20 @@ strong { font-weight: 600; }
   display: grid;
   grid-template-columns: 1fr;
   gap: 16px;
-  margin-bottom: 72px;
+  margin-bottom: 40px;
 }
 
 @media (min-width: 768px) {
-  .coop-cards { margin-bottom: 96px; }
+  .coop-cards { margin-bottom: 56px; }
 }
 
 @media (min-width: 1024px) {
-  .coop-cards { margin-bottom: 120px; }
+  .coop-cards { margin-bottom: 72px; }
 }
+
+/* Last coop-cards block in the section (the cycle card) sits at the bottom —
+   no extra bottom margin, section padding handles the closing rhythm. */
+.coop-cards:last-child { margin-bottom: 0; }
 
 .coop-card {
   padding: 28px;
@@ -1118,7 +1146,7 @@ strong { font-weight: 600; }
 .coop-card p + p { margin-top: 14px; }
 
 /* Wide variant — full container width, editorial 2-col layout:
-   title acts as a left anchor, body text flows on the right. */
+   title + compass icon act as a left anchor, body text flows on the right. */
 .coop-card--wide {
   display: grid;
   grid-template-columns: 1fr;
@@ -1144,29 +1172,89 @@ strong { font-weight: 600; }
   }
 }
 
+/* Left-column head: title + compass icon stacked vertically */
+.coop-card__head {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+@media (min-width: 900px) {
+  .coop-card__head { gap: 28px; }
+}
+
+@media (min-width: 1200px) {
+  .coop-card__head { gap: 36px; }
+}
+
+.coop-card__icon {
+  width: 100%;
+  max-width: 180px;
+  height: auto;
+  display: block;
+  transition: transform var(--hover-duration) var(--ease);
+}
+
+@media (min-width: 1200px) {
+  .coop-card__icon { max-width: 220px; }
+}
+
+/* On mobile, scale the compass down and keep it left-aligned with the title */
+@media (max-width: 899px) {
+  .coop-card__icon { max-width: 110px; }
+}
+
+/* Hover on the card scales only the icon (not the card) — matches the
+   .area-card / .eucs-note / .family-note icon-zoom pattern. */
+.coop-card--wide:hover .coop-card__icon {
+  transform: scale(1.06);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .coop-card--wide:hover .coop-card__icon { transform: none; }
+}
+
+/* Cycle figure embedded inside a coop-card body — breathing room above,
+   and constrain to the card's right column so it doesn't overflow on
+   narrow desktop widths where the column is < 720px. */
+.coop-card__body .cycle-figure {
+  margin-top: 36px;
+  max-width: 100%;
+}
+
+@media (min-width: 768px) {
+  .coop-card__body .cycle-figure { margin-top: 44px; }
+}
+
+@media (min-width: 1024px) {
+  .coop-card__body .cycle-figure { margin-top: 52px; }
+}
+
 /* ----- Sub-section heading (used inside a larger section for sub-topics) -----
    Left-aligned to match hero rhythm and overall site consistency. */
 .subsection-head {
   text-align: left;
   max-width: 760px;
-  margin: 0 0 44px;
+  margin: 0 0 28px;
 }
 
 .subsection-head__title { margin: 0; }
 
 @media (min-width: 768px) {
-  .subsection-head { margin-bottom: 56px; }
+  .subsection-head { margin-bottom: 36px; }
 }
 
-/* Generous breathing between sub-sections inside the merged "Jak ve Finkli" block */
-.section--coop .areas { margin-bottom: 80px; }
+/* Breathing between sub-sections inside the merged "Jak ve Finkli" block —
+   tighter rhythm so the section reads as one connected block, not three. */
+.section--coop .areas { margin-bottom: 48px; }
 
 @media (min-width: 768px) {
-  .section--coop .areas { margin-bottom: 110px; }
+  .section--coop .areas { margin-bottom: 64px; }
 }
 
 @media (min-width: 1024px) {
-  .section--coop .areas { margin-bottom: 130px; }
+  .section--coop .areas { margin-bottom: 80px; }
 }
 
 /* ----- Cycle: intro head — left-aligned to match the rest of the page ----- */
@@ -1636,5 +1724,1526 @@ strong { font-weight: 600; }
     padding: 14px 16px;
     font-size: 15px;
     border-radius: 14px;
+  }
+}
+
+/* ==========================================================================
+   Section: Přehled balíčků — 3 pricing tier cards
+   Reuses the glass + coordinated-hover pattern from .area-card.
+   Silver+ (middle) is FEATURED: dark surface, badge, and on desktop sits
+   slightly raised by default (scale 1.04) so it visually leads the trio.
+   Descriptions are pinned to the bottom of each card via margin-top: auto
+   so they line up across cards even when item counts differ (Silver 3 → Gold 9).
+   ========================================================================== */
+
+/* Head (H2 + 3 lead paragraphs) — left-aligned, wider read column to
+   match the cards grid width below (editorial feel, per web_sketchnew). */
+.packages-head {
+  text-align: left;
+  max-width: 100%;
+  margin: 0 0 44px;
+}
+
+.packages-head__title {
+  margin: 0 0 20px;
+}
+
+.packages-head__lead {
+  font-size: 16px;
+  line-height: 1.65;
+  color: var(--text-base);
+  max-width: 940px;
+}
+
+.packages-head__lead + .packages-head__lead {
+  margin-top: 14px;
+}
+
+@media (min-width: 768px) {
+  .packages-head { margin-bottom: 60px; }
+  .packages-head__lead { font-size: 17px; }
+}
+
+/* Grid: 1 col mobile → 3 cols desktop, stretch to equal heights */
+.packages {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+
+@media (min-width: 768px) {
+  .packages {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    align-items: stretch;
+  }
+}
+
+@media (min-width: 1024px) {
+  .packages { gap: 28px; }
+}
+
+/* ----- Card base: glass, flex column so desc can pin to bottom ----- */
+.package-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 28px 24px;
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid rgba(11, 46, 52, 0.05);
+  border-radius: 20px;
+  backdrop-filter: blur(20px) saturate(140%);
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
+  box-shadow: 0 6px 22px rgba(11, 46, 52, 0.025);
+  transition:
+    transform var(--hover-duration) var(--ease),
+    background var(--hover-duration) var(--ease),
+    border-color var(--hover-duration) var(--ease),
+    box-shadow var(--hover-duration) var(--ease);
+}
+
+@media (min-width: 768px) {
+  .package-card { padding: 32px; }
+}
+
+.package-card:hover {
+  transform: scale(var(--hover-scale));
+  background: rgba(255, 255, 255, 0.72);
+  border-color: rgba(3, 217, 140, 0.16);
+  box-shadow: 0 18px 44px rgba(3, 217, 140, 0.10);
+  z-index: 2;  /* above the featured card's default z-index: 1 */
+}
+
+/* ----- Featured (Silver+): dark, raised baseline, green halo ----- */
+.package-card--featured {
+  background: var(--brand-dark);
+  color: #FFFFFF;
+  border-color: rgba(3, 217, 140, 0.30);
+  box-shadow: 0 18px 50px rgba(3, 217, 140, 0.18);
+}
+
+/* On desktop, sit visibly above neighbours by default */
+@media (min-width: 768px) {
+  .package-card--featured {
+    transform: scale(var(--hover-scale));
+    z-index: 1;
+  }
+}
+
+/* Hover: deepen the green halo. Keep dark bg (don't shift to glass). */
+.package-card--featured:hover {
+  background: var(--brand-dark);
+  border-color: rgba(3, 217, 140, 0.50);
+  box-shadow: 0 24px 60px rgba(3, 217, 140, 0.28);
+}
+
+@media (min-width: 768px) {
+  .package-card--featured:hover {
+    transform: scale(var(--hover-scale));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .package-card { transition: background 0.2s var(--ease), box-shadow 0.2s var(--ease); }
+  .package-card:hover { transform: none !important; }
+  .package-card--featured { transform: none !important; }
+  .package-card--featured:hover { transform: none !important; }
+}
+
+/* ----- Badge "Nejoblíbenější" — rounded rectangle, top-center, overlap edge ----- */
+.package-card__badge {
+  position: absolute;
+  top: -14px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 7px 14px;
+  background: var(--brand-green);
+  color: var(--brand-dark);
+  font-size: 12.5px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  border-radius: 10px;
+  white-space: nowrap;
+  box-shadow: 0 8px 22px rgba(3, 217, 140, 0.30);
+}
+
+/* ----- Head: tier name + price block ----- */
+.package-card__head {
+  margin-bottom: 24px;
+}
+
+/* Title row — name on the left, brick icon on the right (Silver / Silver+ / Gold).
+   Items align by baseline so the icon visually sits "on" the text line, leaning
+   slightly above (per web_sketchnew). The icon is purely decorative. */
+.package-card__title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+
+.package-card__brick {
+  flex-shrink: 0;
+  width: auto;
+  height: 56px;
+  display: block;
+  user-select: none;
+  pointer-events: none;
+  /* Subtle drop shadow so the brick lifts off both light & dark surfaces */
+  filter: drop-shadow(0 6px 12px rgba(11, 46, 52, 0.18));
+  transition: transform var(--hover-duration) var(--ease);
+}
+
+@media (min-width: 768px) {
+  .package-card__brick { height: 62px; }
+}
+
+@media (min-width: 1024px) {
+  .package-card__brick { height: 68px; }
+}
+
+/* Tiny coordinated movement on card hover — the brick "tilts forward" */
+.package-card:hover .package-card__brick {
+  transform: scale(1.06) rotate(-2deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .package-card:hover .package-card__brick { transform: none; }
+}
+
+.package-card__name {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--brand-dark);
+}
+
+.package-card--featured .package-card__name {
+  color: #FFFFFF;
+}
+
+.package-card__price {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+
+.package-card__amount {
+  font-size: 28px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--brand-dark);
+}
+
+.package-card--featured .package-card__amount {
+  color: #FFFFFF;
+}
+
+.package-card__period {
+  font-size: 15px;
+  color: var(--text-muted);
+}
+
+.package-card--featured .package-card__period {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* Secondary price line ("+ 149 Kč / měsíc za Garanci EUCS") */
+.package-card__price-extra {
+  margin-top: 8px;
+  font-size: 14px;
+  line-height: 1.45;
+  color: var(--text-muted);
+}
+
+.package-card--featured .package-card__price-extra {
+  color: rgba(255, 255, 255, 0.72);
+}
+
+/* ----- Items list ----- */
+.package-card__items {
+  list-style: none;
+  margin: 0 0 24px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.package-card__items li {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  font-size: 15px;
+  line-height: 1.5;
+  font-weight: 600;
+  color: var(--brand-dark);
+  transition: opacity var(--hover-duration) var(--ease);
+}
+
+.package-card--featured .package-card__items li {
+  color: #FFFFFF;
+}
+
+/* Inherited from a lower tier — dimmed text + dimmed seal so the eye is
+   drawn to what THIS tier actually adds on top. Pattern from web_sketchnew. */
+.package-card__items li.is-inherited {
+  font-weight: 400;
+  color: var(--text-soft);
+}
+
+.package-card__items li.is-inherited .pkg-check__seal {
+  fill: rgba(3, 217, 140, 0.35);
+}
+
+.package-card--featured .package-card__items li.is-inherited {
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.package-card--featured .package-card__items li.is-inherited .pkg-check__seal {
+  fill: rgba(3, 217, 140, 0.45);
+}
+/* Note: no .pkg-check__tick override here — inherited ticks on the featured
+   card stay brand-dark (matching the card surface) so the cutout principle
+   reads consistently across all items. */
+
+/* On hover of the whole card, gently bring inherited items back to ~80%
+   so the user can read them comfortably if they're scanning all features. */
+.package-card:hover .package-card__items li.is-inherited {
+  opacity: 1;
+  color: var(--text-muted);
+}
+
+.package-card--featured:hover .package-card__items li.is-inherited {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.package-card__check {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1px;  /* optical alignment with first text line */
+}
+
+.package-card__check svg { display: block; }
+
+/* Custom organic-badge check icon — styled via classes so each card variant
+   can swap the tick to match its own background (negative-space "cutout" look,
+   per web_sketchnew). Default = white tick for the glass cards (Silver/Gold),
+   overridden to brand-dark on the featured dark card. */
+.pkg-check__seal {
+  fill: var(--brand-green);
+}
+
+.pkg-check__tick {
+  fill: none;
+  stroke: #FFFFFF;  /* matches Silver / Gold card surface */
+  stroke-width: 3.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Featured (Silver+, dark card): tick matches the dark card surface */
+.package-card--featured .pkg-check__tick {
+  stroke: var(--brand-dark);
+}
+
+/* ----- Description — pinned to bottom of card (margin-top: auto) -----
+   In a 3-col equal-height grid, this lines descriptions up across cards
+   regardless of item-count differences (Silver 3 vs Gold 9). */
+.package-card__desc {
+  margin: auto 0 0;  /* push to bottom of flex column */
+  padding: 18px 20px;
+  background: rgba(11, 46, 52, 0.04);
+  border-radius: 14px;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--text-muted);
+}
+
+/* Bold accent at the start of each description — names the target audience
+   in tier color (dark on glass cards, green on the dark featured card) */
+.package-card__desc strong {
+  font-weight: 600;
+  color: var(--brand-dark);
+}
+
+/* Featured: description sits in a subtle white-tint inset block, and the
+   audience-name accent is brand green for emphasis on dark background */
+.package-card--featured .package-card__desc {
+  background: rgba(255, 255, 255, 0.07);
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.package-card--featured .package-card__desc strong {
+  color: var(--brand-green);
+}
+
+/* ----- Mobile compaction ----- */
+@media (max-width: 559px) {
+  .package-card { padding: 26px 22px; }
+  .package-card__badge { font-size: 12px; padding: 6px 12px; top: -12px; }
+  .package-card__amount { font-size: 26px; }
+  .package-card__items li { font-size: 14.5px; }
+  .package-card__brick { height: 48px; }
+  .package-card__desc { padding: 14px 16px; }
+}
+
+/* ----- Family note — "Myslíme i na rodinu" -----
+   Sits INSIDE section--packages, tightly coupled to the pricing grid above.
+   Reuses the same glass surface as the cards, so visually it reads as the
+   final beat of the pricing story (referral + household pricing). Smaller
+   top gap on purpose — it's not a new section. */
+.family-note {
+  position: relative;
+  margin-top: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 28px 24px;
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid rgba(11, 46, 52, 0.05);
+  border-radius: 20px;
+  backdrop-filter: blur(20px) saturate(140%);
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
+  box-shadow: 0 6px 22px rgba(11, 46, 52, 0.025);
+  transition:
+    background var(--hover-duration) var(--ease),
+    border-color var(--hover-duration) var(--ease),
+    box-shadow var(--hover-duration) var(--ease);
+}
+
+@media (min-width: 768px) {
+  .family-note {
+    flex-direction: row;
+    align-items: center;
+    gap: 40px;
+    padding: 36px 40px;
+    margin-top: 40px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .family-note {
+    gap: 56px;
+    padding: 44px 48px;
+    margin-top: 48px;
+  }
+}
+
+/* Coordinated hover — soft warm halo (pinkish-green tint hints at "❤️")
+   without breaking the brand palette. */
+.family-note:hover {
+  background: rgba(255, 255, 255, 0.72);
+  border-color: rgba(3, 217, 140, 0.18);
+  box-shadow: 0 18px 44px rgba(3, 217, 140, 0.10);
+}
+
+/* Text column — fills remaining space */
+.family-note__body {
+  flex: 1;
+  min-width: 0;
+}
+
+.family-note__title {
+  margin: 0 0 14px;
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+/* Heart emoji — slightly smaller than heading and gently pulsing on hover */
+.family-note__heart {
+  font-size: 0.85em;
+  line-height: 1;
+  display: inline-block;
+  transition: transform var(--hover-duration) var(--ease);
+}
+
+.family-note:hover .family-note__heart {
+  transform: scale(1.15);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .family-note:hover .family-note__heart { transform: none; }
+}
+
+.family-note__text {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.65;
+  color: var(--text-base);
+}
+
+.family-note__text + .family-note__text {
+  margin-top: 14px;
+}
+
+.family-note__text strong {
+  font-weight: 600;
+  color: var(--brand-dark);
+}
+
+/* Icon (rodina.png) — sidekick illustration. Aligns to bottom-left on mobile
+   so the heart-emoji title visually sits "above" it, and centers vertically
+   when laid out side-by-side on tablet+. */
+.family-note__icon {
+  flex-shrink: 0;
+  width: 100%;
+  max-width: 140px;
+  height: auto;
+  display: block;
+  align-self: flex-start;
+  transition: transform var(--hover-duration) var(--ease);
+}
+
+.family-note:hover .family-note__icon {
+  transform: scale(1.04);
+}
+
+@media (max-width: 559px) {
+  .family-note__icon { max-width: 110px; }
+}
+
+@media (min-width: 768px) {
+  .family-note__icon {
+    max-width: 200px;
+    align-self: center;
+  }
+}
+
+@media (min-width: 1024px) {
+  .family-note__icon { max-width: 240px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .family-note:hover .family-note__icon { transform: none; }
+}
+
+/* ----- EUCS note — explainer for "Garance EUCS" in Silver+ / Gold -----
+   Mint-tinted variant of the same aside pattern. Lives inside section--packages
+   to stay in context with the Garance EUCS line in the cards above. Visually
+   distinct from .family-note (which is white glass) — this one uses brand mint
+   to signal "service offer / insurance protection". */
+.eucs-note {
+  position: relative;
+  margin-top: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 28px 24px;
+  background: rgba(221, 251, 240, 0.85);
+  border: 1px solid rgba(3, 217, 140, 0.18);
+  border-radius: 20px;
+  backdrop-filter: blur(20px) saturate(140%);
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
+  box-shadow: 0 6px 22px rgba(11, 46, 52, 0.025);
+  transition:
+    background var(--hover-duration) var(--ease),
+    border-color var(--hover-duration) var(--ease),
+    box-shadow var(--hover-duration) var(--ease);
+}
+
+@media (min-width: 768px) {
+  .eucs-note {
+    flex-direction: row;
+    align-items: center;
+    gap: 40px;
+    padding: 36px 40px;
+    margin-top: 28px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .eucs-note {
+    gap: 56px;
+    padding: 44px 48px;
+    margin-top: 32px;
+  }
+}
+
+.eucs-note:hover {
+  background: rgba(221, 251, 240, 1);
+  border-color: rgba(3, 217, 140, 0.28);
+  box-shadow: 0 18px 44px rgba(3, 217, 140, 0.12);
+}
+
+/* Text column */
+.eucs-note__body {
+  flex: 1;
+  min-width: 0;
+}
+
+.eucs-note__title {
+  margin: 0 0 14px;
+}
+
+.eucs-note__text {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.65;
+  color: var(--text-base);
+}
+
+.eucs-note__text + .eucs-note__text {
+  margin-top: 14px;
+}
+
+.eucs-note__text strong {
+  font-weight: 600;
+  color: var(--brand-dark);
+}
+
+/* Real clickable link to www.eucs.cz — green underline that thickens on hover */
+.eucs-note__link {
+  color: var(--brand-dark);
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-color: var(--brand-green);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
+  transition:
+    color var(--hover-duration) var(--ease),
+    text-decoration-thickness var(--hover-duration) var(--ease);
+}
+
+.eucs-note__link:hover {
+  color: var(--brand-green);
+  text-decoration-thickness: 3px;
+}
+
+/* Shield icon — matched to .family-note__icon sizing so the two asides
+   above each other read as a consistent visual rhythm. */
+.eucs-note__icon {
+  flex-shrink: 0;
+  width: 100%;
+  max-width: 140px;
+  height: auto;
+  display: block;
+  align-self: flex-start;
+  filter: drop-shadow(0 12px 24px rgba(3, 217, 140, 0.20));
+  transition: transform var(--hover-duration) var(--ease);
+}
+
+.eucs-note:hover .eucs-note__icon {
+  transform: scale(1.05);
+}
+
+@media (max-width: 559px) {
+  .eucs-note__icon { max-width: 110px; }
+}
+
+@media (min-width: 768px) {
+  .eucs-note__icon {
+    max-width: 200px;
+    align-self: center;
+  }
+}
+
+@media (min-width: 1024px) {
+  .eucs-note__icon { max-width: 240px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .eucs-note:hover .eucs-note__icon { transform: none; }
+}
+
+/* =Section: myPlann= ========================================================
+   Klientská aplikace — open editorial section, no glass card. Lets the phone
+   breathe against the living mint backdrop. Three-layer visual on the right:
+   solid green disc behind, F balloon icon top-right (peeks behind phone),
+   phone in front as the focal element with the only hover transform.
+   ========================================================================== */
+.myplann {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 40px;
+  align-items: center;
+}
+
+@media (min-width: 900px) {
+  .myplann {
+    grid-template-columns: 1.05fr 1fr;
+    column-gap: 64px;
+    gap: 64px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .myplann {
+    grid-template-columns: 1.1fr 1fr;
+    column-gap: 88px;
+  }
+}
+
+/* ----- Copy column ----- */
+.myplann__copy {
+  max-width: 560px;
+}
+
+.myplann__title {
+  margin: 0 0 22px;
+}
+
+.myplann__text {
+  margin: 0;
+  font-size: 17px;
+  line-height: 1.7;
+  color: var(--text-base);
+}
+
+@media (min-width: 768px) {
+  .myplann__text { font-size: 18px; }
+}
+
+.myplann__text + .myplann__text {
+  margin-top: 18px;
+}
+
+.myplann__text strong {
+  font-weight: 600;
+  color: var(--brand-dark);
+}
+
+/* ----- Visual column -----
+   Square-ish stage, position: relative. Each layer is absolutely positioned
+   using % so it scales with the stage width across breakpoints. */
+.myplann__visual {
+  position: relative;
+  width: 100%;
+  max-width: 460px;
+  aspect-ratio: 1 / 1;
+  margin: 0 auto;
+  /* Isolation creates a new stacking context so the hover-scaled phone
+     never overlaps the disc into adjacent sections. */
+  isolation: isolate;
+}
+
+@media (min-width: 900px) {
+  .myplann__visual {
+    max-width: 520px;
+    margin: 0;
+    justify-self: end;
+  }
+}
+
+@media (min-width: 1200px) {
+  .myplann__visual {
+    max-width: 580px;
+  }
+}
+
+/* Solid brand-green disc — sits behind everything, slightly off-center to
+   the right so the phone (which sits center-right) overlaps its right edge.
+   Pure CSS, no asset. Square aspect-ratio guarantees a perfect circle
+   regardless of stage size. */
+.myplann__disc {
+  position: absolute;
+  top: 14%;
+  right: 6%;
+  width: 76%;
+  aspect-ratio: 1 / 1;
+  border-radius: 50%;
+  background: var(--brand-green);
+  z-index: 0;
+  pointer-events: none;
+}
+
+@media (min-width: 900px) {
+  .myplann__disc {
+    top: 12%;
+    right: 4%;
+    width: 78%;
+  }
+}
+
+/* F balloon icon — 3D look, peeks from behind the phone in the upper-right.
+   z-index between disc (0) and phone (2) so the phone overlaps the lower
+   portion while the icon's top sticks up above the phone. Rotated to match
+   the reference: top leans right, body tucked behind the phone. */
+.myplann__badge {
+  position: absolute;
+  top: -10%;
+  right: 4%;
+  width: 42%;
+  max-width: 220px;
+  height: auto;
+  z-index: 1;
+  pointer-events: none;
+  transform: rotate(14deg);
+  transform-origin: center center;
+  filter: drop-shadow(0 14px 30px rgba(11, 46, 52, 0.14));
+}
+
+@media (min-width: 900px) {
+  .myplann__badge {
+    top: -12%;
+    right: 2%;
+    width: 44%;
+  }
+}
+
+/* Phone — focal element. Centered-right inside the stage, in front of
+   both the disc and the balloon's lower portion. */
+.myplann__phone {
+  position: absolute;
+  top: 4%;
+  bottom: 4%;
+  left: 22%;
+  right: 4%;
+  width: auto;
+  height: 92%;
+  margin: auto;
+  object-fit: contain;
+  z-index: 2;
+  filter: drop-shadow(0 28px 50px rgba(11, 46, 52, 0.20));
+  transform-origin: center center;
+  transition: transform var(--hover-duration) var(--ease);
+}
+
+/* Hover ONLY on the phone — disc and balloon stay still.
+   Slightly stronger than .package-card__brick (1.06 / -2deg) per brief:
+   "telefon by se měl ještě trochu zvětšit". */
+.myplann__visual:hover .myplann__phone {
+  transform: scale(1.08) rotate(-3deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .myplann__visual:hover .myplann__phone { transform: none; }
+}
+
+/* =Section: Contact (Tým Finkli)= ===========================================
+   One big mint-tinted glass card holds the whole contact block: heading + lead
+   at top, then a 2-col grid with both people (photo + info + CTA inline, no
+   inner cards). Mint recipe mirrors .eucs-note so the two mint surfaces on
+   the page (EUCS aside + this contact card) read as the same family.
+   "Kontaktovat" CTA is rendered twice (mailto: and tel:) and toggled by
+   @media (hover: hover) and (pointer: fine):
+     - touch / phone (no hover):     tel:  → opens dialer
+     - mouse / laptop (hover): mailto: → opens mail client with prefilled subject
+   ========================================================================== */
+
+/* ----- Big mint glass wrapper ----- */
+.contact-card {
+  position: relative;
+  display: block;
+  padding: 32px 24px;
+  background: rgba(221, 251, 240, 0.85);
+  border: 1px solid rgba(3, 217, 140, 0.18);
+  border-radius: 22px;
+  backdrop-filter: blur(20px) saturate(140%);
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
+  box-shadow: 0 6px 22px rgba(11, 46, 52, 0.025);
+}
+
+@media (min-width: 768px) {
+  .contact-card {
+    padding: 44px 40px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .contact-card {
+    padding: 56px 52px;
+    border-radius: 24px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .contact-card {
+    padding: 64px 60px;
+  }
+}
+
+/* ----- Heading area inside the card ----- */
+.contact-card__head {
+  max-width: 760px;
+  margin: 0 0 36px;
+}
+
+@media (min-width: 768px) {
+  .contact-card__head { margin-bottom: 48px; }
+}
+
+@media (min-width: 1024px) {
+  .contact-card__head { margin-bottom: 56px; }
+}
+
+.contact-card__title {
+  margin: 0 0 18px;
+}
+
+.contact-card__lead {
+  margin: 0;
+  font-size: 17px;
+  line-height: 1.7;
+  color: var(--text-base);
+}
+
+@media (min-width: 768px) {
+  .contact-card__lead { font-size: 18px; }
+}
+
+/* ----- 2-col grid of people (inside the card) ----- */
+.contact-team {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 36px;
+}
+
+@media (min-width: 900px) {
+  .contact-team {
+    grid-template-columns: 1fr 1fr;
+    column-gap: 48px;
+    row-gap: 40px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .contact-team { column-gap: 64px; }
+}
+
+/* ----- Person row (no card around it anymore) ----- */
+.contact-person {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 24px;
+  align-items: center;
+}
+
+@media (min-width: 1200px) {
+  .contact-person { gap: 32px; }
+}
+
+/* ----- Photo (left column) -----
+   White background fallback + soft shadow so the photo "lifts" off the
+   mint card surface. */
+.contact-person__photo {
+  width: 130px;
+  height: 170px;
+  display: block;
+  object-fit: cover;
+  border-radius: 16px;
+  background: var(--bg-white);
+  box-shadow: 0 8px 24px rgba(11, 46, 52, 0.08);
+  transition: transform var(--hover-duration) var(--ease),
+              box-shadow var(--hover-duration) var(--ease);
+}
+
+@media (max-width: 559px) {
+  .contact-person__photo {
+    width: 104px;
+    height: 138px;
+    border-radius: 14px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .contact-person__photo {
+    width: 150px;
+    height: 196px;
+  }
+}
+
+/* Photo lifts subtly on row hover — matches global hover rhythm */
+.contact-person:hover .contact-person__photo {
+  transform: scale(1.04);
+  box-shadow: 0 14px 32px rgba(3, 217, 140, 0.18);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .contact-person:hover .contact-person__photo { transform: none; }
+}
+
+/* =Section: Contact Form card= ==============================================
+   Sits below .contact-card (people). White-tinted glass mirroring the
+   diagnostic result card so the form feels like the same family as the hero
+   diagnostic flow. 2-col layout on desktop (head left, form right).
+   Form field/focus/invalid styles deliberately match .diagnostic__form so
+   both forms look identical — single visual language across the page.
+   ========================================================================== */
+.contact-form-card {
+  position: relative;
+  margin-top: 24px;
+  padding: 32px 24px;
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid rgba(11, 46, 52, 0.05);
+  border-radius: 22px;
+  backdrop-filter: blur(20px) saturate(140%);
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
+  box-shadow: 0 6px 22px rgba(11, 46, 52, 0.025);
+}
+
+@media (min-width: 768px) {
+  .contact-form-card {
+    padding: 44px 40px;
+    margin-top: 32px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .contact-form-card {
+    padding: 56px 52px;
+    border-radius: 24px;
+    margin-top: 40px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .contact-form-card { padding: 64px 60px; }
+}
+
+/* Layout — stack on mobile, 2-col on desktop (head left, form right) */
+.contact-form-card__layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 32px;
+  align-items: start;
+}
+
+@media (min-width: 900px) {
+  .contact-form-card__layout {
+    grid-template-columns: 1fr 1fr;
+    column-gap: 56px;
+    gap: 56px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .contact-form-card__layout { column-gap: 80px; }
+}
+
+/* ----- Head column (left on desktop) ----- */
+.contact-form-card__head {
+  max-width: 560px;
+}
+
+.contact-form-card__title {
+  margin: 0 0 18px;
+}
+
+.contact-form-card__text {
+  margin: 0;
+  font-size: 17px;
+  line-height: 1.7;
+  color: var(--text-base);
+}
+
+@media (min-width: 768px) {
+  .contact-form-card__text { font-size: 18px; }
+}
+
+.contact-form-card__text + .contact-form-card__text {
+  margin-top: 16px;
+}
+
+/* ----- Form (right column) — visual rules mirror .diagnostic__form ----- */
+.contact-form__fields {
+  display: grid;
+  gap: 16px;
+}
+
+.contact-form__field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.contact-form__label {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-base);
+}
+
+.contact-form__optional {
+  color: var(--text-soft);
+  font-weight: 400;
+}
+
+.contact-form input,
+.contact-form textarea {
+  width: 100%;
+  padding: 14px 16px;
+  font: inherit;
+  font-size: 16px;
+  line-height: 1.4;
+  color: var(--brand-dark);
+  background: var(--bg-white);
+  border: 1px solid var(--border-soft);
+  border-radius: 12px;
+  font-family: inherit;
+  transition:
+    border-color var(--hover-duration) var(--ease),
+    box-shadow var(--hover-duration) var(--ease),
+    background var(--hover-duration) var(--ease);
+}
+
+/* Textarea — vertical resize but capped so the card doesn't grow forever.
+   Brief: "opet limitovat maximalni vysku rozateni". */
+.contact-form textarea {
+  resize: vertical;
+  min-height: 88px;
+  max-height: 260px;
+}
+
+.contact-form input::placeholder,
+.contact-form textarea::placeholder {
+  font-family: inherit;
+  font-weight: 400;
+  color: var(--text-soft);
+  opacity: 1;
+}
+
+.contact-form input:focus,
+.contact-form textarea:focus {
+  outline: none;
+  border-color: var(--brand-green);
+  box-shadow: 0 0 0 4px rgba(3, 217, 140, 0.15);
+  background: #FFFFFF;
+}
+
+.contact-form input:invalid:not(:placeholder-shown) {
+  border-color: rgba(204, 51, 29, 0.55);
+}
+
+.contact-form__submit {
+  margin-top: 4px;
+  justify-self: stretch;
+  width: 100%;
+}
+
+/* ----- Card-level thanks (sibling of __layout uvnitř .contact-form-card) -----
+   Po úspěšném odeslání JS schová __layout a zobrazí tento blok přes celou
+   šířku karty. Po ~3 s návrat zpět na form (mirror diagnostické UX).
+   Karta má vlastní vnitřní padding (32–64 px) — uvnitř blocku stačí jen
+   mírný vertikální dech kolem seal/title/textu, ať dýchá uprostřed karty. */
+.contact-form-card__thanks {
+  text-align: center;
+  padding: 16px 0 8px;
+}
+
+/* Starý in-form thanks block už není v DOM, pravidlo ponecháno harmlessly
+   jako záchrana pro starší verze cache. (Lze v budoucnu odstranit.) */
+.contact-form__thanks {
+  text-align: center;
+  padding: 16px 8px;
+}
+
+.contact-form__seal {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 18px;
+}
+
+.contact-form__thanks-title {
+  margin: 0 0 8px;
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--brand-dark);
+}
+
+.contact-form__thanks-sub {
+  margin: 0;
+  font-size: 16px;
+  color: var(--text-muted);
+}
+
+/* ----- Info column ----- */
+.contact-person__info {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-width: 0;
+}
+
+.contact-person__name {
+  margin: 0;
+}
+
+.contact-person__links {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.contact-person__link {
+  display: inline-block;
+  color: var(--text-base);
+  text-decoration: none;
+  font-size: 15.5px;
+  line-height: 1.4;
+  transition: color var(--hover-duration) var(--ease);
+  /* allow long emails to wrap on narrow screens */
+  word-break: break-word;
+}
+
+@media (min-width: 768px) {
+  .contact-person__link { font-size: 16px; }
+}
+
+.contact-person__link:hover {
+  color: var(--brand-green);
+}
+
+/* ----- CTA — dual button, viewport-aware via (hover) media query ----- */
+.contact-person__cta {
+  align-self: flex-start;
+  margin-top: 8px;
+}
+
+/* Default = touch device / no hover capability → show tel: button */
+.contact-person__cta--desktop { display: none; }
+.contact-person__cta--mobile  { display: inline-flex; }
+
+/* Mouse-capable device → show mailto: button */
+@media (hover: hover) and (pointer: fine) {
+  .contact-person__cta--desktop { display: inline-flex; }
+  .contact-person__cta--mobile  { display: none; }
+}
+
+/* =Section: Form error messages= ============================================
+   Subtle inline error pod tlačítkem Odeslat — používá se při síťové chybě
+   ze submitu (Web3Forms). Stejný vizuál pro oba formuláře.
+   ========================================================================== */
+.diagnostic__error,
+.contact-form__error {
+  margin: 4px 0 0;
+  font-size: 14px;
+  line-height: 1.5;
+  color: rgba(204, 51, 29, 0.85);
+}
+
+/* =Section: News (Ze světa Finkli)= =========================================
+   Bento grid sekce mezi týmem (#kontakt) a formulářem (#napsat). Karty jsou
+   hardcoded <a class="news-card"> bloky — žádný JS rendering, žádný JSON.
+
+   Velikosti karet (utility třídy):
+     .news-card--1x1 (default), --2x1, --3x1, --4x1, --1x2, --2x2
+
+   Varianty pozadí:
+     - .news-card--with-image  : background <img> + dark gradient overlay
+     - .news-card--bg-mint     : solid mint
+     - .news-card--bg-yellow   : solid Gold akcent
+     - .news-card--bg-green    : solid brand green
+     - .news-card--bg-dark     : solid brand dark
+     - .news-card--bg-white    : solid white
+     - (default)               : glass (mirrors .diagnostic__card)
+
+   Responsive collapse:
+     - ≥1024px : respektuje user-spec velikost (grid-column / grid-row span)
+     - 640–1023px : 2-col grid, cokoliv span ≥2 → span 2, jinak 1
+     - <640px : všechny karty full-width
+   ========================================================================== */
+
+/* Head — H2 + lead, levé zarovnání, stejný rytmus jako .section__head */
+.news-head {
+  max-width: 760px;
+  margin: 0 0 32px;
+}
+
+@media (min-width: 768px) {
+  .news-head { margin-bottom: 40px; }
+}
+
+@media (min-width: 1024px) {
+  .news-head { margin-bottom: 48px; }
+}
+
+.news-head__title {
+  margin: 0 0 14px;
+}
+
+.news-head__lead {
+  margin: 0;
+  font-size: 17px;
+  line-height: 1.7;
+  color: var(--text-base);
+}
+
+@media (min-width: 768px) {
+  .news-head__lead { font-size: 18px; }
+}
+
+/* ----- Bento grid container ----- */
+.news-bento {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-auto-rows: minmax(220px, auto);
+  gap: 14px;
+}
+
+@media (min-width: 640px) {
+  .news-bento {
+    grid-template-columns: repeat(2, 1fr);
+    grid-auto-rows: minmax(240px, auto);
+    gap: 16px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .news-bento {
+    grid-template-columns: repeat(4, 1fr);
+    grid-auto-rows: minmax(260px, auto);
+    gap: 20px;
+  }
+}
+
+/* ----- Card base ----- */
+.news-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  overflow: hidden;
+  padding: 24px;
+  border-radius: 20px;
+  text-decoration: none;
+  color: var(--text-base);
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid rgba(11, 46, 52, 0.05);
+  backdrop-filter: blur(20px) saturate(140%);
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
+  box-shadow: 0 6px 22px rgba(11, 46, 52, 0.025);
+  transition:
+    transform var(--hover-duration) var(--ease),
+    box-shadow var(--hover-duration) var(--ease),
+    border-color var(--hover-duration) var(--ease);
+  /* Aspect default — 1×1 cells fall back to grid-auto-rows */
+  min-height: 220px;
+}
+
+@media (min-width: 768px) {
+  .news-card {
+    padding: 28px;
+    border-radius: 22px;
+    min-height: 240px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .news-card {
+    padding: 32px;
+    min-height: 260px;
+  }
+}
+
+.news-card:hover {
+  transform: scale(var(--hover-scale));
+  box-shadow: 0 18px 44px rgba(11, 46, 52, 0.08);
+  border-color: rgba(3, 217, 140, 0.20);
+  z-index: 2;
+}
+
+.news-card:focus-visible {
+  outline: 2px solid var(--brand-green);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .news-card { transition: none; }
+  .news-card:hover { transform: none; }
+}
+
+/* ----- Card body (text stack) ----- */
+.news-card__body {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.news-card__eyebrow {
+  display: inline-flex;
+  align-self: flex-start;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(3, 217, 140, 0.18);
+  color: var(--brand-dark);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  line-height: 1.4;
+  margin-bottom: 4px;
+}
+
+.news-card__title {
+  margin: 0;
+  font-size: clamp(20px, 2.2vw, 24px);
+  line-height: 1.2;
+}
+
+.news-card__desc {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--text-muted);
+}
+
+@media (min-width: 1024px) {
+  .news-card__desc { font-size: 15.5px; }
+}
+
+/* ----- Variant: image background ----- */
+.news-card--with-image {
+  padding: 0;
+  background: var(--brand-dark);
+  border-color: transparent;
+}
+
+.news-card--with-image .news-card__body {
+  padding: 24px;
+  color: #FFFFFF;
+}
+
+@media (min-width: 768px) {
+  .news-card--with-image .news-card__body { padding: 28px; }
+}
+
+@media (min-width: 1024px) {
+  .news-card--with-image .news-card__body { padding: 32px; }
+}
+
+.news-card__image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+  transition: transform var(--hover-duration) var(--ease);
+}
+
+.news-card--with-image:hover .news-card__image {
+  transform: scale(1.06);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .news-card--with-image:hover .news-card__image { transform: none; }
+}
+
+.news-card__overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(
+    180deg,
+    rgba(11, 46, 52, 0) 30%,
+    rgba(11, 46, 52, 0.55) 75%,
+    rgba(11, 46, 52, 0.78) 100%
+  );
+  pointer-events: none;
+}
+
+.news-card--with-image .news-card__eyebrow {
+  background: rgba(255, 255, 255, 0.20);
+  color: #FFFFFF;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+.news-card--with-image .news-card__title {
+  color: #FFFFFF;
+}
+
+.news-card--with-image .news-card__desc {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+/* ----- Variant: solid color backgrounds ----- */
+.news-card--bg-mint {
+  background: rgba(221, 251, 240, 0.95);
+  border-color: rgba(3, 217, 140, 0.18);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+.news-card--bg-yellow {
+  background: var(--brand-yellow);
+  border-color: rgba(11, 46, 52, 0.08);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+.news-card--bg-yellow .news-card__eyebrow {
+  background: rgba(11, 46, 52, 0.10);
+}
+
+.news-card--bg-green {
+  background: var(--brand-green);
+  border-color: rgba(11, 46, 52, 0.08);
+  color: var(--brand-dark);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+.news-card--bg-green .news-card__eyebrow {
+  background: rgba(11, 46, 52, 0.12);
+}
+
+.news-card--bg-dark {
+  background: var(--brand-dark);
+  border-color: rgba(255, 255, 255, 0.06);
+  color: #FFFFFF;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+.news-card--bg-dark .news-card__eyebrow {
+  background: rgba(3, 217, 140, 0.25);
+  color: var(--brand-green);
+}
+
+.news-card--bg-dark .news-card__title {
+  color: #FFFFFF;
+}
+
+.news-card--bg-dark .news-card__desc {
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.news-card--bg-white {
+  background: #FFFFFF;
+  border-color: rgba(11, 46, 52, 0.06);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+/* ----- Sizes — desktop (≥1024px) honors author intent ----- */
+@media (min-width: 1024px) {
+  .news-card--2x1 { grid-column: span 2; }
+  .news-card--3x1 { grid-column: span 3; }
+  .news-card--4x1 { grid-column: span 4; }
+  .news-card--1x2 { grid-row: span 2; }
+  .news-card--2x2 { grid-column: span 2; grid-row: span 2; }
+}
+
+/* ----- Sizes — tablet (640–1023px) — 2-col grid, anything ≥2 cols → span 2 ----- */
+@media (min-width: 640px) and (max-width: 1023px) {
+  .news-card--2x1,
+  .news-card--3x1,
+  .news-card--4x1,
+  .news-card--2x2 {
+    grid-column: span 2;
+  }
+  .news-card--1x2,
+  .news-card--2x2 {
+    grid-row: span 2;
+  }
+}
+
+/* ----- Sizes — mobile (<640px) — všechny karty full-width, žádné row span ----- */
+@media (max-width: 639px) {
+  .news-card {
+    grid-column: span 1 !important;
+    grid-row: span 1 !important;
   }
 }
