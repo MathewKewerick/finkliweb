@@ -658,6 +658,22 @@ strong { font-weight: 600; }
     visibility 0s linear 0s;
 }
 
+/* Inactive view sits ABSOLUTELY over the active one so it does NOT
+   contribute to the grid cell's height. Before this rule, the grid
+   cell was always sized to the tallest view (the card), which made
+   the hero permanently reserve space for an unopened question card
+   and pushed the next section far below the fold.
+
+   Now the diagnostic container collapses to the active view's natural
+   height: short when chips are shown, taller when the card is open.
+   The crossfade (opacity + scale) still runs on both views. */
+.diagnostic__view:not(.is-active) {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+}
+
 /* ----- The card itself — spans full column width, light & airy ----- */
 .diagnostic__card {
   /* Soft glass: more transparent so the mint backdrop reads through,
@@ -1042,8 +1058,9 @@ strong { font-weight: 600; }
   .diagnostic__seal { animation: none; }
 }
 
-/* Hero: mobile = app-feel.
-   On small screens, give the hero copy a soft glass card to feel intentional. */
+/* Hero on mobile — flush text on the drifting backdrop, no glass card.
+   (Originally the copy had its own glass surface to feel app-like, but
+   the hero on desktop has no card either, so we keep it consistent.) */
 @media (max-width: 559px) {
   .hero {
     padding: 96px 0 32px;
@@ -1055,15 +1072,6 @@ strong { font-weight: 600; }
     flex-direction: column;
     justify-content: flex-end;
   }
-  .hero__copy {
-    border: 1px solid rgba(3, 217, 140, 0.14);
-    background: rgba(255, 255, 255, 0.55);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border-radius: 24px;
-    padding: 22px 20px;
-    box-shadow: 0 18px 50px rgba(11, 46, 52, 0.06);
-  }
   .hero__actions .btn {
     width: 100%;
     min-height: 52px;
@@ -1074,40 +1082,51 @@ strong { font-weight: 600; }
    that the whole hero (claim, CTAs, situations title, hint, 3 chip rows)
    still fits inside a single 100vh viewport */
 @media (min-width: 560px) {
-  .hero { padding: 112px 0 48px; }
+  .hero { padding: 112px 0 28px; }
 }
 @media (min-width: 1024px) {
-  .hero { padding: 124px 0 56px; }
+  .hero { padding: 124px 0 32px; }
 }
 
 /* ==========================================================================
    Sections — shared rhythm
    ========================================================================== */
+/* Global section rhythm — half of the original (was 64/96/110).
+   Section-to-section gap = padding-bottom + padding-top of the next.
+   With this, default gap is 64/96/112 across the whole site, which keeps
+   sections connected as one story instead of feeling like separate pages. */
 .section {
-  padding: 64px 0;
+  padding: 32px 0;
 }
 
 @media (min-width: 768px) {
-  .section { padding: 96px 0; }
+  .section { padding: 48px 0; }
 }
 
 @media (min-width: 1024px) {
-  .section { padding: 110px 0; }
+  .section { padding: 56px 0; }
 }
 
-/* "Jak ve Finkli spolupracujeme" sits directly under the hero — pull it
-   closer so the page doesn't feel like there's a gap between the opening
-   pitch and the first content block. */
-.section--coop {
-  padding-top: 32px;
+/* Balíčky → Aplikace boundary feels right at the original wider gap
+   (the visual weight of the pricing cards needs more breathing room before
+   the phone showcase begins). Restore the original spacing on both sides
+   to preserve that ~220px desktop gap, while everything else stays tight. */
+.section--packages {
+  padding-bottom: 64px;
+}
+
+.section--myplann {
+  padding-top: 64px;
 }
 
 @media (min-width: 768px) {
-  .section--coop { padding-top: 48px; }
+  .section--packages { padding-bottom: 96px; }
+  .section--myplann  { padding-top: 96px; }
 }
 
 @media (min-width: 1024px) {
-  .section--coop { padding-top: 56px; }
+  .section--packages { padding-bottom: 110px; }
+  .section--myplann  { padding-top: 110px; }
 }
 
 .section__head {
@@ -1253,20 +1272,227 @@ strong { font-weight: 600; }
   .coop-card--wide:hover .coop-card__icon { transform: none; }
 }
 
-/* Cycle figure embedded inside a coop-card body — breathing room above,
-   and constrain to the card's right column so it doesn't overflow on
-   narrow desktop widths where the column is < 720px. */
-.coop-card__body .cycle-figure {
-  margin-top: 36px;
-  max-width: 100%;
+/* Compact icon variant — used by time.png in the "Kde jiní končí" card.
+   time.png is visually denser than kompas.png, so at the same max-width it
+   reads as chunkier. Trimming ~25% balances the two cards visually. */
+.coop-card__icon--time {
+  max-width: 130px;
+}
+
+@media (min-width: 1200px) {
+  .coop-card__icon--time { max-width: 160px; }
+}
+
+@media (max-width: 899px) {
+  .coop-card__icon--time { max-width: 84px; }
+}
+
+/* Cycle visuals (.cycle-figure and .cycle-steps) are direct grid children of
+   .coop-card--wide so they can span both columns on desktop and sit centered
+   underneath the head+body row. On mobile the card is 1-col, so spanning is
+   a no-op (still centered).
+
+   Inside the cycle card we DO NOT cap the figure width — it fills the entire
+   inner card width so the vectorised text inside reads at body-text size or
+   larger. Base .cycle-figure max-width rules (560/760/880/960) are overridden
+   here for this specific context. */
+.coop-card--wide .cycle-figure,
+.coop-card--wide .cycle-steps {
+  grid-column: 1 / -1;
+  margin: 36px auto 0;
+}
+
+.coop-card--wide .cycle-figure {
+  width: 100%;
+  max-width: 750px;
 }
 
 @media (min-width: 768px) {
-  .coop-card__body .cycle-figure { margin-top: 44px; }
+  .coop-card--wide .cycle-figure { margin-top: 44px; }
 }
 
 @media (min-width: 1024px) {
-  .coop-card__body .cycle-figure { margin-top: 52px; }
+  .coop-card--wide .cycle-figure { margin-top: 52px; }
+}
+
+/* ==========================================================================
+   =Section: Cycle steps (mobile-only vertical list)=
+
+   On phones the SVG cycle ring (.cycle-figure) shrinks to ~300px wide and
+   its internal text becomes unreadable. We hide the SVG on small screens
+   and render this vertical step list instead — same 5 steps + a closing
+   loop hint that mirrors the dashed-green return arrow in the SVG.
+
+   Connectors:
+     1 → 2 → 3 → 4   solid (regular process)
+     4 → 5            dashed green (entering the "Finkli difference")
+     5 → loop note    dashed green (cycle closes, returns to analýza)
+   ========================================================================== */
+
+/* Default: hidden everywhere — only revealed in the mobile media query below.
+   This way the desktop/tablet experience stays exactly as it was (SVG ring). */
+.cycle-steps {
+  display: none;
+}
+
+@media (max-width: 559px) {
+
+  /* Hide the SVG ring on phones — list takes over */
+  .coop-card--wide .cycle-figure {
+    display: none;
+  }
+
+  .cycle-steps {
+    display: block;
+    list-style: none;
+    margin: 28px 0 0;
+    padding: 0;
+  }
+
+  /* ----- Step card ----- */
+  .cycle-steps__item {
+    position: relative;
+    display: block;
+    padding: 22px 18px 24px;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.55);
+    border: 1px solid rgba(11, 46, 52, 0.06);
+    border-radius: 16px;
+    backdrop-filter: blur(20px) saturate(140%);
+    -webkit-backdrop-filter: blur(20px) saturate(140%);
+    box-shadow: 0 6px 22px rgba(11, 46, 52, 0.025);
+  }
+
+  /* Accent variant — péče & servis: mint surface + green border, signals
+     the "Finkli difference" visually without screaming. */
+  .cycle-steps__item--accent {
+    background: rgba(221, 251, 240, 0.85);
+    border-color: rgba(3, 217, 140, 0.22);
+    box-shadow: 0 10px 28px rgba(3, 217, 140, 0.12);
+  }
+
+  /* Head row: icon + number badge stacked vertically (icon on top) */
+  .cycle-steps__head {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+
+  .cycle-steps__icon {
+    width: 52px;
+    height: 52px;
+    object-fit: contain;
+    display: block;
+  }
+
+  .cycle-steps__num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 28px;
+    height: 28px;
+    padding: 0 8px;
+    border-radius: 999px;
+    background: var(--brand-dark);
+    color: var(--bg-base);
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1;
+  }
+
+  .cycle-steps__item--accent .cycle-steps__num {
+    background: var(--brand-green);
+    color: var(--brand-dark);
+  }
+
+  .cycle-steps__title {
+    margin: 0 0 8px;
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 1.25;
+    color: var(--brand-dark);
+  }
+
+  .cycle-steps__item--accent .cycle-steps__title {
+    color: var(--brand-green);
+  }
+
+  .cycle-steps__text {
+    margin: 0;
+    font-size: 14.5px;
+    line-height: 1.55;
+    color: var(--text-base);
+  }
+
+  /* ----- Connector: thin vertical line between steps + arrow tip below ----- */
+  .cycle-steps__connector {
+    position: relative;
+    display: block;
+    width: 2px;
+    height: 32px;
+    margin: 10px auto 14px;
+    background-color: var(--brand-dark);
+    list-style: none;
+  }
+
+  /* Downward-pointing arrow tip drawn from two rotated borders */
+  .cycle-steps__connector::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 50%;
+    width: 8px;
+    height: 8px;
+    border-right: 2px solid var(--brand-dark);
+    border-bottom: 2px solid var(--brand-dark);
+    transform: translate(-50%, 0) rotate(45deg);
+  }
+
+  /* Dashed green variant — used for 4→5 and 5→loop, marks the Finkli
+     difference (ongoing care). Background-image gradient creates the
+     dashed pattern, since a 2px-wide element can't use border-style. */
+  .cycle-steps__connector--dashed {
+    background-color: transparent;
+    background-image: linear-gradient(
+      to bottom,
+      var(--brand-green) 50%,
+      transparent 50%
+    );
+    background-size: 2px 7px;
+    background-repeat: repeat-y;
+  }
+
+  .cycle-steps__connector--dashed::after {
+    border-right-color: var(--brand-green);
+    border-bottom-color: var(--brand-green);
+  }
+
+  /* ----- Loop note: closing pill below step 5 that explains the cycle ----- */
+  .cycle-steps__loop {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    max-width: 320px;
+    margin: 0 auto;
+    padding: 12px 18px;
+    border: 1px dashed var(--brand-green);
+    border-radius: 999px;
+    background: rgba(221, 251, 240, 0.45);
+    color: var(--brand-dark);
+    font-size: 13.5px;
+    line-height: 1.4;
+    list-style: none;
+  }
+
+  .cycle-steps__loop-icon {
+    font-size: 16px;
+    line-height: 1;
+    color: var(--brand-green);
+    font-weight: 600;
+  }
 }
 
 /* ----- Sub-section heading (used inside a larger section for sub-topics) -----
@@ -1315,28 +1541,43 @@ strong { font-weight: 600; }
 }
 
 /* ----- Cycle: static SVG figure + hover hotspots overlay -----
-   Texts inside kolecko.svg are vectorised filled paths (not <text> elements),
-   so size is controlled by overall SVG width. Reduced max-width below brings
-   text to roughly body-text size on each breakpoint. */
+   Text inside kolecko-outline.svg is vectorised paths (font-size 6 in a
+   326-unit-wide viewBox for descriptions, 8 for step titles). Rendered text
+   size scales linearly with figure width:
+     figure_px * 6 / 326 ≈ description text in px
+   So a 880-px-wide figure on desktop renders descriptions at ~16 px,
+   matching .coop-card body text. */
 .cycle-figure {
   position: relative;
-  margin: 0 auto;
-  max-width: 560px;
+  grid-column: 1 / -1;
+  width: min(100%, 960px);
+  margin: 56px auto 0;
   padding: 0;
 }
 
 .cycle-figure__svg {
   display: block;
   width: 100%;
+  max-width: 100%;
   height: auto;
 }
 
 @media (min-width: 768px) {
-  .cycle-figure { max-width: 640px; }
+  .cycle-figure {
+    width: min(100%, 760px);
+  }
 }
 
 @media (min-width: 1024px) {
-  .cycle-figure { max-width: 720px; }
+  .cycle-figure {
+    width: min(100%, 880px);
+  }
+}
+
+@media (min-width: 1200px) {
+  .cycle-figure {
+    width: min(100%, 960px);
+  }
 }
 
 /* Invisible hover-zones, one per icon. Positions are %-coords inside the
@@ -1752,7 +1993,7 @@ strong { font-weight: 600; }
   .chip:hover { transform: none !important; }
 }
 
-/* Mobile: chips full-width and bigger touch target */
+/* Mobile: chips full-width, centered label, bigger touch target */
 @media (max-width: 559px) {
   .situations__grid {
     flex-direction: column;
@@ -1762,6 +2003,8 @@ strong { font-weight: 600; }
     padding: 14px 16px;
     font-size: 15px;
     border-radius: 14px;
+    justify-content: center;
+    text-align: center;
   }
 }
 
@@ -2447,6 +2690,65 @@ strong { font-weight: 600; }
   color: var(--brand-dark);
 }
 
+/* ----- Store CTAs (App Store + Google Play) -----
+   Pill-shaped buttons that sit under the copy on the dark section background.
+   Two accent variants from our token palette: Apple = brand-green (primary),
+   Android = brand-yellow (Gold accent). Both keep dark text for readability. */
+.myplann__cta {
+  margin-top: 28px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+@media (min-width: 768px) {
+  .myplann__cta { margin-top: 36px; gap: 14px; }
+}
+
+/* Base store-button modifier: pill shape, slightly tighter padding than .btn
+   defaults so it doesn't overwhelm. Inherits .btn hover scale + transition. */
+.btn--store {
+  padding: 13px 22px;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  min-height: 48px;
+  color: var(--brand-dark);
+}
+
+.btn--store .btn__icon {
+  flex-shrink: 0;
+  display: block;
+  /* currentColor on the SVG inherits this button's text color */
+  color: var(--brand-dark);
+}
+
+/* Apple App Store — brand-green */
+.btn--store-apple {
+  background: var(--brand-green);
+  box-shadow: 0 8px 22px rgba(3, 217, 140, 0.22);
+}
+
+.btn--store-apple:hover {
+  box-shadow: 0 14px 32px rgba(3, 217, 140, 0.32);
+}
+
+/* Google Play (Android) — brand-yellow (Gold accent) */
+.btn--store-android {
+  background: var(--brand-yellow);
+  box-shadow: 0 8px 22px rgba(251, 208, 40, 0.28);
+}
+
+.btn--store-android:hover {
+  box-shadow: 0 14px 32px rgba(251, 208, 40, 0.40);
+}
+
+/* Mobile: full-width buttons stacked, easier touch targets */
+@media (max-width: 559px) {
+  .myplann__cta { flex-direction: column; }
+  .btn--store { width: 100%; min-height: 52px; }
+}
+
 /* ----- Visual column -----
    Square-ish stage, position: relative. Each layer is absolutely positioned
    using % so it scales with the stage width across breakpoints. */
@@ -2862,6 +3164,16 @@ strong { font-weight: 600; }
 .contact-form-card__thanks {
   text-align: center;
   padding: 16px 0 8px;
+}
+
+/* DŮLEŽITÉ: Atribut [hidden] dává UA `display: none`, ale `display: grid`
+   v .contact-form-card__layout ho silnější specifikou přebíjí — bez tohoto
+   pravidla by layout zůstal viditelný a thanks se ukazoval POD ním místo
+   ABY ho nahradil. Tahle dvojice selektorů [hidden] zajistí, že schování
+   funguje jak má (pro layout i pro samotný thanks). */
+.contact-form-card__layout[hidden],
+.contact-form-card__thanks[hidden] {
+  display: none;
 }
 
 /* Starý in-form thanks block už není v DOM, pravidlo ponecháno harmlessly
@@ -3422,4 +3734,129 @@ strong { font-weight: 600; }
 
 @media (min-width: 768px) {
   .site-footer__link { font-size: 15.5px; }
+}
+
+/* ==========================================================================
+   =Section: Mobile centering pass=  (≤ 559px)
+
+   On phones, the overall vibe shifts from "editorial" to "app-like" — texts,
+   headings and inline icons read better centered on a narrow viewport.
+   Tablet/desktop stay left-aligned per the design system (DESIGN.md).
+
+   Exclusions (intentionally kept left-aligned):
+   - Form labels & inputs (contact-form, diagnostic-form) — labels above
+     inputs must left-align so they visually map to their field.
+   - Diagnostic "Zpět" link — escape route stays in the top-left corner.
+   - News cards' inner body & eyebrow chips — they have their own layout.
+   - Footer — already centered/structured per column.
+   ========================================================================== */
+@media (max-width: 559px) {
+
+  /* ---- Hero ---- */
+  .hero__title,
+  .hero__sub,
+  .hero__situations-title,
+  .diagnostic__hint {
+    text-align: center;
+  }
+
+  /* CTA row stays as flex-column (existing rule makes buttons full-width) —
+     no extra change needed; alignment is implicit on full-width buttons. */
+
+  /* ---- Generic section heads ---- */
+  .section__head,
+  .subsection-head {
+    text-align: center;
+  }
+
+  /* ---- Coop card (Kdo jsme / Kde jiní končí) ---- */
+  /* Title + compass/time icon stack — center both in the head column */
+  .coop-card__head {
+    align-items: center;
+  }
+
+  .coop-card__title,
+  .coop-card p {
+    text-align: center;
+  }
+
+  /* ---- Family note (Myslíme i na rodinu) ---- */
+  .family-note__body {
+    text-align: center;
+  }
+
+  .family-note__title {
+    justify-content: center;  /* heart + label inline */
+  }
+
+  .family-note__icon {
+    align-self: center;
+  }
+
+  /* ---- EUCS note (Získejte více z pojistné události) ---- */
+  .eucs-note__body {
+    text-align: center;
+  }
+
+  .eucs-note__icon {
+    align-self: center;
+  }
+
+  /* ---- Packages head ---- */
+  .packages-head,
+  .packages-head__title,
+  .packages-head__lead {
+    text-align: center;
+  }
+
+  /* ---- myPlann (Aplikace) ---- */
+  .myplann__copy,
+  .myplann__title,
+  .myplann__text {
+    text-align: center;
+  }
+
+  .myplann__cta {
+    justify-content: center;  /* center store buttons */
+  }
+
+  /* ---- Contact card (Lidé / Tým) ---- */
+  .contact-card__head,
+  .contact-card__title,
+  .contact-card__lead {
+    text-align: center;
+  }
+
+  /* Person row: stack photo above info, all centered */
+  .contact-person {
+    grid-template-columns: 1fr;
+    justify-items: center;
+  }
+
+  .contact-person__info {
+    align-items: center;
+    text-align: center;
+  }
+
+  .contact-person__links {
+    align-items: center;
+  }
+
+  .contact-person__cta {
+    align-self: center;
+  }
+
+  /* ---- News head ---- */
+  .news-head,
+  .news-head__title,
+  .news-head__lead {
+    text-align: center;
+  }
+
+  /* ---- Contact form head (NOT form labels/inputs — those stay left) ---- */
+  .contact-form-card__head,
+  .contact-form-card__title,
+  .contact-form-card__text {
+    text-align: center;
+  }
 }

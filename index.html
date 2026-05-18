@@ -235,13 +235,13 @@
           </div>
           <div class="coop-card__body">
             <p>
-              Finkli vzniklo z&nbsp;přesvědčení, že finance jsou příliš důležité na&nbsp;to, aby se řešily nahodile, nepravidelně, a&nbsp;že se dají dělat i&nbsp;jinak — partnersky, čestně, transparentně a&nbsp;dlouhodobě. Nechtěli jsme být pouze prodejci produktů, ale skutečnými partnery pro Váš finanční život.
+              Finkli vzniklo z&nbsp;přesvědčení, že <strong>finance jsou příliš důležité na&nbsp;to, aby se řešily nahodile, nepravidelně, a&nbsp;že se dají dělat i&nbsp;jinak — partnersky, čestně, transparentně a&nbsp;dlouhodobě.</strong> Nechtěli jsme být pouze prodejci produktů, ale skutečnými partnery pro Váš finanční život.
             </p>
             <p>
-              Nezačínáme produktem a&nbsp;nekončíme sjednáním. Začínáme pochopením Vaší situace jako celku a&nbsp;teprve podle robustního plánu hledáme konkrétní řešení. Po sjednání s&nbsp;Vámi zůstáváme dál, protože péče o&nbsp;finance je proces, ne jednorázová událost.
+              <strong>Nezačínáme produktem a&nbsp;nekončíme sjednáním.</strong> Začínáme pochopením Vaší situace jako celku a&nbsp;teprve podle robustního plánu hledáme konkrétní řešení. Po sjednání s&nbsp;Vámi zůstáváme dál, protože péče o&nbsp;finance je proces, ne jednorázová událost.
             </p>
             <p>
-              Naším cílem je být Vaším dlouhodobým partnerem pro finanční život s&nbsp;přehledem, systémem a&nbsp;klidem.
+              <strong>Naším cílem je být Vaším dlouhodobým partnerem pro finanční život s&nbsp;přehledem, systémem a&nbsp;klidem.</strong>
             </p>
           </div>
         </article>
@@ -299,7 +299,7 @@
         <article class="coop-card coop-card--wide">
           <div class="coop-card__head">
             <h3 class="h3 coop-card__title">Kde jiní končí, my pokračujeme</h3>
-            <img src="assets/time.png" alt="" class="coop-card__icon" />
+            <img src="assets/time.png" alt="" class="coop-card__icon coop-card__icon--time" />
           </div>
           <div class="coop-card__body">
             <p>
@@ -308,13 +308,21 @@
             <p>
               Ve&nbsp;Finkli přidáváme krok, který podle nás dává celé spolupráci smysl: <strong>dlouhodobou péči a&nbsp;servis.</strong> Díky ní se k&nbsp;plánu pravidelně vracíme, aktualizujeme ho a&nbsp;znovu navazujeme na&nbsp;to, co je právě důležité. Proces se tím uzavírá a&nbsp;finance nezůstávají jen u&nbsp;jednorázového rozhodnutí.
             </p>
+          </div>
+
+          <!-- Cycle visuals live OUTSIDE .coop-card__body so they can span both
+               grid columns on desktop and sit centered under the head + body.
+               (Inside body they'd be constrained to the right column.) -->
 
             <!-- Cycle diagram — static SVG export from Figma + invisible hover zones
                  overlaid on each icon for a subtle green halo on hover.
-                 Hotspot %-coords derived from icon rect positions in kolecko.svg viewBox 326×261. -->
+                 Hotspot %-coords derived from icon rect positions in kolecko.svg viewBox 326×261.
+                 NOTE: SVG is shown on tablet & desktop only. On phones the
+                 texts inside the SVG become unreadable, so we render the
+                 list version below (.cycle-steps) instead. -->
             <figure class="cycle-figure"
                     aria-label="Cyklus spolupráce s klientem — 5 kroků (Analýza, Plán, Výběr produktu, Realizace, Péče a servis) s návratem od péče zpět k analýze">
-              <img src="assets/kolecko_text.svg" alt="" class="cycle-figure__svg" />
+              <img src="assets/kolecko-outline.svg" alt="" class="cycle-figure__svg" />
 
               <div class="cycle-figure__hotspots" aria-hidden="true">
                 <span class="cycle-hotspot" style="--x: 50.6%;  --y: 4.8%;"></span>  <!-- 1. Analýza -->
@@ -324,7 +332,73 @@
                 <span class="cycle-hotspot" style="--x: 19.9%;  --y: 33.8%;"></span> <!-- 5. Péče & servis -->
               </div>
             </figure>
-          </div>
+
+            <!-- Mobile-only: vertical step list (same content as the SVG above
+                 but readable on a phone). Connectors:
+                 1 → 2 → 3 → 4 solid (regular process)
+                 4 → 5 dashed green (entering the "Finkli difference" — péče)
+                 5 → loop dashed green (cycle closes, returns to analýza). -->
+            <ol class="cycle-steps" aria-label="Cyklus spolupráce v 5 krocích">
+              <li class="cycle-steps__item">
+                <div class="cycle-steps__head">
+                  <img src="assets/analyza_icon.png" alt="" class="cycle-steps__icon" />
+                  <span class="cycle-steps__num">1</span>
+                </div>
+                <h4 class="cycle-steps__title">Analýza</h4>
+                <p class="cycle-steps__text">Podíváme se na Vaši finanční situaci jako celek — příjmy, výdaje, závazky, cíle. Bez analýzy nelze dobře plánovat.</p>
+              </li>
+
+              <li class="cycle-steps__connector" aria-hidden="true"></li>
+
+              <li class="cycle-steps__item">
+                <div class="cycle-steps__head">
+                  <img src="assets/plan_icon.png" alt="" class="cycle-steps__icon" />
+                  <span class="cycle-steps__num">2</span>
+                </div>
+                <h4 class="cycle-steps__title">Plán</h4>
+                <p class="cycle-steps__text">Na základě analýzy vzniká mapa: co, proč a&nbsp;v&nbsp;jakém pořadí řešit. Finanční plán je základ všeho, co následuje.</p>
+              </li>
+
+              <li class="cycle-steps__connector" aria-hidden="true"></li>
+
+              <li class="cycle-steps__item">
+                <div class="cycle-steps__head">
+                  <img src="assets/nastaveni_icon.png" alt="" class="cycle-steps__icon" />
+                  <span class="cycle-steps__num">3</span>
+                </div>
+                <h4 class="cycle-steps__title">Výběr produktu</h4>
+                <p class="cycle-steps__text">Teprve teď přicházejí konkrétní produkty a&nbsp;nástroje. Vybíráme je jako důsledek plánu, nikdy ne jako výchozí bod.</p>
+              </li>
+
+              <li class="cycle-steps__connector" aria-hidden="true"></li>
+
+              <li class="cycle-steps__item">
+                <div class="cycle-steps__head">
+                  <img src="assets/realizace_icon.png" alt="" class="cycle-steps__icon" />
+                  <span class="cycle-steps__num">4</span>
+                </div>
+                <h4 class="cycle-steps__title">Realizace</h4>
+                <p class="cycle-steps__text">Vybraná řešení uvedeme do praxe. Postaráme se o&nbsp;veškeré sjednání a&nbsp;administrativu za&nbsp;Vás.</p>
+              </li>
+
+              <li class="cycle-steps__connector cycle-steps__connector--dashed" aria-hidden="true"></li>
+
+              <li class="cycle-steps__item cycle-steps__item--accent">
+                <div class="cycle-steps__head">
+                  <img src="assets/pece_icon.png" alt="" class="cycle-steps__icon" />
+                  <span class="cycle-steps__num">5</span>
+                </div>
+                <h4 class="cycle-steps__title">Péče &amp;&nbsp;servis</h4>
+                <p class="cycle-steps__text">Pravidelně kontrolujeme vývoj Vaší situace a&nbsp;upravujeme plán podle reality. Váš plán žije a&nbsp;přináší výsledky v&nbsp;čase.</p>
+              </li>
+
+              <li class="cycle-steps__connector cycle-steps__connector--dashed" aria-hidden="true"></li>
+
+              <li class="cycle-steps__loop">
+                <span class="cycle-steps__loop-icon" aria-hidden="true">↻</span>
+                <span>Cyklus se uzavírá péčí a&nbsp;vrací zpět k&nbsp;1.&nbsp;Analýze</span>
+              </li>
+            </ol>
         </article>
       </div>
 
@@ -346,7 +420,7 @@
           Protože spolupráce ve&nbsp;Finkli stojí na&nbsp;dlouhodobé péči, ne na&nbsp;jednorázovém prodeji, funguje formou měsíčních balíčků za&nbsp;servis, plánování a&nbsp;průběžnou podporu.
         </p>
         <p class="packages-head__lead">
-          Provize z&nbsp;produktů jsou ze své podstaty jednorázové a&nbsp;mohou vytvářet tlak na&nbsp;prodej. Přímá platba tento tlak odstraňuje, spolupráce je tak dlouhodobě udržitelná, transparentní a&nbsp;bez skrytých motivací. Řešení vybíráme podle Vašich potřeb, ne podle výše provize.
+          Provize z&nbsp;produktů jsou ze své podstaty jednorázové a&nbsp;mohou vytvářet tlak na&nbsp;prodej. <strong>Přímá platba tento tlak odstraňuje, spolupráce je tak dlouhodobě udržitelná, transparentní a&nbsp;bez skrytých motivací. Řešení vybíráme podle Vašich potřeb, ne podle výše provize.</strong>
         </p>
         <p class="packages-head__lead">
           Níže najdete orientační přehled balíčků a&nbsp;kombinací služeb, které poskytujeme. Není cílem si hned vybrat konkrétní variantu. Na&nbsp;schůzce spolu v&nbsp;klidu projdeme Vaši situaci a&nbsp;ukážeme si, jaká cesta pro Vás dává největší smysl.
@@ -631,6 +705,38 @@
           <p class="myplann__text">
             Najdete v&nbsp;ní smlouvy, dokumenty i&nbsp;portfolio, můžete sledovat aktuální vývoj, vidět, co se právě řeší, a&nbsp;<strong>komunikovat s&nbsp;námi bezpečně bez zbytečné administrativy.</strong>
           </p>
+
+          <!-- Store CTAs: Apple App Store + Google Play. SVG icons inlined so
+               currentColor inherits from the button text color. Brand-green pair
+               with brand-yellow uses our existing accent tokens (no new colors). -->
+          <div class="myplann__cta">
+            <a class="btn btn--store btn--store-apple"
+               href="https://apps.apple.com/cz/app/myplann/id6443604108?l=cs"
+               target="_blank" rel="noopener noreferrer"
+               aria-label="Stáhnout myPLANN pro iPhone z App Store">
+              <svg class="btn__icon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M15.079 5.999l.239 .012c1.43 .097 3.434 1.013 4.508 2.586a1 1 0 0 1 -.344 1.44c-.05 .028 -.372 .158 -.497 .217a4.15 4.15 0 0 0 -.722 .431c-.614 .461 -.948 1.009 -.942 1.694c.01 .885 .339 1.454 .907 1.846c.208 .143 .436 .253 .666 .33c.126 .043 .426 .116 .444 .122a1 1 0 0 1 .662 .942c0 2.621 -3.04 6.381 -5.286 6.381c-.79 0 -1.272 -.091 -1.983 -.315l-.098 -.031c-.463 -.146 -.702 -.192 -1.133 -.192c-.52 0 -.863 .06 -1.518 .237l-.197 .053c-.575 .153 -.964 .226 -1.5 .248c-2.749 0 -5.285 -5.093 -5.285 -9.072c0 -3.87 1.786 -6.92 5.286 -6.92c.297 0 .598 .045 .909 .128c.403 .107 .774 .26 1.296 .508c.787 .374 .948 .44 1.009 .44h.016c.03 -.003 .128 -.047 1.056 -.457c1.061 -.467 1.864 -.685 2.746 -.616l-.24 -.012z"/>
+                <path d="M14 1a1 1 0 0 1 1 1a3 3 0 0 1 -3 3a1 1 0 0 1 -1 -1a3 3 0 0 1 3 -3z"/>
+              </svg>
+              <span>Stáhnout</span>
+            </a>
+
+            <a class="btn btn--store btn--store-android"
+               href="https://play.google.com/store/apps/details?id=cz.sabservis.myplann&amp;hl=en_US"
+               target="_blank" rel="noopener noreferrer"
+               aria-label="Stáhnout myPLANN pro Android z Google Play">
+              <svg class="btn__icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M4 10l0 6"/>
+                <path d="M20 10l0 6"/>
+                <path d="M7 9h10v8a1 1 0 0 1 -1 1h-8a1 1 0 0 1 -1 -1v-8a5 5 0 0 1 10 0"/>
+                <path d="M8 3l1 2"/>
+                <path d="M16 3l-1 2"/>
+                <path d="M9 18l0 3"/>
+                <path d="M15 18l0 3"/>
+              </svg>
+              <span>Stáhnout</span>
+            </a>
+          </div>
         </div>
 
         <!-- Visual: 3 layered pieces.
@@ -672,7 +778,7 @@
           <div class="contact-person">
             <img src="assets/finkli_profilovka_jarda.jpg" alt="Jaroslav Nedvěd — partner ve Finkli" class="contact-person__photo" />
             <div class="contact-person__info">
-              <h3 class="h3 contact-person__name">Jaroslav Nedvěd</h3>
+              <h3 class="h3 contact-person__name">Jaroslav Nedvěd, EFA</h3>
               <ul class="contact-person__links">
                 <li>
                   <a href="mailto:jaroslav.nedved@finkli.cz" class="contact-person__link">jaroslav.nedved@finkli.cz</a>
@@ -746,43 +852,56 @@
            target="_blank" rel="noopener noreferrer">
           <img src="assets/news/marianne-zeny-investovani.webp" alt="" class="news-card__image" loading="lazy" />
           <div class="news-card__overlay" aria-hidden="true"></div>
-          <div class="news-card__body">
-            <span class="news-card__eyebrow">Rozhovor v&nbsp;Marianne</span>
+          <<div class="news-card__body">
+    <div class="news-card__eyebrows">
+      <span class="news-card__eyebrow">Rozhovor Jaroslava Nedvěda</span>
+      <span class="news-card__eyebrow">27.4.2026</span>
+    </div>
             <h3 class="h3 news-card__title">Ženy by byly v&nbsp;investování lepší než muži</h3>
-            <p class="news-card__desc">Jaroslav v&nbsp;Marianne.cz o&nbsp;tom, proč mají ženy v&nbsp;investování přirozený náskok — a&nbsp;proč investování má být nuda, ne hra.</p>
+            <p class="news-card__desc">Jaroslav pro Marianne.cz mluví o tom, proč mohou mít ženy v investování přirozenou výhodu, proč je důležitější disciplína než adrenalin a proč dobré investování nezačíná výběrem produktu, ale jasným důvodem, plánem a časem.</p>
           </div>
         </a>
 
         <!-- 2) Placeholder — glass (default), 1×1
              Smažte / přepište při přidání skutečné aktuality. -->
         <a class="news-card news-card--1x1"
-           href="#novinky">
+           href="#">
           <div class="news-card__body">
-            <span class="news-card__eyebrow">Metodika</span>
-            <h3 class="h3 news-card__title">Jak vypadá první schůzka ve&nbsp;Finkli</h3>
-            <p class="news-card__desc">Krátký průvodce tím, co Vás čeká, když se s&nbsp;námi rozhodnete probrat Vaši finanční situaci.</p>
+    <div class="news-card__eyebrows">
+      <span class="news-card__eyebrow">Metodika</span>
+      <span class="news-card__eyebrow">18.5.2026</span>
+    </div>
+            <h3 class="h3 news-card__title">Spouštíme nový web&nbsp;Finkli</h3>
+            <p class="news-card__desc">Nový web přehledně ukazuje, jak ve Finkli přemýšlíme o financích, spolupráci a dlouhodobé péči.</p>
           </div>
         </a>
 
         <!-- 3) Placeholder — solid yellow (Gold akcent), 1×1 -->
-        <a class="news-card news-card--1x1 news-card--bg-yellow"
+        <a class="news-card news-card--1x1"
            href="#novinky">
           <div class="news-card__body">
-            <span class="news-card__eyebrow">Novinka</span>
-            <h3 class="h3 news-card__title">Spouštíme balíček Gold</h3>
-            <p class="news-card__desc">Nová úroveň péče pro klienty, kteří chtějí mít své finance pod taktovkou profesionála od&nbsp;A&nbsp;do&nbsp;Z.</p>
+    <div class="news-card__eyebrows">
+      <span class="news-card__eyebrow">Aplikace</span>
+      <span class="news-card__eyebrow">myPlann</span>
+    </div>
+            <h3 class="h3 news-card__title">Vaše finance vždy po ruce</h3>
+            <p class="news-card__desc">Klientská aplikace Vám dá přehled o smlouvách, dokumentech, portfoliu i tom, co právě společně řešíme.</p>
           </div>
         </a>
 
         <!-- 4) Placeholder — dark, 2×1 (široký highlight) -->
-        <a class="news-card news-card--2x1 news-card--bg-dark"
-           href="#novinky">
-          <div class="news-card__body">
-            <span class="news-card__eyebrow">Článek</span>
-            <h3 class="h3 news-card__title">Proč péče o&nbsp;finance není jednorázová událost</h3>
-            <p class="news-card__desc">Většina poradců končí tam, kde my teprve začínáme. Co znamená dlouhodobé partnerství a&nbsp;proč nestačí jednou „sjednat".</p>
-          </div>
-        </a>
+        <a class="news-card news-card--2x1 news-card--bg-dark" href="#novinky">
+  <div class="news-card__body">
+    <div class="news-card__eyebrows">
+      <span class="news-card__eyebrow">Přístup</span>
+      <span class="news-card__eyebrow">30+ institucí</span>
+    </div>
+    <h3 class="h3 news-card__title">Řešení napříč trhem</h3>
+    <p class="news-card__desc">
+      Máme přístup k řešením napříč trhem včetně největších bank, pojišťoven a investičních společností. Díky tomu nejsme omezeni na nabídku jedné instituce a můžeme vybírat podle toho, co odpovídá Vašemu finančnímu plánu, potřebám a situaci v čase.
+    </p>
+  </div>
+</a>
 
       </div>
     </div>
