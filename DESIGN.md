@@ -196,9 +196,16 @@ Sekce by NEMĚLY mít vlastní solid background — nechte backdrop probleskovat
 ## Sekce — stav
 
 ### ✅ Header (hotovo)
-- Floating, glass, centered, max-width 640px
-- Logo SVG vlevo, nav uprostřed (desktop), CTA Kontakt vpravo
-- Mobile: hamburger menu → full-screen overlay
+- Floating, glass, **max-width: var(--container-max) = 1200px** (sedí přesně
+  s obsahovým sloupcem `.container`), auto margins, top: 14px
+- Logo SVG vlevo, nav uprostřed (desktop), CTA Kontakt (#kontakt-form) vpravo
+- **Nav má 7 položek:** O nás (#onas), Co děláme (#oblasti), Přístup (#pristup),
+  Balíčky (#balicky), Aplikace (#aplikace), Lidé (#lide), Novinky (#novinky)
+  + CTA Kontakt (#kontakt-form)
+- **Breakpoint pro hamburger: <1100px** (na užších viewportech full-screen
+  overlay s identickou nav strukturou). Nav font-size 13px (1100–1239px) /
+  13.5px (≥1240px) — sedmá nav položka by se jinak nevešla.
+- Mobile menu (full-screen overlay) má stejných 7 položek + Kontakt CTA
 - Scroll state: header shadow se prohlubuje při scrollu
 
 ### ✅ Hero (hotovo) — `id="hero"`
@@ -227,7 +234,7 @@ Sekce by NEMĚLY mít vlastní solid background — nechte backdrop probleskovat
   textarea pod tím přes celou šířku, nízká defaultní výška (52–140 px).
 
 ### ✅ Sekce "Jak ve Finkli s klienty spolupracujeme" (hotovo) — `id="onas"`
-**3 sub-sekce uvnitř:**
+**3 sub-sekce uvnitř (chunky, ne samostatné sekce):**
 
 1. **Wide karta "Kdo jsme a co děláme"** (`.coop-card--wide`)
    - Editorial 2-col grid: 1fr 1.7fr
@@ -235,19 +242,21 @@ Sekce by NEMĚLY mít vlastní solid background — nechte backdrop probleskovat
    - Pravý sloupec: 3 odstavce textu (brand voice z letáku)
 
 2. **3 area karty "V jakých oblastech Vám pomáháme"** (`#oblasti`)
+   - Scroll target pro nav "Co děláme"
    - Card 1: Přání a cíle (Investice, Penze) → cile_icon.png
    - Card 2: Ochrana (Pojištění) → pojisteni_icon.png
    - Card 3: Financování (Úvěry) → uvery_icon.png
    - Centrované content uvnitř karty (icon → pill → sub → divider → text)
    - Coordinated hover: pill greens, divider greens, icon scales
 
-3. **Cyklus diagram "Spolupráce ve Finkli v čase"**
-   - Statické SVG (kolecko_text.svg) loaded jako `<img>`
+3. **"Kde jiní končí, my pokračujeme" + cyklus diagram** (`#pristup`)
+   - Scroll target pro nav "Přístup" — id na `.coop-cards--cycle` wrapperu
+   - Wide karta s textem + statický SVG (kolecko_text.svg) loaded jako `<img>`
    - Hover hotspoty: 5 invisible spans nad ikonami, decentní zelený soft halo na hover
    - Pod diagramem: cycle-note vysvětlující dashed green line
 
-### ✅ News „Ze světa Finkli" (hotovo) — `id="aktuality"`
-- Bento grid sekce mezi týmem (`#kontakt`) a formulářem (`#napsat`).
+### ✅ News „Ze světa Finkli" (hotovo) — `id="novinky"`
+- Bento grid sekce mezi týmem (`#kontakt` / `#lide`) a formulářem (`#kontakt-form`).
 - H2 „Ze světa Finkli" + lead, levé zarovnání (stejný rytmus jako ostatní sekce).
 - 4-col desktop / 2-col tablet / 1-col mobile. CSS Grid, žádný JS.
 - Karty = hardcoded `<a class="news-card">` bloky (žádný JSON, žádný admin, žádné rendering JS).
@@ -265,11 +274,14 @@ Sekce by NEMĚLY mít vlastní solid background — nechte backdrop probleskovat
 - Placeholder karty (Metodika / Spouštíme Gold / Proč není péče jednorázová) — smazat/přepsat
   při přidání skutečných aktualit.
 
-### ✅ Kontakt (hotovo) — `id="kontakt"` + `id="napsat"`
-- **Po refactoru:** rozděleno na 2 sousedící sekce kvůli vložení `#aktuality` mezi tým a form:
-  - `#kontakt` — `.contact-card` (mint glass, tým Finkli — Jaroslav, Matěj)
-  - `#napsat` — `.contact-form-card` (white glass, formulář)
-- Header CTA „Kontakt" (`href="#kontakt"`) stále scrolluje na tým.
+### ✅ Kontakt (hotovo) — `id="kontakt"` + `id="lide"` + `id="kontakt-form"`
+- **Po refactoru:** rozděleno na 2 sousedící sekce kvůli vložení `#novinky` mezi tým a form:
+  - `#kontakt` (sekce) + `#lide` (na `.contact-card` uvnitř) — mint glass, tým Finkli
+    (Jaroslav, Matěj). Nav "Lidé" cílí na `#lide` (scroll přímo na kartu týmu).
+  - `#kontakt-form` (sekce) — `.contact-form-card` (white glass, formulář).
+    Form uvnitř má `id="contact-form"` — to je JS hook (script.js → form submit),
+    NEMĚNIT. Section id="kontakt-form" je čistě scroll target pro header CTA.
+- Header CTA „Kontakt" (`href="#kontakt-form"`) scrolluje rovnou na formulář dole.
 - 2-col contact card s týmem + samostatná `.contact-form-card` (jméno / email / telefon / zpráva)
 - **Submission: napojeno na Web3Forms** — používá sdílenou konstantu `WEB3FORMS`.
   Subject: "Nový lead z webu – ${name}". Payload: jméno, telefon, email, zpráva.
@@ -281,13 +293,38 @@ Sekce by NEMĚLY mít vlastní solid background — nechte backdrop probleskovat
   zpět původní form. Form je před tím `form.reset()`-nutý.
 - Při chybě: `.contact-form__error` pod tlačítkem, form zůstává vyplněný.
 
+### ✅ Footer (hotovo) — `.site-footer`
+
+- 4-col grid na desktopu (`1.4fr 0.8fr 0.9fr 1fr`), 2-col na tabletu (≥640px),
+  1-col stack na mobilu. Container 1200px (stejný jako zbytek webu).
+- Border-top `1px var(--border-soft)` jako jemné oddělení od sekce nad ním.
+  Žádné solid pozadí — drift backdrop probleskuje.
+- Padding: 72/88/100 px nahoře, 40/48/56 px dole (mobile / tablet / desktop).
+- **Sloupec 1 (Brand):** logo (`finkli_logo_dark.svg`, 26–28 px height) +
+  claim ("Na finance se díváme jako na dlouhodobý proces…", max-width 340 px,
+  `var(--text-muted)`) + copyright "© 2026 Finkli. Všechna práva vyhrazena."
+  (drobně, `var(--text-soft)`).
+- **Sloupec 2 (Mapa webu):** kopie header nav (8 položek) ve stejném pořadí —
+  O nás, Co děláme, Přístup, Balíčky, Aplikace, Lidé, Novinky, Kontakt.
+  Vertikální seznam, hover → `var(--brand-green)`.
+- **Sloupec 3 (Kontakty):** `mailto:info@finkli.cz`, `tel:+420000000000`,
+  LinkedIn (`href="#"` placeholder), Instagram (`href="#"` placeholder).
+- **Sloupec 4 (Ze světa Finkli):** tituly článků ze sekce `#novinky`.
+  Marianne rozhovor odkazuje na externí URL (target="_blank"), zbylé tři
+  zatím `href="#novinky"` — **až vznikne stránka konkrétního článku,
+  nahradit href hodnoty**. Tento sloupec se musí aktualizovat ručně při
+  každé změně v `#novinky`.
+- **Headers sloupců:** uppercase, `letter-spacing: 0.18em`, font-size 13 px,
+  `font-weight: 600`, color `var(--brand-dark)`.
+- **Links:** default `var(--text-base)`, hover `var(--brand-green)`,
+  `transition: color 0.2s var(--ease)`.
+
 ### 🚧 TODO sekce
 
 - **Přehled balíčků** (Silver / Silver+ / Gold) — připraveno texty
 - **EUCS** sekce (Získejte více peněz z pojistné události)
 - **Myslíme i na rodinu** (doplněk k balíčkům)
 - **Tým Finkli** (Jaroslav, Matěj) — profilovky v assets
-- **Footer** s mapou webu, kontakty, právními odkazy
 
 ---
 
@@ -358,15 +395,15 @@ Sekce by NEMĚLY mít vlastní solid background — nechte backdrop probleskovat
 
 ---
 
-## Workflow pro přidání nové aktuality (sekce `#aktuality`)
+## Workflow pro přidání nové aktuality (sekce `#novinky`)
 
-Karty v `#aktuality` jsou hardcoded HTML bloky. Žádný build, žádný admin.
+Karty v `#novinky` jsou hardcoded HTML bloky. Žádný build, žádný admin.
 **Jak přidat novou aktualitu:**
 
 1. **Obrázek** (pokud má karta být image varianta) → ulož do `/web/assets/news/{slug}.jpg`
    (např. `marianne-zeny-investovani.jpg`). Nepoužívej hot-linking — externí URL
    se mění.
-2. **Otevři** `index.html`, najdi `<div class="news-bento">` v sekci `#aktuality`.
+2. **Otevři** `index.html`, najdi `<div class="news-bento">` v sekci `#novinky`.
 3. **Paste nový `<a class="news-card">` blok** podle existujícího vzoru. Tři varianty:
    - **Image:** `news-card--with-image` + `<img class="news-card__image">` + `<div class="news-card__overlay">`
    - **Solid color:** `news-card--bg-{mint|yellow|green|dark|white}`

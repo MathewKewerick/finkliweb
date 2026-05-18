@@ -30,12 +30,15 @@
 
       <nav class="header__nav" aria-label="Hlavní">
         <a href="#onas">O nás</a>
-        <a href="#sluzby">Co děláme</a>
-        <a href="#balicky">Balíčky</a>
+        <a href="#oblasti">Co děláme</a>
         <a href="#pristup">Přístup</a>
+        <a href="#balicky">Balíčky</a>
+        <a href="#aplikace">Aplikace</a>
+        <a href="#lide">Lidé</a>
+        <a href="#novinky">Novinky</a>
       </nav>
 
-      <a href="#kontakt" class="header__cta header__cta--desktop" data-desktop>Kontakt</a>
+      <a href="#kontakt-form" class="header__cta header__cta--desktop" data-desktop>Kontakt</a>
 
       <button class="header__burger" type="button" aria-label="Otevřít menu" aria-controls="mobile-menu" aria-expanded="false">
         <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -60,12 +63,15 @@
 
     <nav class="mobile-menu__nav" aria-label="Mobilní">
       <a href="#onas">O nás</a>
-      <a href="#sluzby">Co děláme</a>
-      <a href="#balicky">Balíčky</a>
+      <a href="#oblasti">Co děláme</a>
       <a href="#pristup">Přístup</a>
+      <a href="#balicky">Balíčky</a>
+      <a href="#aplikace">Aplikace</a>
+      <a href="#lide">Lidé</a>
+      <a href="#novinky">Novinky</a>
     </nav>
 
-    <a href="#kontakt" class="mobile-menu__cta">Kontakt</a>
+    <a href="#kontakt-form" class="mobile-menu__cta">Kontakt</a>
   </div>
 
   <!-- ===== Hero ===== -->
@@ -82,7 +88,7 @@
         </p>
         <div class="hero__actions">
           <a href="#pristup" class="btn btn--secondary">Zjistit, jak spolupráce funguje</a>
-          <a href="#kontakt" class="btn btn--primary">Nezávazná konzultace</a>
+          <a href="#kontakt-form" class="btn btn--primary">Nezávazná konzultace</a>
         </div>
       </div>
 
@@ -287,8 +293,9 @@
       </div>
 
       <!-- Sub-section: Kde jiní končí, my pokračujeme — wide coop-card with
-           time icon (left column) + body text + embedded cycle diagram below. -->
-      <div class="coop-cards coop-cards--cycle">
+           time icon (left column) + body text + embedded cycle diagram below.
+           id="pristup" je scroll target pro nav "Přístup" (chunk uvnitř #onas). -->
+      <div class="coop-cards coop-cards--cycle" id="pristup">
         <article class="coop-card coop-card--wide">
           <div class="coop-card__head">
             <h3 class="h3 coop-card__title">Kde jiní končí, my pokračujeme</h3>
@@ -651,7 +658,7 @@
   <section class="section section--contact" id="kontakt">
     <div class="container">
 
-      <article class="contact-card">
+      <article class="contact-card" id="lide">
 
         <header class="contact-card__head">
           <h2 class="h2 contact-card__title">Kdo se o&nbsp;Vás ve&nbsp;Finkli postará</h2>
@@ -719,7 +726,7 @@
          - (default)               : glass (white-tinted, mirrors .diagnostic__card)
        Card sizes (desktop only, collapse on smaller breakpoints):
          - default 1×1, plus modifiers --2x1 / --3x1 / --4x1 / --1x2 / --2x2. -->
-  <section class="section section--news" id="aktuality">
+  <section class="section section--news" id="novinky">
     <div class="container">
 
       <header class="news-head">
@@ -749,7 +756,7 @@
         <!-- 2) Placeholder — glass (default), 1×1
              Smažte / přepište při přidání skutečné aktuality. -->
         <a class="news-card news-card--1x1"
-           href="#aktuality">
+           href="#novinky">
           <div class="news-card__body">
             <span class="news-card__eyebrow">Metodika</span>
             <h3 class="h3 news-card__title">Jak vypadá první schůzka ve&nbsp;Finkli</h3>
@@ -759,7 +766,7 @@
 
         <!-- 3) Placeholder — solid yellow (Gold akcent), 1×1 -->
         <a class="news-card news-card--1x1 news-card--bg-yellow"
-           href="#aktuality">
+           href="#novinky">
           <div class="news-card__body">
             <span class="news-card__eyebrow">Novinka</span>
             <h3 class="h3 news-card__title">Spouštíme balíček Gold</h3>
@@ -769,7 +776,7 @@
 
         <!-- 4) Placeholder — dark, 2×1 (široký highlight) -->
         <a class="news-card news-card--2x1 news-card--bg-dark"
-           href="#aktuality">
+           href="#novinky">
           <div class="news-card__body">
             <span class="news-card__eyebrow">Článek</span>
             <h3 class="h3 news-card__title">Proč péče o&nbsp;finance není jednorázová událost</h3>
@@ -783,9 +790,9 @@
 
   <!-- ===== Section: Kontaktní formulář — „Napište nám" =====
        Vystrnaděno z #kontakt do vlastní sekce, aby mezi tým a formulář mohla
-       být vložena sekce #aktuality. Header CTA „Kontakt" (#kontakt) zůstává
-       a scrolluje uživatele nahoru na tým. -->
-  <section class="section section--contact-form" id="napsat">
+       být vložena sekce #novinky. Section id="kontakt-form" je scroll target
+       pro header CTA „Kontakt" — skočí přesně na formulář, ne na tým výš. -->
+  <section class="section section--contact-form" id="kontakt-form">
     <div class="container">
 
       <!-- Contact form card — white-tinted glass mirroring .diagnostic__card.
@@ -858,6 +865,73 @@
 
     </div>
   </section>
+
+  <!-- ===== Footer ===== -->
+  <footer class="site-footer" id="site-footer">
+    <div class="container">
+      <div class="site-footer__grid">
+
+        <!-- Column 1: Brand -->
+        <div class="site-footer__col site-footer__col--brand">
+          <a href="#" class="site-footer__brand" aria-label="Finkli — domů">
+            <img src="assets/finkli_logo_dark.svg" alt="Finkli" class="site-footer__logo" />
+          </a>
+          <p class="site-footer__claim">
+            Na finance se díváme jako na dlouhodobý proces, ne jednorázové rozhodnutí.
+            Nejsme postavení na prodeji produktů, ale na dlouhodobé spolupráci a&nbsp;péči.
+          </p>
+          <p class="site-footer__copy">© 2026 Finkli. Všechna práva vyhrazena.</p>
+        </div>
+
+        <!-- Column 2: Mapa webu — stejné položky jako header nav -->
+        <nav class="site-footer__col" aria-label="Mapa webu">
+          <h4 class="site-footer__heading">Mapa webu</h4>
+          <ul class="site-footer__list">
+            <li><a href="#onas" class="site-footer__link">O&nbsp;nás</a></li>
+            <li><a href="#oblasti" class="site-footer__link">Co děláme</a></li>
+            <li><a href="#pristup" class="site-footer__link">Přístup</a></li>
+            <li><a href="#balicky" class="site-footer__link">Balíčky</a></li>
+            <li><a href="#aplikace" class="site-footer__link">Aplikace</a></li>
+            <li><a href="#lide" class="site-footer__link">Lidé</a></li>
+            <li><a href="#novinky" class="site-footer__link">Novinky</a></li>
+            <li><a href="#kontakt-form" class="site-footer__link">Kontakt</a></li>
+          </ul>
+        </nav>
+
+        <!-- Column 3: Kontakty -->
+        <div class="site-footer__col">
+          <h4 class="site-footer__heading">Kontakty</h4>
+          <ul class="site-footer__list">
+            <li><a href="mailto:info@finkli.cz" class="site-footer__link">info@finkli.cz</a></li>
+            <li><a href="tel:+420000000000" class="site-footer__link">+420&nbsp;000&nbsp;000&nbsp;000</a></li>
+            <li><a href="#" class="site-footer__link" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
+            <li><a href="#" class="site-footer__link" target="_blank" rel="noopener noreferrer">Instagram</a></li>
+          </ul>
+        </div>
+
+        <!-- Column 4: Ze světa Finkli — tituly článků ze sekce #novinky
+             Odkazy směřují na konkrétní článek pokud existuje (Marianne),
+             jinak na #novinky. Až vznikne stránka konkrétního článku,
+             nahradit href hodnoty. -->
+        <div class="site-footer__col">
+          <h4 class="site-footer__heading">Ze světa Finkli</h4>
+          <ul class="site-footer__list">
+            <li>
+              <a href="https://www.marianne.cz/zivotni-styl/zeny-byly-v-investovani-lepsi-nez-muzi-ale-neveri-si-odbornik-radi-jak-bezpracne"
+                 class="site-footer__link"
+                 target="_blank" rel="noopener noreferrer">
+                Ženy by byly v&nbsp;investování lepší než muži
+              </a>
+            </li>
+            <li><a href="#novinky" class="site-footer__link">Jak vypadá první schůzka ve&nbsp;Finkli</a></li>
+            <li><a href="#novinky" class="site-footer__link">Spouštíme balíček Gold</a></li>
+            <li><a href="#novinky" class="site-footer__link">Proč péče o&nbsp;finance není jednorázová událost</a></li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </footer>
 
   <script src="script.js" defer></script>
 </body>

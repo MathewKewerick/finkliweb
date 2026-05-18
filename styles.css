@@ -196,9 +196,13 @@ strong { font-weight: 600; }
   justify-content: space-between;
   gap: 12px;
 
+  /* Header se šíří přes celý obsahový sloupec (1200px), aby
+     vnější hrany glass karty seděly s .container ostatních sekcí.
+     Vyšší vnitřní padding posouvá logo (vlevo) i CTA (vpravo) od hran
+     glass karty — uvnitř pak nav vyplňuje zbytek a rovnoměrně se rozprostře. */
   width: 100%;
-  max-width: 640px;
-  padding: 9px 9px 9px 16px;
+  max-width: var(--container-max);
+  padding: 9px 14px 9px 22px;
 
   background: rgba(255, 255, 255, 0.82);
   backdrop-filter: saturate(140%) blur(18px);
@@ -207,6 +211,21 @@ strong { font-weight: 600; }
   border-radius: 16px;
   box-shadow: var(--shadow-header);
   transition: box-shadow 0.3s var(--ease), transform 0.3s var(--ease);
+}
+
+@media (min-width: 1100px) {
+  .header__inner {
+    /* Velký vnitřní padding: glass karta zůstává 1200px, ale obsah uvnitř
+       (logo + nav + CTA) se zúží do užšího centrálního pásu — působí
+       líp než když je vše roztažené na plnou šířku karty. */
+    padding: 12px 56px 12px 64px;
+  }
+}
+
+@media (min-width: 1240px) {
+  .header__inner {
+    padding: 14px 88px 14px 96px;
+  }
 }
 
 .header.is-scrolled .header__inner {
@@ -239,23 +258,42 @@ strong { font-weight: 600; }
   display: none;
 }
 
-@media (min-width: 880px) {
+@media (min-width: 1100px) {
+  /* Nav drží 7 položek jako kompaktní cluster ve středu headeru.
+     flex: 1 nechá nav obsadit zbylé místo, ale `justify-content: center`
+     položky shluká do středu — kolem nich je dýchací prostor a od loga
+     i CTA mají odstup. */
   .header__nav {
     display: flex;
     align-items: center;
-    gap: 2px;
+    justify-content: center;
+    flex: 1 1 auto;
+    min-width: 0;
+    gap: 4px;
   }
 
   .header__nav a {
-    padding: 8px 12px;
+    padding: 7px 10px;
     border-radius: 9px;
-    font-size: 13.5px;
+    font-size: 13px;
     color: var(--brand-dark);
     transition: background 0.2s var(--ease), color 0.2s var(--ease);
+    white-space: nowrap;
   }
 
   .header__nav a:hover {
     background: var(--bg-mint-tint);
+  }
+}
+
+/* Větší rozestup/font na širších viewportech */
+@media (min-width: 1240px) {
+  .header__nav {
+    gap: 6px;
+  }
+  .header__nav a {
+    padding: 8px 12px;
+    font-size: 13.5px;
   }
 }
 
@@ -302,7 +340,7 @@ strong { font-weight: 600; }
 
 .header__burger:hover { background: var(--bg-mint-tint); }
 
-@media (min-width: 880px) {
+@media (min-width: 1100px) {
   .header__burger { display: none; }
 }
 
@@ -2922,7 +2960,8 @@ strong { font-weight: 600; }
 }
 
 /* =Section: News (Ze světa Finkli)= =========================================
-   Bento grid sekce mezi týmem (#kontakt) a formulářem (#napsat). Karty jsou
+   Bento grid sekce mezi týmem (#lide / #kontakt) a formulářem (#kontakt-form).
+   Karty jsou
    hardcoded <a class="news-card"> bloky — žádný JS rendering, žádný JSON.
 
    Velikosti karet (utility třídy):
@@ -3246,4 +3285,141 @@ strong { font-weight: 600; }
     grid-column: span 1 !important;
     grid-row: span 1 !important;
   }
+}
+
+/* =Section: Site footer= ====================================================
+   4-sloupcový footer na konci stránky.
+     1) Brand (logo + claim + copyright)
+     2) Mapa webu (kopíruje header nav)
+     3) Kontakty (e-mail, tel, social)
+     4) Ze světa Finkli (tituly článků ze sekce #novinky)
+
+   Layout: 4-col grid na ≥1024px (1.4fr 0.8fr 0.8fr 0.9fr), 2-col na tabletu,
+   1-col stack na mobilu. Container 1200px (stejně jako zbytek webu).
+   Border-top jako jemné oddělení od sekce nad ním.
+
+   Drift backdrop probleskuje — žádné solid pozadí.
+   ========================================================================== */
+
+.site-footer {
+  border-top: 1px solid var(--border-soft);
+  padding: 72px 0 40px;
+  margin-top: 24px;
+}
+
+@media (min-width: 768px) {
+  .site-footer { padding: 88px 0 48px; }
+}
+
+@media (min-width: 1024px) {
+  .site-footer { padding: 100px 0 56px; }
+}
+
+.site-footer__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 40px;
+}
+
+@media (min-width: 640px) {
+  .site-footer__grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 40px 32px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .site-footer__grid {
+    grid-template-columns: 1.4fr 0.8fr 0.9fr 1fr;
+    gap: 48px;
+  }
+}
+
+.site-footer__col {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-width: 0;
+}
+
+/* ----- Column 1: Brand ----- */
+.site-footer__col--brand {
+  gap: 18px;
+}
+
+.site-footer__brand {
+  display: inline-flex;
+  align-items: center;
+  color: var(--brand-dark);
+  align-self: flex-start;
+}
+
+.site-footer__logo {
+  height: 26px;
+  width: auto;
+  display: block;
+}
+
+@media (min-width: 1024px) {
+  .site-footer__logo { height: 28px; }
+}
+
+.site-footer__claim {
+  margin: 0;
+  max-width: 340px;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--text-muted);
+}
+
+@media (min-width: 1024px) {
+  .site-footer__claim { font-size: 15px; }
+}
+
+.site-footer__copy {
+  margin: 6px 0 0;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--text-soft);
+}
+
+/* ----- Column headings (MAPA WEBU / KONTAKTY / ZE SVĚTA FINKLI) ----- */
+.site-footer__heading {
+  margin: 0 0 4px;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--brand-dark);
+}
+
+/* ----- Lists & links ----- */
+.site-footer__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.site-footer__link {
+  display: inline-block;
+  color: var(--text-base);
+  text-decoration: none;
+  font-size: 15px;
+  line-height: 1.45;
+  transition: color 0.2s var(--ease);
+  /* Allow long URLs / emails to wrap on narrow screens */
+  word-break: break-word;
+}
+
+.site-footer__link:hover,
+.site-footer__link:focus-visible {
+  color: var(--brand-green);
+}
+
+@media (min-width: 768px) {
+  .site-footer__link { font-size: 15.5px; }
 }
