@@ -196,12 +196,11 @@ strong { font-weight: 600; }
   justify-content: space-between;
   gap: 12px;
 
-  /* Header se šíří přes celý obsahový sloupec (1200px), aby
-     vnější hrany glass karty seděly s .container ostatních sekcí.
-     Vyšší vnitřní padding posouvá logo (vlevo) i CTA (vpravo) od hran
-     glass karty — uvnitř pak nav vyplňuje zbytek a rovnoměrně se rozprostře. */
+  /* Header je užší než obsahový sloupec (1200px) — kompaktní pás ~850px,
+     aby logo (vlevo), nav (uprostřed) a CTA (vpravo) seděly blízko sebe
+     bez velkých prázdných mezer. */
   width: 100%;
-  max-width: var(--container-max);
+  max-width: 850px;
   padding: 9px 14px 9px 22px;
 
   background: rgba(255, 255, 255, 0.82);
@@ -215,16 +214,15 @@ strong { font-weight: 600; }
 
 @media (min-width: 1100px) {
   .header__inner {
-    /* Velký vnitřní padding: glass karta zůstává 1200px, ale obsah uvnitř
-       (logo + nav + CTA) se zúží do užšího centrálního pásu — působí
-       líp než když je vše roztažené na plnou šířku karty. */
-    padding: 12px 56px 12px 64px;
+    /* Užší karta — žádný extra vnitřní padding navíc; gapy mezi nav položkami
+       a hover paddingy řídí .header__nav a .header__nav a, ne tahle hodnota. */
+    padding: 12px 16px 12px 22px;
   }
 }
 
 @media (min-width: 1240px) {
   .header__inner {
-    padding: 14px 88px 14px 96px;
+    padding: 14px 18px 14px 24px;
   }
 }
 
@@ -324,6 +322,16 @@ strong { font-weight: 600; }
   .header__cta:hover { transform: none !important; }
 }
 
+/* Mobile (<1100px): nav je skrytý → bez tohoto pravidla by se CTA Kontakt
+   ocitlo uprostřed mezi logem a hamburgerem (kvůli space-between). Auto-left
+   margin přitlačí CTA k pravému kraji, hned vedle hamburgeru. Na desktopu
+   už nav s flex:1 zabírá střed, takže auto margin nemá co absorbovat. */
+@media (max-width: 1099px) {
+  .header__cta--desktop {
+    margin-left: auto;
+  }
+}
+
 /* Mobile hamburger */
 .header__burger {
   display: inline-flex;
@@ -391,15 +399,17 @@ strong { font-weight: 600; }
 .mobile-menu__nav {
   display: flex;
   flex-direction: column;
+  align-items: center;          /* každý link je vystředěný — palec dosáhne pohodlně */
   gap: 4px;
   margin-top: 16px;
 }
 
 .mobile-menu__nav a {
-  padding: 16px 18px;
+  padding: 16px 24px;
   font-size: 22px;
   font-weight: 500;
   letter-spacing: -0.02em;
+  text-align: center;
   color: var(--brand-dark);
   border-radius: 14px;
   transition: background 0.2s var(--ease);
@@ -494,25 +504,36 @@ strong { font-weight: 600; }
 
    Positioning intentionally uses viewport units (vh), NOT percent of hero.
    This way the deco stays put even when hero grows (e.g. when a textarea
-   inside the diagnostic card is resized). */
+   inside the diagnostic card is resized).
+
+   Mobile: deco zobrazené velmi jemně (opacity 0.16) jako brand-jemný motiv
+   na pozadí, vykukující ze strany. Stejný parallax přes --parallax-y. */
 .hero__deco {
   --parallax-y: 0px;
   position: absolute;
   pointer-events: none;
   user-select: none;
-  display: none;
+  display: block;
   width: auto;
-  height: 60vh;
-  max-height: 480px;
-  top: 20vh;
-  right: -140px;
+  /* Mobile defaults — F-tvar vykukuje zprava jako brand motiv na pozadí.
+     Pozice a opacity nastavené tak, aby byl viditelný ale nerušil text. */
+  height: 52vh;
+  max-height: 360px;
+  top: 26vh;
+  right: -32%;
   transform: translate3d(0, var(--parallax-y), 0);
-  opacity: 0.95;
+  opacity: 0.22;
   will-change: transform;
 }
 
 @media (min-width: 1024px) {
-  .hero__deco { display: block; }
+  .hero__deco {
+    height: 60vh;
+    max-height: 480px;
+    top: 20vh;
+    right: -140px;
+    opacity: 0.95;
+  }
 }
 
 @media (min-width: 1280px) {
@@ -1058,20 +1079,43 @@ strong { font-weight: 600; }
   .diagnostic__seal { animation: none; }
 }
 
-/* Hero on mobile — flush text on the drifting backdrop, no glass card.
-   (Originally the copy had its own glass surface to feel app-like, but
-   the hero on desktop has no card either, so we keep it consistent.) */
+/* Hero on mobile — odlehčená kompozice:
+   První viewport (100svh) obsahuje POUZE nadpis + subhead + 2 CTAs, vystředěné
+   přirozeně. Diagnostika (chips) začne až pod foldem — uživatel musí scrollovat,
+   ale na otevření vidí klidnou hero kompozici místo natlačené stěny obsahu. */
 @media (max-width: 559px) {
   .hero {
-    padding: 96px 0 32px;
-    min-height: 92svh;
+    /* Reset desktop centering — na mobilu řídí layout .hero__copy a .hero__situations */
+    padding: 0;
+    min-height: auto;
+    display: block;
     align-items: stretch;
   }
+
   .hero__inner {
     display: flex;
     flex-direction: column;
-    justify-content: flex-end;
+    justify-content: flex-start;
   }
+
+  .hero__copy {
+    /* First viewport block — nadpis + subhead + 2 CTAs vystředěné svisle.
+       Min-height 100svh = na otevření vidíš přesně tento blok a nic víc.
+       Padding-top dělá vzduch od headeru (header je ~52px + 14px floating). */
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 96px 0 32px;
+  }
+
+  .hero__situations {
+    /* Diagnostika začne pod foldem; menší top margin než desktop, protože
+       už je oddělená přirozeným zlomem viewportu. */
+    margin-top: 32px;
+    padding-bottom: 32px;
+  }
+
   .hero__actions .btn {
     width: 100%;
     min-height: 52px;
@@ -1511,15 +1555,10 @@ strong { font-weight: 600; }
 
 /* Breathing between sub-sections inside the merged "Jak ve Finkli" block —
    tighter rhythm so the section reads as one connected block, not three. */
-.section--coop .areas { margin-bottom: 48px; }
-
-@media (min-width: 768px) {
-  .section--coop .areas { margin-bottom: 64px; }
-}
-
-@media (min-width: 1024px) {
-  .section--coop .areas { margin-bottom: 80px; }
-}
+/* .areas now feeds into .areas-summary directly — no gap between them
+   (handled by .areas-summary margin-top, matched to .areas grid gap).
+   Section rhythm to the cycle block below lives on .areas-summary instead. */
+.section--coop .areas { margin-bottom: 0; }
 
 /* ----- Cycle: intro head — left-aligned to match the rest of the page ----- */
 .cycle-head {
@@ -1814,8 +1853,9 @@ strong { font-weight: 600; }
 }
 
 .area-card {
-  text-align: center;
-  padding: 32px 24px 36px;
+  position: relative;
+  overflow: hidden;
+  padding: 36px 28px 32px;
   background: rgba(255, 255, 255, 0.55);
   border: 1px solid rgba(11, 46, 52, 0.05);
   border-radius: 20px;
@@ -1829,23 +1869,65 @@ strong { font-weight: 600; }
     box-shadow var(--hover-duration) var(--ease);
 }
 
+/* Decent green glow along the bottom edge — modern accent without breaking
+   the glass surface. */
+.area-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(80% 55% at 50% 100%, rgba(3, 217, 140, 0.10), transparent 65%);
+  opacity: 0.85;
+  transition: opacity var(--hover-duration) var(--ease);
+}
+
 .area-card:hover {
   background: rgba(255, 255, 255, 0.72);
   border-color: rgba(3, 217, 140, 0.16);
   box-shadow: 0 18px 44px rgba(3, 217, 140, 0.10);
 }
 
-@media (min-width: 1024px) {
-  .area-card { padding: 40px 28px 44px; }
+.area-card:hover::after {
+  opacity: 1;
 }
 
-/* Icon */
+@media (min-width: 1024px) {
+  .area-card { padding: 44px 32px 36px; }
+}
+
+/* Number badge (01 / 02 / 03) — top-left, solid brand green pill with white digit. */
+.area-card__number {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 40px;
+  padding: 6px 12px;
+  background: var(--brand-green);
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  border-radius: 12px;
+  box-shadow: 0 6px 16px rgba(3, 217, 140, 0.20);
+}
+
+@media (min-width: 1024px) {
+  .area-card__number { top: 24px; left: 24px; }
+}
+
+/* Icon — centered, slightly larger than original */
 .area-card__icon {
+  position: relative;
+  z-index: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 0 auto 22px;
-  height: 96px;
+  margin: 12px 0 24px;
+  height: 110px;
   transition: transform var(--hover-duration) var(--ease);
 }
 
@@ -1859,43 +1941,37 @@ strong { font-weight: 600; }
   transform: scale(1.06);
 }
 
-/* Pill badge (Přání a cíle / Ochrana / Financování) */
-.area-card__pill {
-  display: inline-block;
-  padding: 10px 24px;
-  border: 1px solid rgba(11, 46, 52, 0.15);
-  border-radius: 10px;
-  font-size: 17px;
+/* Title (Přání a cíle / Ochrana / Financování) — clean text, no border */
+.area-card__title {
+  position: relative;
+  z-index: 1;
+  margin: 0 0 6px;
+  font-size: 24px;
   font-weight: 600;
-  letter-spacing: -0.01em;
+  line-height: 1.2;
+  letter-spacing: -0.015em;
   color: var(--brand-dark);
-  background: transparent;
-  margin-bottom: 18px;
-  transition:
-    border-color var(--hover-duration) var(--ease),
-    background var(--hover-duration) var(--ease);
 }
 
-.area-card:hover .area-card__pill {
-  border-color: var(--brand-green);
-  background: var(--bg-mint-tint);
-}
-
-/* Subtitle (Investice, Penze / Pojištění / Úvěry) */
+/* Subtitle (Investice, Penze / Pojištění / Úvěry) — green category label */
 .area-card__sub {
-  font-size: 17px;
-  font-weight: 500;
-  letter-spacing: -0.01em;
-  color: var(--brand-dark);
-  margin-bottom: 20px;
+  position: relative;
+  z-index: 1;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.005em;
+  color: var(--brand-green);
+  margin-bottom: 18px;
 }
 
-/* Hair-line divider */
+/* Hair-line divider — thinned, left-aligned */
 .area-card__divider {
-  width: 72px;
+  position: relative;
+  z-index: 1;
+  width: 56px;
   height: 1px;
-  margin: 0 auto 20px;
-  background: rgba(11, 46, 52, 0.2);
+  margin: 0 0 18px;
+  background: rgba(11, 46, 52, 0.15);
   transition: background var(--hover-duration) var(--ease);
 }
 
@@ -1905,6 +1981,8 @@ strong { font-weight: 600; }
 
 /* Body text — matches .coop-card p and .cycle-head__text (16 px) for consistency */
 .area-card__text {
+  position: relative;
+  z-index: 1;
   font-size: 16px;
   line-height: 1.65;
   color: var(--text-base);
@@ -1913,15 +1991,109 @@ strong { font-weight: 600; }
 
 /* Mobile compaction */
 @media (max-width: 559px) {
-  .area-card { padding: 28px 22px 30px; }
-  .area-card__icon { height: 80px; margin-bottom: 18px; }
-  .area-card__pill { font-size: 16px; padding: 9px 20px; }
-  .area-card__sub { font-size: 16px; margin-bottom: 16px; }
-  .area-card__divider { margin-bottom: 16px; }
+  .area-card { padding: 32px 22px 28px; }
+  .area-card__number { top: 16px; left: 16px; min-width: 36px; padding: 5px 10px; font-size: 13px; }
+  .area-card__icon { height: 92px; margin: 10px 0 20px; }
+  .area-card__title { font-size: 22px; }
+  .area-card__sub { font-size: 14px; margin-bottom: 14px; }
+  .area-card__divider { margin-bottom: 14px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .area-card:hover .area-card__icon { transform: none; }
+}
+
+/* ----- Areas summary — wide glass strip under the 3 area cards.
+   Compass icon (left, in mint circular badge) + connecting message (right).
+   Mirrors .family-note rhythm (icon-scale on hover, no card scale). ----- */
+.areas-summary {
+  /* margin-top matches .areas grid gap (same rhythm as between the 3 cards above);
+     margin-bottom takes over the section rhythm to the next coop-cards block. */
+  margin-top: 20px;
+  margin-bottom: 48px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 24px;
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid var(--border-green-soft);
+  border-radius: 20px;
+  backdrop-filter: blur(20px) saturate(140%);
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
+  box-shadow: 0 6px 22px rgba(11, 46, 52, 0.025);
+  transition:
+    background var(--hover-duration) var(--ease),
+    border-color var(--hover-duration) var(--ease),
+    box-shadow var(--hover-duration) var(--ease);
+}
+
+@media (min-width: 768px) {
+  .areas-summary {
+    flex-direction: row;
+    align-items: center;
+    gap: 28px;
+    padding: 26px 36px;
+    margin-top: 24px;
+    margin-bottom: 64px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .areas-summary {
+    gap: 32px;
+    padding: 28px 40px;
+    margin-top: 28px;
+    margin-bottom: 80px;
+  }
+}
+
+.areas-summary:hover {
+  background: rgba(255, 255, 255, 0.72);
+  border-color: rgba(3, 217, 140, 0.24);
+  box-shadow: 0 18px 44px rgba(3, 217, 140, 0.10);
+}
+
+/* Circular mint badge wrapping the compass image */
+.areas-summary__icon-wrap {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  padding: 12px;
+  background: var(--bg-mint-tint);
+  border: 1px solid var(--border-green-soft);
+  border-radius: 50%;
+  transition: transform var(--hover-duration) var(--ease);
+}
+
+.areas-summary__icon {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+.areas-summary:hover .areas-summary__icon-wrap {
+  transform: scale(var(--hover-scale));
+}
+
+.areas-summary__text {
+  flex: 1;
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--text-base);
+}
+
+.areas-summary__highlight {
+  color: var(--brand-green);
+  font-weight: 600;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .areas-summary:hover .areas-summary__icon-wrap { transform: none; }
 }
 
 /* On mobile, show a small dashed "loop back" indicator between step 5 and step 1
@@ -1954,17 +2126,26 @@ strong { font-weight: 600; }
   .situations__grid { gap: 12px; }
 }
 
+/* Chips share a glass "filter-pill" language so the section reads as a clear
+   set of entry points. Two visual variants alternate for rhythm:
+   - default = white glass (depth, blur)
+   - .chip--filled = solid mint with a 1.5px brand-green border + subtle
+     inset highlight that gives a hint of dimension. */
 .chip {
   display: inline-flex;
   align-items: center;
-  padding: 12px 18px;
+  padding: 13px 22px;
   font-size: 15px;
   font-weight: 500;
   line-height: 1.25;
+  letter-spacing: -0.005em;
   color: var(--brand-dark);
-  background: transparent;
-  border: 1px solid var(--border-green);
-  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid rgba(11, 46, 52, 0.08);
+  border-radius: 14px;
+  backdrop-filter: blur(12px) saturate(140%);
+  -webkit-backdrop-filter: blur(12px) saturate(140%);
+  box-shadow: 0 2px 8px rgba(11, 46, 52, 0.04);
   /* Uses global --hover-scale / --hover-duration */
   transition:
     transform var(--hover-duration) var(--ease),
@@ -1976,16 +2157,29 @@ strong { font-weight: 600; }
 
 .chip--filled {
   background: var(--bg-mint-tint);
-  border-color: var(--brand-green);
-  box-shadow: 0 6px 18px rgba(3, 217, 140, 0.06);
+  border: 1.5px solid var(--brand-green);
+  /* inset white line at the top = subtle highlight; outer green halo
+     = brand-tinted lift without going "neon". */
+  box-shadow:
+    0 6px 18px rgba(3, 217, 140, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.7);
 }
 
 .chip:hover {
   transform: scale(var(--hover-scale));
   background: var(--bg-mint-tint);
   border-color: var(--brand-green);
-  box-shadow: 0 10px 26px rgba(3, 217, 140, 0.12);
+  box-shadow:
+    0 12px 28px rgba(3, 217, 140, 0.16),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
   z-index: 1;
+}
+
+.chip--filled:hover {
+  /* Filled chip already has the mint surface — bump the halo instead. */
+  box-shadow:
+    0 14px 32px rgba(3, 217, 140, 0.20),
+    inset 0 1px 0 rgba(255, 255, 255, 0.75);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -2000,9 +2194,8 @@ strong { font-weight: 600; }
   }
   .chip {
     width: 100%;
-    padding: 14px 16px;
+    padding: 15px 20px;
     font-size: 15px;
-    border-radius: 14px;
     justify-content: center;
     text-align: center;
   }
@@ -3736,6 +3929,27 @@ strong { font-weight: 600; }
   .site-footer__link { font-size: 15.5px; }
 }
 
+/* ----- Mobile (<640px): centrovat celý footer -----
+   Brief: na mobilu zarovnat všechno na střed (logo, claim, headings,
+   odkazy) — kompaktnější vertikální stack působí lépe než levé zarovnání
+   přes celou šířku. Pouze mobile; na ≥640px se vrací k levému zarovnání. */
+@media (max-width: 639px) {
+  .site-footer__col {
+    align-items: center;
+    text-align: center;
+  }
+
+  .site-footer__brand {
+    align-self: center;
+  }
+
+  .site-footer__claim {
+    /* claim chceme i na mobilu zachovat čitelný řádek — center + max-width */
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
 /* ==========================================================================
    =Section: Mobile centering pass=  (≤ 559px)
 
@@ -3777,6 +3991,32 @@ strong { font-weight: 600; }
 
   .coop-card__title,
   .coop-card p {
+    text-align: center;
+  }
+
+  /* ---- Area cards (V jakých oblastech Vám pomáháme) ---- */
+  .area-card {
+    text-align: center;
+    padding-top: 56px;  /* room for number badge above centered content */
+  }
+
+  .area-card__number {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .area-card__icon {
+    justify-content: center;
+  }
+
+  .area-card__divider {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* ---- Areas summary ---- */
+  .areas-summary {
+    align-items: center;
     text-align: center;
   }
 

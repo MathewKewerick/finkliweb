@@ -255,10 +255,11 @@
       <div class="areas">
 
         <article class="area-card">
+          <span class="area-card__number" aria-hidden="true">01</span>
           <div class="area-card__icon">
             <img src="assets/cile_icon.png" alt="" />
           </div>
-          <div class="area-card__pill">Přání a&nbsp;cíle</div>
+          <h3 class="area-card__title">Přání a&nbsp;cíle</h3>
           <div class="area-card__sub">Investice, Penze</div>
           <div class="area-card__divider" aria-hidden="true"></div>
           <p class="area-card__text">
@@ -267,10 +268,11 @@
         </article>
 
         <article class="area-card">
+          <span class="area-card__number" aria-hidden="true">02</span>
           <div class="area-card__icon">
             <img src="assets/pojisteni_icon.png" alt="" />
           </div>
-          <div class="area-card__pill">Ochrana</div>
+          <h3 class="area-card__title">Ochrana</h3>
           <div class="area-card__sub">Pojištění</div>
           <div class="area-card__divider" aria-hidden="true"></div>
           <p class="area-card__text">
@@ -279,10 +281,11 @@
         </article>
 
         <article class="area-card">
+          <span class="area-card__number" aria-hidden="true">03</span>
           <div class="area-card__icon">
             <img src="assets/uvery_icon.png" alt="" />
           </div>
-          <div class="area-card__pill">Financování</div>
+          <h3 class="area-card__title">Financování</h3>
           <div class="area-card__sub">Úvěry</div>
           <div class="area-card__divider" aria-hidden="true"></div>
           <p class="area-card__text">
@@ -291,6 +294,18 @@
         </article>
 
       </div>
+
+      <!-- Areas summary — spans the 3 area cards above. Compass icon (left) +
+           connecting message (right). Glass strip pattern; reuses .family-note
+           rhythm (icon-scale on hover, no card scale). -->
+      <aside class="areas-summary">
+        <div class="areas-summary__icon-wrap">
+          <img src="assets/kompas.png" alt="" class="areas-summary__icon" />
+        </div>
+        <p class="areas-summary__text">
+          Propojujeme tyto tři oblasti do jednoho celku, aby Vaše finance měly <strong class="areas-summary__highlight">směr, ochranu a&nbsp;sílu&nbsp;růst</strong>.
+        </p>
+      </aside>
 
       <!-- Sub-section: Kde jiní končí, my pokračujeme — wide coop-card with
            time icon (left column) + body text + embedded cycle diagram below.
