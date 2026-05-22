@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>FinkliPoint — Portál poradce</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="icon" href="assets/ikona_favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:opsz,wght@5..30,100..900&display=swap" rel="stylesheet">
+  <style>
+    /* === Design tokens (mirror :root ze styles.css) === */
+    :root {
+      --brand-dark:    #0B2E34;
+      --brand-green:   #03D98C;
+      --brand-yellow:  #FBD028;
+      --bg-base:       #F4FFF9;
+      --bg-mint-tint:  #DDFBF0;
+      --text-base:     #0B2E34;
+      --text-muted:    rgba(11, 46, 52, 0.7);
+      --text-soft:     rgba(11, 46, 52, 0.55);
+      --border-soft:   rgba(11, 46, 52, 0.08);
+      --ease:          cubic-bezier(0.2, 0.7, 0.2, 1);
+      --hover-scale:   1.04;
+      --hover-duration: 0.28s;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Google Sans Flex', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
+      font-size: 16px;
+      line-height: 1.65;
+      color: var(--text-base);
+      background-color: var(--bg-base);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* === Drift backdrop (stejný jako hlavní web) === */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      background:
+        radial-gradient(ellipse 60% 50% at 18% 22%, rgba(3, 217, 140, 0.09) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 40% at 80% 70%, rgba(3, 217, 140, 0.07) 0%, transparent 65%),
+        radial-gradient(ellipse 45% 55% at 55% 10%, rgba(251, 208, 40, 0.04) 0%, transparent 60%);
+      pointer-events: none;
+      animation: driftBg 55s ease-in-out infinite alternate;
+    }
+    @keyframes driftBg {
+      0%   { transform: translate(0, 0) scale(1); }
+      33%  { transform: translate(2%, 1.5%) scale(1.015); }
+      66%  { transform: translate(-1.5%, 2%) scale(0.988); }
+      100% { transform: translate(1%, -1.5%) scale(1.008); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      body::before { animation: none; }
+    }
+
+    /* ======================================================
+       LOGIN VIEW
+    ====================================================== */
+    .fp-login {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    .fp-login.is-hidden { display: none; }
+
+    .fp-login__card {
+      background: rgba(255, 255, 255, 0.62);
+      border: 1px solid rgba(11, 46, 52, 0.07);
+      border-radius: 24px;
+      backdrop-filter: blur(24px) saturate(150%);
+      -webkit-backdrop-filter: blur(24px) saturate(150%);
+      box-shadow: 0 8px 36px rgba(11, 46, 52, 0.07);
+      padding: 44px 40px 40px;
+      width: 100%;
+      max-width: 400px;
+    }
+
+    .fp-login__logo {
+      display: block;
+      height: 24px;
+      width: auto;
+      margin-bottom: 30px;
+    }
+
+    .fp-login__eyebrow {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--brand-green);
+      margin-bottom: 6px;
+    }
+
+    .fp-login__title {
+      font-size: 26px;
+      font-weight: 600;
+      color: var(--brand-dark);
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+      margin-bottom: 30px;
+    }
+
+    .fp-login__fields {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin-bottom: 8px;
+    }
+
+    .fp-login__label {
+      display: block;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: var(--text-soft);
+      margin-bottom: 6px;
+    }
+
+    .fp-login__input {
+      display: block;
+      width: 100%;
+      font: inherit;
+      font-size: 15px;
+      color: var(--brand-dark);
+      background: var(--bg-base);
+      border: 1px solid rgba(11, 46, 52, 0.12);
+      border-radius: 10px;
+      padding: 12px 14px;
+      outline: none;
+      transition: border-color 0.2s var(--ease), box-shadow 0.2s var(--ease), background 0.2s;
+    }
+    .fp-login__input:hover  { border-color: rgba(11, 46, 52, 0.2); }
+    .fp-login__input:focus  {
+      border-color: var(--brand-green);
+      background: #fff;
+      box-shadow: 0 0 0 3px rgba(3, 217, 140, 0.16);
+    }
+    .fp-login__input.is-error {
+      border-color: #d0344a;
+      box-shadow: 0 0 0 3px rgba(208, 52, 74, 0.12);
+    }
+
+    .fp-login__error {
+      font-size: 13px;
+      color: #c0392b;
+      line-height: 1.5;
+      margin: 12px 0 16px;
+      min-height: 0;
+      opacity: 0;
+      transform: translateY(-4px);
+      transition: opacity 0.18s var(--ease), transform 0.18s var(--ease);
+    }
+    .fp-login__error.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .fp-login__btn {
+      display: block;
+      width: 100%;
+      padding: 14px 20px;
+      background: var(--brand-green);
+      color: var(--brand-dark);
+      font: inherit;
+      font-size: 15px;
+      font-weight: 600;
+      border: 0;
+      border-radius: 10px;
+      cursor: pointer;
+      letter-spacing: -0.01em;
+      transition: transform var(--hover-duration) var(--ease), box-shadow var(--hover-duration) var(--ease);
+    }
+    .fp-login__btn:hover  { transform: scale(var(--hover-scale)); box-shadow: 0 6px 20px rgba(3, 217, 140, 0.3); }
+    .fp-login__btn:active { transform: scale(0.98); }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20%       { transform: translateX(-9px); }
+      40%       { transform: translateX(9px); }
+      60%       { transform: translateX(-5px); }
+      80%       { transform: translateX(5px); }
+    }
+    .fp-login__card.is-shaking { animation: shake 0.42s var(--ease); }
+
+    /* ======================================================
+       DASHBOARD VIEW
+    ====================================================== */
+    .fp-app {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .fp-app.is-hidden { display: none; }
+
+    /* --- Header --- */
+    .fp-header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(244, 255, 249, 0.84);
+      backdrop-filter: blur(22px) saturate(150%);
+      -webkit-backdrop-filter: blur(22px) saturate(150%);
+      border-bottom: 1px solid var(--border-soft);
+      padding: 0 40px;
+      height: 62px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .fp-header__left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .fp-header__logo { height: 21px; width: auto; }
+
+    .fp-header__sep {
+      width: 1px;
+      height: 17px;
+      background: var(--border-soft);
+    }
+
+    .fp-header__badge {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--brand-green);
+    }
+
+    .fp-header__logout {
+      font: inherit;
+      font-size: 13px;
+      color: var(--text-soft);
+      background: transparent;
+      border: 1px solid var(--border-soft);
+      border-radius: 8px;
+      padding: 7px 14px;
+      cursor: pointer;
+      transition: color 0.2s var(--ease), border-color 0.2s var(--ease),
+                  transform var(--hover-duration) var(--ease);
+    }
+    .fp-header__logout:hover {
+      color: var(--brand-dark);
+      border-color: rgba(11, 46, 52, 0.2);
+      transform: scale(var(--hover-scale));
+    }
+
+    /* --- Main content --- */
+    .fp-main {
+      flex: 1;
+      padding: 52px 40px 80px;
+      max-width: 1140px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .fp-section-eyebrow {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--brand-green);
+      margin-bottom: 8px;
+    }
+
+    .fp-section-title {
+      font-size: clamp(26px, 4vw, 36px);
+      font-weight: 600;
+      color: var(--brand-dark);
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+      margin-bottom: 8px;
+    }
+
+    .fp-section-lead {
+      font-size: 16px;
+      color: var(--text-muted);
+      margin-bottom: 40px;
+      max-width: 500px;
+      line-height: 1.6;
+    }
+
+    /* --- Nástroje grid --- */
+    .fp-tools {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+    }
+
+    .fp-tool-card {
+      display: flex;
+      flex-direction: column;
+      background: rgba(255, 255, 255, 0.58);
+      border: 1px solid rgba(11, 46, 52, 0.06);
+      border-radius: 20px;
+      backdrop-filter: blur(20px) saturate(140%);
+      -webkit-backdrop-filter: blur(20px) saturate(140%);
+      box-shadow: 0 4px 16px rgba(11, 46, 52, 0.03);
+      padding: 28px 28px 24px;
+      text-decoration: none;
+      color: inherit;
+      transition: transform var(--hover-duration) var(--ease),
+                  box-shadow var(--hover-duration) var(--ease);
+    }
+    a.fp-tool-card:hover {
+      transform: scale(var(--hover-scale));
+      box-shadow: 0 10px 32px rgba(11, 46, 52, 0.08);
+    }
+
+    .fp-tool-card--soon {
+      opacity: 0.48;
+      cursor: default;
+      pointer-events: none;
+    }
+
+    .fp-tool-card__icon {
+      width: 44px;
+      height: 44px;
+      background: var(--bg-mint-tint);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 18px;
+      flex-shrink: 0;
+    }
+
+    .fp-tool-card__name {
+      font-size: 17px;
+      font-weight: 600;
+      color: var(--brand-dark);
+      letter-spacing: -0.01em;
+      margin-bottom: 7px;
+    }
+
+    .fp-tool-card__desc {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.55;
+      flex: 1;
+    }
+
+    .fp-tool-card__cta {
+      margin-top: 20px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--brand-green);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .fp-tool-card__pill {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-soft);
+      background: rgba(11, 46, 52, 0.06);
+      border-radius: 6px;
+      padding: 3px 9px;
+      margin-top: 18px;
+      align-self: flex-start;
+    }
+
+    /* Responsive */
+    @media (max-width: 640px) {
+      .fp-login__card  { padding: 32px 22px 28px; }
+      .fp-header       { padding: 0 20px; }
+      .fp-main         { padding: 32px 20px 60px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- =====================================================
+     LOGIN VIEW
+===================================================== -->
+<div class="fp-login" id="fpLogin">
+  <div class="fp-login__card" id="fpCard">
+
+    <img src="assets/finkli_logo_dark.svg" alt="Finkli" class="fp-login__logo">
+    <p class="fp-login__eyebrow">Portál pro poradce</p>
+    <h1 class="fp-login__title">FinkliPoint</h1>
+
+    <div class="fp-login__fields">
+      <div>
+        <label class="fp-login__label" for="fpId">Přihlašovací ID</label>
+        <input class="fp-login__input" id="fpId" type="text"
+               autocomplete="username" spellcheck="false" autocapitalize="none">
+      </div>
+      <div>
+        <label class="fp-login__label" for="fpPass">Heslo</label>
+        <input class="fp-login__input" id="fpPass" type="password"
+               autocomplete="current-password">
+      </div>
+    </div>
+
+    <p class="fp-login__error" id="fpError">Nesprávné ID nebo heslo. Zkus to znovu.</p>
+
+    <button class="fp-login__btn" id="fpLoginBtn" type="button">Vstoupit</button>
+
+  </div>
+</div>
+
+<!-- =====================================================
+     DASHBOARD VIEW
+===================================================== -->
+<div class="fp-app is-hidden" id="fpApp">
+
+  <header class="fp-header">
+    <div class="fp-header__left">
+      <img src="assets/finkli_logo_dark.svg" alt="Finkli" class="fp-header__logo">
+      <div class="fp-header__sep"></div>
+      <span class="fp-header__badge">FinkliPoint</span>
+    </div>
+    <button class="fp-header__logout" id="fpLogout" type="button">Odhlásit</button>
+  </header>
+
+  <main class="fp-main">
+
+    <p class="fp-section-eyebrow">Nástroje</p>
+    <h2 class="fp-section-title">Co dnes potřebuješ?</h2>
+    <p class="fp-section-lead">Pracovní nástroje pro poradce Finkli na jednom místě.</p>
+
+    <div class="fp-tools">
+
+      <!-- 1. Generátor podpisu ——————————————————————— -->
+      <a class="fp-tool-card" href="email-signature/podpis-matej.html" target="_blank" rel="noopener noreferrer">
+        <div class="fp-tool-card__icon">
+          <!-- Ikona: pero / podpis -->
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M3 17h6M3 6.5h9M3 10.5h11M3 14h7.5" stroke="#03D98C" stroke-width="1.65" stroke-linecap="round"/>
+            <path d="M15 5.5l2.5 2.5-5 5H10v-2.5l5-5z" stroke="#03D98C" stroke-width="1.5" stroke-linejoin="round" fill="none"/>
+          </svg>
+        </div>
+        <div class="fp-tool-card__name">Generátor e-mailového podpisu</div>
+        <p class="fp-tool-card__desc">Vyplň jméno, pozici a kontakt — zobrazí se náhled a zkopíruješ HTML rovnou do svého e-mailového klienta.</p>
+        <div class="fp-tool-card__cta">
+          Otevřít nástroj
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+      </a>
+
+      <!-- 2. Placeholder: Materiály ——————————————————— -->
+      <div class="fp-tool-card fp-tool-card--soon">
+        <div class="fp-tool-card__icon">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="3.5" y="3.5" width="15" height="15" rx="2.5" stroke="#03D98C" stroke-width="1.65"/>
+            <path d="M7 8h8M7 11.5h6M7 15h4" stroke="#03D98C" stroke-width="1.65" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="fp-tool-card__name">Materiály pro klienty</div>
+        <p class="fp-tool-card__desc">Prezentace, brožury a podklady pro schůzky — vše na jednom místě, vždy aktuální verze.</p>
+        <span class="fp-tool-card__pill">Brzy k dispozici</span>
+      </div>
+
+      <!-- 3. Placeholder: Klienti ————————————————————— -->
+      <div class="fp-tool-card fp-tool-card--soon">
+        <div class="fp-tool-card__icon">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="11" cy="8.5" r="3.5" stroke="#03D98C" stroke-width="1.65"/>
+            <path d="M4.5 19c0-3.038 2.91-5.5 6.5-5.5s6.5 2.462 6.5 5.5" stroke="#03D98C" stroke-width="1.65" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="fp-tool-card__name">Přehled klientů</div>
+        <p class="fp-tool-card__desc">Klientské situace, poznámky ze schůzek a přehled aktivní spolupráce na jednom místě.</p>
+        <span class="fp-tool-card__pill">Brzy k dispozici</span>
+      </div>
+
+    </div>
+  </main>
+
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  // Přihlašovací údaje uloženy jako base64 — pouze symbolické,
+  // žádná reálná bezpečnost není vyžadována ani přislíbena.
+  var C = ['Zmlua2xpcG9pbnQ=', 'YiFnI2R6V2p3dV5oRjBk'];
+
+  function verify(id, pass) {
+    try {
+      return btoa(id) === C[0] && btoa(pass) === C[1];
+    } catch (_) {
+      return false;
+    }
+  }
+
+  var KEY = 'fp_session';
+
+  var loginWrap = document.getElementById('fpLogin');
+  var appWrap   = document.getElementById('fpApp');
+  var idInput   = document.getElementById('fpId');
+  var passInput = document.getElementById('fpPass');
+  var errorEl   = document.getElementById('fpError');
+  var card      = document.getElementById('fpCard');
+  var loginBtn  = document.getElementById('fpLoginBtn');
+  var logoutBtn = document.getElementById('fpLogout');
+
+  function showApp() {
+    loginWrap.classList.add('is-hidden');
+    appWrap.classList.remove('is-hidden');
+    try { sessionStorage.setItem(KEY, '1'); } catch (_) {}
+  }
+
+  function showLogin() {
+    appWrap.classList.add('is-hidden');
+    loginWrap.classList.remove('is-hidden');
+    try { sessionStorage.removeItem(KEY); } catch (_) {}
+    idInput.value   = '';
+    passInput.value = '';
+    setError(false);
+    idInput.focus();
+  }
+
+  function setError(on) {
+    if (on) {
+      errorEl.classList.add('is-visible');
+      idInput.classList.add('is-error');
+      passInput.classList.add('is-error');
+    } else {
+      errorEl.classList.remove('is-visible');
+      idInput.classList.remove('is-error');
+      passInput.classList.remove('is-error');
+    }
+  }
+
+  function shakeCard() {
+    card.classList.remove('is-shaking');
+    void card.offsetWidth; // reflow pro restart animace
+    card.classList.add('is-shaking');
+    card.addEventListener('animationend', function () {
+      card.classList.remove('is-shaking');
+    }, { once: true });
+  }
+
+  function tryLogin() {
+    var id   = idInput.value.trim();
+    var pass = passInput.value;
+    setError(false);
+
+    if (verify(id, pass)) {
+      showApp();
+    } else {
+      setError(true);
+      shakeCard();
+      passInput.focus();
+    }
+  }
+
+  // Zůstat přihlášen v rámci session
+  try {
+    if (sessionStorage.getItem(KEY) === '1') {
+      showApp();
+    }
+  } catch (_) {}
+
+  loginBtn.addEventListener('click', tryLogin);
+  logoutBtn.addEventListener('click', showLogin);
+  [idInput, passInput].forEach(function (el) {
+    el.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') tryLogin();
+    });
+  });
+
+})();
+</script>
+
+</body>
+</html>

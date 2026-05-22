@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <title>Finkli — generátor emailového podpisu</title>
+  <!--
+    =====================================================================
+    FINKLI EMAILOVÝ PODPIS — GENERÁTOR
+    =====================================================================
+    Otevři tento soubor v prohlížeči, vyplň pole nahoře (jméno, telefon,
+    foto URL apod.), zkontroluj náhled, klikni „Kopírovat" a vlož do
+    nastavení podpisu v emailovém klientu.
+
+    Obrázky se tahají z https://finkli.vercel.app/assets/... — co vidíš
+    v náhledu se ukáže i v reálném emailu.
+
+    DARK MODE PODPORA:
+      • Apple Mail (Mac/iOS)  → plně podporováno (style blok + media query)
+      • Outlook.com web       → podporováno přes [data-ogsc] selektor
+      • Gmail web/mobile      → strippuje <style>, ale dělá auto-inverzi
+      • Outlook desktop Win   → dark mode nemá, podpis vždy světlý
+    =====================================================================
+  -->
+  <style>
+    body {
+      margin: 0;
+      padding: 48px 24px 96px;
+      background: #F4FFF9;
+      font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+      color: #0B2E34;
+    }
+    .preview-wrap { max-width: 720px; margin: 0 auto; }
+
+    .preview-label {
+      font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase;
+      color: rgba(11, 46, 52, 0.55); font-weight: 600; margin: 0 0 14px 0;
+    }
+    .page-title {
+      font-size: 22px; font-weight: 600; letter-spacing: -0.01em;
+      margin: 0 0 6px 0; color: #0B2E34;
+    }
+    .page-lead {
+      font-size: 14px; color: rgba(11, 46, 52, 0.7);
+      margin: 0 0 28px 0; line-height: 1.55;
+    }
+
+    /* ===== EDITOR ===== */
+    .sig-editor {
+      background: #FFFFFF;
+      border: 1px solid rgba(11, 46, 52, 0.08);
+      border-radius: 14px;
+      padding: 24px 24px 22px;
+      box-shadow: 0 10px 30px rgba(11, 46, 52, 0.04);
+      margin: 0 0 32px 0;
+    }
+    .sig-editor__head {
+      display: flex; align-items: baseline; justify-content: space-between;
+      margin: 0 0 18px 0; gap: 12px; flex-wrap: wrap;
+    }
+    .sig-editor__title {
+      font-size: 15px; font-weight: 600; color: #0B2E34;
+      letter-spacing: -0.01em; margin: 0;
+    }
+    .sig-editor__reset {
+      background: transparent; border: 0; padding: 4px 0;
+      font-size: 12px; color: rgba(11, 46, 52, 0.55); cursor: pointer;
+      font-family: inherit; font-weight: 500; text-decoration: underline;
+      text-decoration-color: rgba(11, 46, 52, 0.2); text-underline-offset: 3px;
+      transition: color 0.2s;
+    }
+    .sig-editor__reset:hover { color: #03D98C; text-decoration-color: #03D98C; }
+
+    .sig-editor__grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px 16px;
+    }
+    .sig-editor__field { display: flex; flex-direction: column; }
+    .sig-editor__field--full { grid-column: 1 / -1; }
+    .sig-editor__label {
+      font-size: 11px; font-weight: 600; letter-spacing: 0.06em;
+      text-transform: uppercase; color: rgba(11, 46, 52, 0.6);
+      margin: 0 0 5px 2px;
+    }
+    .sig-editor__input {
+      font: inherit; font-size: 14px; color: #0B2E34;
+      background: #F4FFF9;
+      border: 1px solid rgba(11, 46, 52, 0.1);
+      border-radius: 8px;
+      padding: 10px 12px;
+      outline: none;
+      transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+      width: 100%; box-sizing: border-box;
+    }
+    .sig-editor__input:hover { border-color: rgba(11, 46, 52, 0.18); }
+    .sig-editor__input:focus {
+      border-color: #03D98C; background: #FFFFFF;
+      box-shadow: 0 0 0 3px rgba(3, 217, 140, 0.16);
+    }
+
+    @media (max-width: 560px) {
+      .sig-editor__grid { grid-template-columns: 1fr; }
+    }
+
+    /* ===== PREVIEW ===== */
+    .preview-stack > * + * { margin-top: 22px; }
+    .preview-mail {
+      border-radius: 14px;
+      padding: 28px 32px;
+      box-shadow: 0 10px 30px rgba(11, 46, 52, 0.04);
+    }
+    .preview-mail--light {
+      background: #FFFFFF; border: 1px solid rgba(11, 46, 52, 0.08);
+      color: #0B2E34;
+    }
+    .preview-mail--dark {
+      background: #0B2E34; border: 1px solid rgba(255, 255, 255, 0.06);
+      color: #F4FFF9;
+    }
+    .preview-mail__body { font-size: 14px; line-height: 1.6; margin: 0 0 22px 0; }
+    .preview-mail--dark .preview-mail__body { color: rgba(244, 255, 249, 0.78); }
+    .preview-mail__divider {
+      border: 0; border-top: 1px solid rgba(11, 46, 52, 0.08); margin: 0 0 22px 0;
+    }
+    .preview-mail--dark .preview-mail__divider {
+      border-top-color: rgba(255, 255, 255, 0.1);
+    }
+
+    /* Dark preview simulace přes wrapper class (nezávisí na OS) */
+    .preview-mail--dark .finkli-sig__name { color: #F4FFF9 !important; }
+    .preview-mail--dark .finkli-sig__position { color: rgba(244, 255, 249, 0.68) !important; }
+    .preview-mail--dark .finkli-sig__link { color: #F4FFF9 !important; }
+    .preview-mail--dark .finkli-sig__link--brand { color: #03D98C !important; }
+    .preview-mail--dark .finkli-sig__divider { background-color: rgba(244, 255, 249, 0.18) !important; }
+    .preview-mail--dark .finkli-sig__logo-dark { display: none !important; }
+    .preview-mail--dark .finkli-sig__logo-light { display: block !important; }
+
+    .preview-hint {
+      font-size: 12px; color: rgba(11, 46, 52, 0.55);
+      margin: 18px 0 56px 0; line-height: 1.6;
+    }
+    .preview-hint strong { font-weight: 600; color: rgba(11, 46, 52, 0.75); }
+
+    /* ===== CODE BLOCK ===== */
+    .code-section { margin-top: 32px; }
+    .code-section h2 {
+      font-size: 16px; font-weight: 600; margin: 0 0 10px 0;
+      color: #0B2E34; letter-spacing: -0.01em;
+    }
+    .code-section p {
+      font-size: 13px; color: rgba(11, 46, 52, 0.7);
+      margin: 0 0 14px 0; line-height: 1.6;
+    }
+    .code-block {
+      position: relative; background: #0B2E34; color: #E8F8F1;
+      border-radius: 12px; padding: 22px;
+      font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+      font-size: 12px; line-height: 1.65;
+      white-space: pre; overflow-x: auto; tab-size: 2;
+    }
+    .code-copy {
+      position: absolute; top: 12px; right: 12px;
+      background: #03D98C; color: #0B2E34; border: 0; border-radius: 8px;
+      padding: 8px 12px; font-size: 12px; font-weight: 600;
+      cursor: pointer; font-family: inherit;
+      transition: transform 0.28s cubic-bezier(0.2, 0.7, 0.2, 1);
+    }
+    .code-copy:hover { transform: scale(1.04); }
+    .code-copy.copied { background: #FBD028; }
+  </style>
+</head>
+<body>
+
+<div class="preview-wrap">
+
+  <h1 class="page-title">Generátor podpisu</h1>
+  <p class="page-lead">
+    Vyplň pole, podívej se na náhled, klikni „Kopírovat" dole a vlož
+    podpis do nastavení svého emailového klientu.
+  </p>
+
+  <!-- ===== EDITOR ===== -->
+  <form class="sig-editor" id="editor" autocomplete="off" novalidate>
+    <div class="sig-editor__head">
+      <h2 class="sig-editor__title">Údaje podpisu</h2>
+      <button type="button" class="sig-editor__reset" id="resetBtn">Vrátit výchozí (Matěj)</button>
+    </div>
+    <div class="sig-editor__grid">
+      <div class="sig-editor__field">
+        <label class="sig-editor__label" for="in-firstname">Jméno</label>
+        <input class="sig-editor__input" id="in-firstname" type="text" value="Matěj">
+      </div>
+      <div class="sig-editor__field">
+        <label class="sig-editor__label" for="in-lastname">Příjmení</label>
+        <input class="sig-editor__input" id="in-lastname" type="text" value="Krejčík">
+      </div>
+      <div class="sig-editor__field sig-editor__field--full">
+        <label class="sig-editor__label" for="in-position">Pozice</label>
+        <input class="sig-editor__input" id="in-position" type="text" value="Osobní poradce">
+      </div>
+      <div class="sig-editor__field">
+        <label class="sig-editor__label" for="in-phone">Telefon</label>
+        <input class="sig-editor__input" id="in-phone" type="text" value="+420 777 193 373">
+      </div>
+      <div class="sig-editor__field">
+        <label class="sig-editor__label" for="in-email">E-mail</label>
+        <input class="sig-editor__input" id="in-email" type="email" value="matej.krejcik@finkli.cz">
+      </div>
+      <div class="sig-editor__field sig-editor__field--full">
+        <label class="sig-editor__label" for="in-photo">URL fotky</label>
+        <input class="sig-editor__input" id="in-photo" type="url"
+               value="https://finkli.vercel.app/assets/finkli_profilovka_matej.jpg">
+      </div>
+      <div class="sig-editor__field sig-editor__field--full">
+        <label class="sig-editor__label" for="in-weburl">URL webu (odkaz „finkli.cz" + proklik z loga)</label>
+        <input class="sig-editor__input" id="in-weburl" type="url"
+               value="https://finkli.vercel.app">
+      </div>
+    </div>
+  </form>
+
+  <!-- ===== NÁHLED — světlý ===== -->
+  <p class="preview-label">Náhled — světlý režim</p>
+  <div class="preview-stack">
+
+    <div class="preview-mail preview-mail--light">
+      <p class="preview-mail__body">
+        Dobrý den,<br><br>
+        ozývám se s podklady, na kterých jsme se domluvili. Pokud bude cokoliv
+        potřeba upřesnit, napište kdykoliv.<br><br>
+        S přáním pěkného dne,
+      </p>
+      <hr class="preview-mail__divider">
+      <table class="finkli-sig" cellpadding="0" cellspacing="0" border="0" role="presentation"
+             style="border-collapse:collapse; font-family:'Google Sans Flex','Helvetica Neue',Helvetica,Arial,sans-serif; color:#0B2E34;">
+        <tr>
+          <td valign="top" style="padding:0 22px 0 0; vertical-align:top;">
+            <img class="finkli-sig__photo"
+                 src="https://finkli.vercel.app/assets/finkli_profilovka_matej.jpg"
+                 width="96" height="96" alt="Matěj Krejčík"
+                 style="display:block; width:96px; height:96px; border-radius:50%; object-fit:cover; object-position:center 20%; border:0; outline:none; text-decoration:none; -ms-interpolation-mode:bicubic;">
+          </td>
+          <td valign="top" style="padding:2px 0 0 0; vertical-align:top; font-family:'Google Sans Flex','Helvetica Neue',Helvetica,Arial,sans-serif;">
+            <div class="finkli-sig__name"
+                 style="font-family:'Google Sans Flex','Helvetica Neue',Helvetica,Arial,sans-serif; font-size:18px; font-weight:600; color:#0B2E34; line-height:1.2; letter-spacing:-0.01em;">Matěj Krejčík</div>
+            <div class="finkli-sig__position"
+                 style="font-family:'Google Sans Flex','Helvetica Neue',Helvetica,Arial,sans-serif; font-size:13px; font-weight:400; color:#4D6A6F; line-height:1.5; margin-top:3px;">Osobní poradce</div>
+            <div class="finkli-sig__divider"
+                 style="width:36px; height:2px; background-color:#03D98C; line-height:2px; font-size:0; margin:12px 0 12px 0; mso-line-height-rule:exactly;">&nbsp;</div>
+            <table cellpadding="0" cellspacing="0" border="0" role="presentation"
+                   style="border-collapse:collapse; font-family:'Google Sans Flex','Helvetica Neue',Helvetica,Arial,sans-serif; font-size:13px; color:#0B2E34; line-height:1.7;">
+              <tr><td>
+                <a class="finkli-sig__link finkli-sig__link--phone" href="tel:+420777193373"
+                   style="color:#0B2E34; text-decoration:none; font-family:'Google Sans Flex','Helvetica Neue',Helvetica,Arial,sans-serif;">+420&nbsp;777&nbsp;193&nbsp;373</a>
+              </td></tr>
+              <tr><td>
+                <a class="finkli-sig__link finkli-sig__link--email" href="mailto:matej.krejcik@finkli.cz"
+                   style="color:#0B2E34; text-decoration:none; font-family:'Google Sans Flex','Helvetica Neue',Helvetica,Arial,sans-serif;">matej.krejcik@finkli.cz</a>
+              </td></tr>
+              <tr><td>
+                <a class="finkli-sig__link finkli-sig__link--brand" href="https://finkli.vercel.app"
+                   style="color:#03D98C; text-decoration:none; font-weight:500; font-family:'Google Sans Flex','Helvetica Neue',Helvetica,Arial,sans-serif;">finkli.cz</a>
+              </td></tr>
+            </table>
+            <div class="finkli-sig__divider"
+                 style="height:1px; background-color:#E6EAEB; line-height:1px; font-size:0; margin:16px 0 14px 0; mso-line-height-rule:exactly;">&nbsp;</div>
+            <a class="finkli-sig__logo-link" href="https://finkli.vercel.app"
+               style="display:inline-block; text-decoration:none; border:0;">
+              <img class="finkli-sig__logo-dark"
+                   src="https://finkli.vercel.app/assets/finkli_logo_dark.svg"
+                   height="22" alt="Finkli"
+                   style="display:block; height:22px; width:auto; border:0; outline:none; text-decoration:none;">
+              <img class="finkli-sig__logo-light"
+                   src="https://finkli.vercel.app/assets/finkli_logo_light.svg"
+                   height="22" alt="Finkli"
+                   style="display:none; height:22px; width:auto; border:0; outline:none; text-decoration:none;">
+            </a>
+          </td>
+        </tr>
+      </table>
+    </div>
+
+  </div>
+
+  <!-- ===== NÁHLED — tmavý ===== -->
+  <p class="preview-label" style="margin-top: 36px;">Náhled — tmavý režim</p>
+  <div class="preview-stack">
+
+    <div class="preview-mail preview-mail--dark">
+      <p class="preview-mail__body">
+        Dobrý den,<br><br>
+        ozývám se s podklady, na kterých jsme se domluvili. Pokud bude cokoliv
+        potřeba upřesnit, napište kdykoliv.<br><br>
+        S přáním pěkného dne,
+      </p>
+      <hr class="preview-mail__divider">
+      <table class="finkli-sig" cellpadding="0" cellspacing="0" border="0" role="presentation"
+             style="border-collapse:collapse; font-family:'Google Sans Flex','Helvetica Neue',Helvetica,Arial,sans-serif; color:#0B2E34;">
+        <tr>
+          <td valign="top" style="padding:0 22px 0 0; vertical-align:top;">
+            <img class="finkli-sig__photo"
+                 src="https://finkli.vercel.app/assets/finkli_profilovka_matej.jpg"
+                 width="96" height="96" alt="Matěj Krejčík"
+                 style="display:block; width:96px; height:96px; border-radius:50%; object-fit:cover; object-position:center 20%; border:0; outline:none; text-decoration:none;">
+          </td>
+          <td valign="top" style="padding:2px 0 0 0; vertical-align:top;">
+            <div class="finkli-sig__name"
+                 style="font-family:'Google Sans Flex','Helvetica Neue',Helvetica,Arial,sans-serif; font-size:18px; font-weight:600; color:#0B2E34; line-height:1.2; letter-spacing:-0.01em;">Matěj Krejčík</div>
+            <div class="finkli-sig__position"
+                 style="font-family:'Google Sans Flex','Helvetica Neue',Helvetica,Arial,sans-serif; font-size:13px; font-weight:400; color:#4D6A6F; line-height:1.5; margin-top:3px;">Osobní poradce</div>
+            <div class="finkli-sig__divider"
+                 style="width:36px; height:2px; background-color:#03D98C; line-height:2px; font-size:0; margin:12px 0 12px 0;">&nbsp;</div>
+            <table cellpadding="0" cellspacing="0" border="0" role="presentation"
+                   style="border-collapse:collapse; font-family:'Google Sans Flex','Helvetica Neue',Helvetica,Arial,sans-serif; font-size:13px; line-height:1.7;">
+              <tr><td>
+                <a class="finkli-sig__link finkli-sig__link--phone" href="tel:+420777193373"
+                   style="color:#0B2E34; text-decoration:none; font-family:'Google Sans Flex','Helvetica Neue',Helvetica,Arial,sans-serif;">+420&nbsp;777&nbsp;193&nbsp;373</a>
+              </td></tr>
+              <tr><td>
+                <a class="finkli-sig__link finkli-sig__link--email" href="mailto:matej.krejcik@finkli.cz"
+                   style="color:#0B2E34; text-decoration:none; font-family:'Google Sans Flex','Helvetica Neue',Helvetica,Arial,sans-serif;">matej.krejcik@finkli.cz</a>
+              </td></tr>
+              <tr><td>
+                <a class="finkli-sig__link finkli-sig__link--brand" href="https://finkli.vercel.app"
+                   style="color:#03D98C; text-decoration:none; font-weight:500; font-family:'Google Sans Flex','Helvetica Neue',Helvetica,Arial,sans-serif;">finkli.cz</a>
+              </td></tr>
+            </table>
+            <div class="finkli-sig__divider"
+                 style="height:1px; background-color:#E6EAEB; line-height:1px; font-size:0; margin:16px 0 14px 0;">&nbsp;</div>
+            <a class="finkli-sig__logo-link" href="https://finkli.vercel.app"
+               style="display:inline-block; text-decoration:none; border:0;">
+              <img class="finkli-sig__logo-dark"
+                   src="https://finkli.vercel.app/assets/finkli_logo_dark.svg"
+                   height="22" alt="Finkli"
+                   style="display:block; height:22px; width:auto; border:0;">
+              <img class="finkli-sig__logo-light"
+                   src="https://finkli.vercel.app/assets/finkli_logo_light.svg"
+                   height="22" alt="Finkli"
+                   style="display:none; height:22px; width:auto; border:0;">
+            </a>
+          </td>
+        </tr>
+      </table>
+    </div>
+
+  </div>
+
+  <p class="preview-hint">
+    Náhled tahá obrázky přímo z <code>finkli.vercel.app</code> — co vidíš,
+    to dostane email klient. <strong>Apple Mail a Outlook.com</strong> respektují
+    <code>&lt;style&gt;</code> blok a dark mode řešíme exaktně. <strong>Gmail</strong>
+    <code>&lt;style&gt;</code> strippuje, ale dělá vlastní auto-inverzi.
+    <strong>Outlook desktop (Win)</strong> dark mode nemá.
+  </p>
+
+  <!-- ===== CODE BLOCK ===== -->
+  <div class="code-section">
+    <h2>HTML kód k vložení do mailu</h2>
+    <p>
+      Aktualizuje se podle pole nahoře. <strong>Kopírovat</strong> → vlož do
+      nastavení podpisu (Gmail / Apple Mail / Outlook).
+    </p>
+    <div class="code-block"><button class="code-copy" id="copyBtn" type="button">Kopírovat</button><span id="codeContent"></span></div>
+  </div>
+
+</div>
+
+<script>
+(function () {
+  // -------- Defaults (Matěj) --------
+  const DEFAULTS = {
+    firstname: 'Matěj',
+    lastname:  'Krejčík',
+    position:  'Osobní poradce',
+    phone:     '+420 777 193 373',
+    email:     'matej.krejcik@finkli.cz',
+    photo:     'https://finkli.vercel.app/assets/finkli_profilovka_matej.jpg',
+    weburl:    'https://finkli.vercel.app',
+  };
+  const LOGO_DARK = 'https://finkli.vercel.app/assets/finkli_logo_dark.svg';
+  const LOGO_LIGHT = 'https://finkli.vercel.app/assets/finkli_logo_light.svg';
+
+  const FIELDS = Object.keys(DEFAULTS);
+  const inputs = {};
+  FIELDS.forEach(f => inputs[f] = document.getElementById('in-' + f));
+
+  // -------- Helpers --------
+  const escapeHTMLAttr = (s) => String(s)
+    .replace(/&/g, '&amp;').replace(/"/g, '&quot;')
+    .replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  const escapeText = (s) => String(s)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+  function readValues() {
+    const v = {};
+    FIELDS.forEach(f => v[f] = (inputs[f].value || '').trim());
+    return v;
+  }
+  function fullname(v) {
+    return [v.firstname, v.lastname].filter(Boolean).join(' ');
+  }
+  // Mezery v telefonu jsou jen vizuální — pro href je vyhodíme.
+  function telHref(v) {
+    return 'tel:' + (v.phone || '').replace(/[^\d+]/g, '');
+  }
+  function mailtoHref(v) {
+    return 'mailto:' + v.email;
+  }
+  // V textu telefonu si chceme držet pevné mezery (non-breaking),
+  // ať se +420 777 193 373 nezlomí na řádku.
+  function phoneDisplay(v) {
+    return (v.phone || '').replace(/ /g, ' ');
+  }
+
+  // -------- DOM update --------
+  function updateDOM(v) {
+    const name = fullname(v);
+    const th = telHref(v);
+    const mh = mailtoHref(v);
+    const phoneText = phoneDisplay(v);
+
+    document.querySelectorAll('.preview-mail .finkli-sig').forEach(sig => {
+      const photo = sig.querySelector('.finkli-sig__photo');
+      if (photo) { photo.src = v.photo; photo.alt = name; }
+
+      const nameEl = sig.querySelector('.finkli-sig__name');
+      if (nameEl) nameEl.textContent = name;
+
+      const posEl = sig.querySelector('.finkli-sig__position');
+      if (posEl) posEl.textContent = v.position;
+
+      const phA = sig.querySelector('.finkli-sig__link--phone');
+      if (phA) { phA.href = th; phA.textContent = phoneText; }
+
+      const emA = sig.querySelector('.finkli-sig__link--email');
+      if (emA) { emA.href = mh; emA.textContent = v.email; }
+
+      const webA = sig.querySelector('.finkli-sig__link--brand');
+      if (webA) { webA.href = v.weburl; }
+
+      const logoA = sig.querySelector('.finkli-sig__logo-link');
+      if (logoA) { logoA.href = v.weburl; }
+    });
+  }
+
+  // -------- HTML build (kopírovaný do schránky) --------
+  function buildHTML(v) {
+    const name = fullname(v);
+    const th = telHref(v);
+    const mh = mailtoHref(v);
+    const phoneText = phoneDisplay(v).replace(/ /g, '&nbsp;');
+    const photo = v.photo;
+    const weburl = v.weburl;
+
+    // Pro vložení do <a> textu/href: HTML-escape všeho user-supplied
+    const nameA = escapeHTMLAttr(name);
+    const positionT = escapeText(v.position);
+    const emailT = escapeText(v.email);
+    const photoA = escapeHTMLAttr(photo);
+    const weburlA = escapeHTMLAttr(weburl);
+    const thA = escapeHTMLAttr(th);
+    const mhA = escapeHTMLAttr(mh);
+
+    return `<style>
+  @media (prefers-color-scheme: dark) {
+    .finkli-sig .finkli-sig__name { color: #F4FFF9 !important; }
+    .finkli-sig .finkli-sig__position { color: rgba(244,255,249,0.68) !important; }
+    .finkli-sig .finkli-sig__link { color: #F4FFF9 !important; }
+    .finkli-sig .finkli-sig__link--brand { color: #03D98C !important; }
+    .finkli-sig .finkli-sig__divider { background-color: rgba(244,255,249,0.18) !important; }
+    .finkli-sig .finkli-sig__logo-dark { display: none !important; }
+    .finkli-sig .finkli-sig__logo-light { display: block !important; }
+  }
+  [data-ogsc] .finkli-sig .finkli-sig__name { color: #F4FFF9 !important; }
+  [data-ogsc] .finkli-sig .finkli-sig__position { color: rgba(244,255,249,0.68) !important; }
+  [data-ogsc] .finkli-sig .finkli-sig__link { color: #F4FFF9 !important; }
+  [data-ogsc] .finkli-sig .finkli-sig__divider { background-color: rgba(244,255,249,0.18) !important; }
+  [data-ogsc] .finkli-sig .finkli-sig__logo-dark { display: none !important; }
+  [data-ogsc] .finkli-sig .finkli-sig__logo-light { display: block !important; }
+</style>
+<table class="finkli-sig" cellpadding="0" cellspacing="0" border="0" role="presentation" style="border-collapse:collapse; font-family:'Google Sans Flex','Helvetica Neue',Helvetica,Arial,sans-serif; color:#0B2E34;">
+  <tr>
+    <td valign="top" style="padding:0 22px 0 0; vertical-align:top;">
+      <img class="finkli-sig__photo" src="${photoA}" width="96" height="96" alt="${nameA}" style="display:block; width:96px; height:96px; border-radius:50%; object-fit:cover; object-position:center 20%; border:0; outline:none; text-decoration:none;">
+    </td>
+    <td valign="top" style="padding:2px 0 0 0; vertical-align:top;">
+      <div class="finkli-sig__name" style="font-family:'Google Sans Flex','Helvetica Neue',Helvetica,Arial,sans-serif; font-size:18px; font-weight:600; color:#0B2E34; line-height:1.2; letter-spacing:-0.01em;">${escapeText(name)}</div>
+      <div class="finkli-sig__position" style="font-family:'Google Sans Flex','Helvetica Neue',Helvetica,Arial,sans-serif; font-size:13px; font-weight:400; color:#4D6A6F; line-height:1.5; margin-top:3px;">${positionT}</div>
+      <div class="finkli-sig__divider" style="width:36px; height:2px; background-color:#03D98C; line-height:2px; font-size:0; margin:12px 0 12px 0;">&nbsp;</div>
+      <table cellpadding="0" cellspacing="0" border="0" role="presentation" style="border-collapse:collapse; font-family:'Google Sans Flex','Helvetica Neue',Helvetica,Arial,sans-serif; font-size:13px; color:#0B2E34; line-height:1.7;">
+        <tr><td><a class="finkli-sig__link finkli-sig__link--phone" href="${thA}" style="color:#0B2E34; text-decoration:none; font-family:'Google Sans Flex','Helvetica Neue',Helvetica,Arial,sans-serif;">${phoneText}</a></td></tr>
+        <tr><td><a class="finkli-sig__link finkli-sig__link--email" href="${mhA}" style="color:#0B2E34; text-decoration:none; font-family:'Google Sans Flex','Helvetica Neue',Helvetica,Arial,sans-serif;">${emailT}</a></td></tr>
+        <tr><td><a class="finkli-sig__link finkli-sig__link--brand" href="${weburlA}" style="color:#03D98C; text-decoration:none; font-weight:500; font-family:'Google Sans Flex','Helvetica Neue',Helvetica,Arial,sans-serif;">finkli.cz</a></td></tr>
+      </table>
+      <div class="finkli-sig__divider" style="height:1px; background-color:#E6EAEB; line-height:1px; font-size:0; margin:16px 0 14px 0;">&nbsp;</div>
+      <a class="finkli-sig__logo-link" href="${weburlA}" style="display:inline-block; text-decoration:none; border:0;">
+        <img class="finkli-sig__logo-dark" src="${LOGO_DARK}" height="22" alt="Finkli" style="display:block; height:22px; width:auto; border:0;">
+        <img class="finkli-sig__logo-light" src="${LOGO_LIGHT}" height="22" alt="Finkli" style="display:none; height:22px; width:auto; border:0;">
+      </a>
+    </td>
+  </tr>
+</table>`;
+  }
+
+  // -------- Update loop --------
+  let currentHTML = '';
+  function update() {
+    const v = readValues();
+    updateDOM(v);
+    currentHTML = buildHTML(v);
+    // textContent sám escapuje HTML značky pro zobrazení v <span>
+    document.getElementById('codeContent').textContent = currentHTML;
+  }
+
+  // -------- Wire up --------
+  FIELDS.forEach(f => {
+    inputs[f].addEventListener('input', update);
+    inputs[f].addEventListener('change', update);
+  });
+
+  document.getElementById('resetBtn').addEventListener('click', () => {
+    FIELDS.forEach(f => inputs[f].value = DEFAULTS[f]);
+    update();
+  });
+
+  document.getElementById('copyBtn').addEventListener('click', async (e) => {
+    const btn = e.currentTarget;
+    try {
+      await navigator.clipboard.writeText(currentHTML);
+    } catch (err) {
+      const ta = document.createElement('textarea');
+      ta.value = currentHTML;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      document.body.removeChild(ta);
+    }
+    btn.textContent = 'Zkopírováno ✓';
+    btn.classList.add('copied');
+    setTimeout(() => {
+      btn.textContent = 'Kopírovat';
+      btn.classList.remove('copied');
+    }, 1800);
+  });
+
+  // Initial render
+  update();
+})();
+</script>
+
+</body>
+</html>
