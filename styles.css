@@ -863,7 +863,6 @@ strong { font-weight: 600; }
 
 .diagnostic__result-copy {
   min-width: 0;
-  max-width: 800px;
 }
 
 .diagnostic__aha,
@@ -4117,7 +4116,6 @@ strong { font-weight: 600; }
   display: flex;
   flex-direction: column;
   gap: 14px;
-  max-width: 920px; /* o něco užší než .container — lépe se čtou dlouhé odpovědi */
   margin-top: 36px;
 }
 
@@ -4290,6 +4288,60 @@ strong { font-weight: 600; }
   }
 }
 
+
+/* =Section: Chip pulse hint= ================================================
+   Sonar-ping effect on the first diagnostic chip — two concentric rings that
+   expand and fade, drawing attention to the clickable chips.
+   Uses data-pulse attribute (removed via JS on first interaction).
+   Two pseudo-elements staggered 0.85 s → natural 3-ring sonar feel.
+   Respects prefers-reduced-motion (rings hidden entirely).
+   ========================================================================== */
+
+/* =Section: Chip hint arrow= ================================================
+   Malá animovaná šipka dolů mezi hint textem a chipy — naznačuje
+   že chipy jsou klikatelné. Zmizí při prvním kliknutí na chip (JS).
+   ========================================================================== */
+
+.chip-hint-arrow {
+  display: none; /* desktop: skryté — hover kurzor stačí */
+  align-items: center;
+  gap: 8px;
+  margin: 4px 0 20px;
+  color: var(--brand-green);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  opacity: 0.75;
+  animation: hintArrowBob 1.8s ease-in-out infinite;
+  transition: opacity 0.4s var(--ease);
+}
+
+.chip-hint-arrow.is-hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.chip-hint-arrow svg {
+  flex-shrink: 0;
+}
+
+@keyframes hintArrowBob {
+  0%, 100% { transform: translateY(0);   opacity: 0.75; }
+  50%       { transform: translateY(4px); opacity: 1;    }
+}
+
+@media (max-width: 559px) {
+  .chip-hint-arrow {
+    display: flex;
+    justify-content: center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chip-hint-arrow {
+    animation: none;
+  }
+}
 
 /* =Section: FinkliPoint footer odkaz= */
 .site-footer__copy--fp {

@@ -407,7 +407,12 @@ const WEB3FORMS = {
     chipButtons.forEach((btn) => {
       btn.addEventListener('click', () => {
         const idx = Number(btn.dataset.situation);
-        if (!Number.isNaN(idx)) startDiagnostic(idx);
+        if (!Number.isNaN(idx)) {
+          // Hide the hint arrow after first chip interaction — user clearly knows chips are clickable
+          const hintArrow = root.querySelector('.chip-hint-arrow');
+          if (hintArrow) hintArrow.classList.add('is-hidden');
+          startDiagnostic(idx);
+        }
       });
     });
 
@@ -690,4 +695,5 @@ const WEB3FORMS = {
     }, { passive: true });
   })();
   */
+
 })();

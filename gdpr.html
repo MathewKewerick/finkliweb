@@ -1,0 +1,337 @@
+<!doctype html>
+<html lang="cs">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Zásady zpracování osobních údajů — Finkli</title>
+  <meta name="description" content="Informace o zpracování osobních údajů společností Finkli s.r.o. v souladu s nařízením GDPR." />
+  <meta name="robots" content="noindex" />
+
+  <meta name="theme-color" content="#F4FFF9" />
+
+  <link rel="icon" type="image/svg+xml" href="assets/ikona_favicon.svg" />
+  <link rel="apple-touch-icon" href="assets/ikona_favicon.svg" />
+
+  <!-- Google Sans Flex -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:opsz,wght@8..144,100..1000&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="styles.css" />
+
+  <style>
+    /* ── GDPR subpage — minimal overrides ─────────────────────────────── */
+    .gdpr-header {
+      position: sticky;
+      top: 14px;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: 0 var(--gutter);
+    }
+
+    .gdpr-header__wrap {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      padding: 14px 0 0;
+    }
+
+    .gdpr-header__inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(244, 255, 249, 0.82);
+      backdrop-filter: blur(20px) saturate(140%);
+      -webkit-backdrop-filter: blur(20px) saturate(140%);
+      border: 1px solid rgba(11, 46, 52, 0.07);
+      border-radius: 16px;
+      padding: 14px 24px;
+      box-shadow: 0 4px 20px rgba(11, 46, 52, 0.05);
+    }
+
+    .gdpr-header__logo {
+      height: 26px;
+      width: auto;
+      display: block;
+    }
+
+    .gdpr-header__back {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-muted);
+      text-decoration: none;
+      padding: 6px 10px;
+      border-radius: 8px;
+      transition: color 0.2s var(--ease), background 0.2s var(--ease);
+    }
+
+    .gdpr-header__back:hover {
+      color: var(--brand-dark);
+      background: rgba(11, 46, 52, 0.05);
+    }
+
+    .gdpr-hero {
+      padding: 72px 0 56px;
+    }
+
+    .gdpr-hero__label {
+      display: inline-block;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--brand-green);
+      margin-bottom: 16px;
+    }
+
+    .gdpr-hero__title {
+      margin-bottom: 16px;
+    }
+
+    .gdpr-hero__meta {
+      font-size: 14px;
+      color: var(--text-soft);
+    }
+
+    /* ── Prose content ── */
+    .gdpr-content {
+      padding-bottom: 100px;
+    }
+
+    .gdpr-prose {
+      max-width: 800px;
+    }
+
+    .gdpr-prose h2 {
+      font-size: clamp(19px, 2vw, 22px);
+      font-weight: 600;
+      line-height: 1.2;
+      color: var(--brand-dark);
+      margin: 52px 0 14px;
+      padding-top: 52px;
+      border-top: 1px solid var(--border-soft);
+    }
+
+    .gdpr-prose h2:first-child {
+      margin-top: 0;
+      padding-top: 0;
+      border-top: none;
+    }
+
+    .gdpr-prose p {
+      margin: 0 0 14px;
+      color: var(--text-base);
+      line-height: 1.7;
+    }
+
+    .gdpr-prose p:last-child {
+      margin-bottom: 0;
+    }
+
+    .gdpr-prose ul {
+      margin: 10px 0 14px 0;
+      padding-left: 20px;
+      color: var(--text-base);
+      line-height: 1.7;
+    }
+
+    .gdpr-prose ul li {
+      margin-bottom: 6px;
+    }
+
+    .gdpr-prose a {
+      color: var(--brand-dark);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      transition: color 0.2s var(--ease);
+    }
+
+    .gdpr-prose a:hover {
+      color: var(--brand-green);
+    }
+
+    .gdpr-prose strong {
+      font-weight: 600;
+      color: var(--brand-dark);
+    }
+
+    .gdpr-card {
+      background: rgba(255, 255, 255, 0.55);
+      border: 1px solid rgba(11, 46, 52, 0.05);
+      border-radius: 16px;
+      padding: 24px 28px;
+      margin: 24px 0;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+    }
+
+    .gdpr-card p {
+      margin: 0 0 6px;
+    }
+
+    .gdpr-card p:last-child {
+      margin: 0;
+    }
+
+    /* ── Footer strip ── */
+    .gdpr-footer {
+      border-top: 1px solid var(--border-soft);
+      padding: 32px 0;
+      color: var(--text-soft);
+      font-size: 13px;
+    }
+
+    .gdpr-footer__inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .gdpr-footer__link {
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: color 0.2s var(--ease);
+    }
+
+    .gdpr-footer__link:hover {
+      color: var(--brand-green);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── Hlavička ── -->
+  <div class="gdpr-header__wrap">
+    <div class="container">
+      <div class="gdpr-header__inner">
+        <a href="index.html" aria-label="Finkli — zpět na hlavní stránku">
+          <img src="assets/finkli_logo_dark.svg" alt="Finkli" class="gdpr-header__logo" />
+        </a>
+        <a href="index.html" class="gdpr-header__back">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Zpět na web
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Nadpis ── -->
+  <div class="gdpr-hero">
+    <div class="container">
+      <span class="gdpr-hero__label">Právní dokumenty</span>
+      <h1 class="h1 gdpr-hero__title">Zásady zpracování<br>osobních údajů</h1>
+      <p class="gdpr-hero__meta">Platné od 1. května 2026 &nbsp;·&nbsp; Finkli s.r.o.</p>
+    </div>
+  </div>
+
+  <!-- ── Obsah ── -->
+  <div class="gdpr-content">
+    <div class="container">
+      <div class="gdpr-prose">
+
+        <!-- 1 -->
+        <h2>1. Správce osobních údajů</h2>
+        <p>Správcem Vašich osobních údajů je společnost:</p>
+        <div class="gdpr-card">
+          <p><strong>Finkli s.r.o.</strong></p>
+          <p>Spojná 721, 273 02 Tuchlovice</p>
+          <p>IČO: 24380555</p>
+          <p>Zapsána v obchodním rejstříku vedeném Městským soudem v Praze, sp. zn. C 440166</p>
+          <p>E-mail: <a href="mailto:info@finkli.cz">info@finkli.cz</a></p>
+        </div>
+        <p>Společnost Finkli s.r.o. nejmenovala pověřence pro ochranu osobních údajů (DPO). Ve věcech ochrany osobních údajů nás kontaktujte na e-mailové adrese uvedené výše.</p>
+
+        <!-- 2 -->
+        <h2>2. Jaké osobní údaje zpracováváme</h2>
+        <p>Zpracováváme výhradně osobní údaje, které nám sami poskytnete prostřednictvím formulářů na tomto webu. Konkrétně se jedná o:</p>
+        <ul>
+          <li><strong>Jméno</strong> — pro oslovení a vedení komunikace</li>
+          <li><strong>E-mailová adresa</strong> — jako hlavní komunikační kanál</li>
+          <li><strong>Telefonní číslo</strong> — nepovinný údaj, slouží k rychlejšímu kontaktu</li>
+          <li><strong>Volný text zprávy nebo poznámky</strong> — popis Vaší situace či dotazu</li>
+          <li><strong>Odpovědi v diagnostickém nástroji</strong> — anonymní yes/no odpovědi na otázky o finanční situaci; jsou přenášeny spolu s formulářovým leadem a slouží výhradně k přípravě první schůzky</li>
+        </ul>
+        <p>Neshromažďujeme žádné zvláštní kategorie osobních údajů (tzv. citlivé údaje) ve smyslu čl. 9 GDPR.</p>
+
+        <!-- 3 -->
+        <h2>3. Účel a právní základ zpracování</h2>
+        <p>Vaše osobní údaje zpracováváme za těmito účely:</p>
+        <ul>
+          <li><strong>Zodpovězení Vašeho dotazu a příprava nezávazné schůzky</strong> — právní základ: přijímání opatření před uzavřením smlouvy na žádost subjektu údajů (čl. 6 odst. 1 písm. b) GDPR).</li>
+          <li><strong>Vedení obchodní komunikace a navázání spolupráce</strong> — právní základ: oprávněný zájem správce spočívající v péči o potenciální i stávající klienty (čl. 6 odst. 1 písm. f) GDPR).</li>
+        </ul>
+        <p>Osobní údaje nezpracováváme pro automatizované rozhodování ani profilování ve smyslu čl. 22 GDPR.</p>
+
+        <!-- 4 -->
+        <h2>4. Doba uchování osobních údajů</h2>
+        <p>Osobní údaje uchováváme po dobu nezbytně nutnou k naplnění účelu, pro který byly shromážděny — nejdéle však <strong>3 roky od posledního kontaktu</strong> s Vámi, pokud nedojde k uzavření smluvního vztahu.</p>
+        <p>V případě uzavření smlouvy o spolupráci se na zpracování osobních údajů v rámci smluvního vztahu vztahují samostatné podmínky, které obdržíte při podpisu smlouvy.</p>
+
+        <!-- 5 -->
+        <h2>5. Příjemci osobních údajů</h2>
+        <p>Vaše osobní údaje předáváme výhradně těmto subjektům:</p>
+        <ul>
+          <li><strong>Web3Forms</strong> (web3forms.com) — technický zprostředkovatel odesílání formulářů. Provozovatel je společnost se sídlem mimo EU (USA). Předávání probíhá na základě standardních smluvních doložek (SCC) schválených Evropskou komisí. Zásady ochrany osobních údajů Web3Forms jsou dostupné na <a href="https://web3forms.com/privacy" target="_blank" rel="noopener noreferrer">web3forms.com/privacy</a>.</li>
+          <li><strong>Google LLC</strong> — pouze v technickém rozsahu nezbytném pro načtení písma Google Sans Flex prostřednictvím služby Google Fonts CDN. Google může při načtení zaznamenat IP adresu Vašeho zařízení. Tato data nejsou předávána třetím stranám. Více informací: <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">policies.google.com/privacy</a>.</li>
+        </ul>
+        <p>Osobní údaje neprodáváme, nepronajímáme ani jinak nesdílíme s třetími stranami za účelem přímého marketingu.</p>
+
+        <!-- 6 -->
+        <h2>6. Soubory cookies a sledování</h2>
+        <p>Tento web <strong>nepoužívá vlastní analytické ani marketingové cookies</strong> a neobsahuje žádné sledovací skripty třetích stran (Google Analytics, Facebook Pixel apod.).</p>
+        <p>Jediný technický požadavek na externí server vzniká při načtení písma přes Google Fonts CDN (viz sekce 5). Nejde o cookie — jedná se o standardní HTTP požadavek, který může zaznamenat IP adresu návštěvníka na straně Googlu.</p>
+
+        <!-- 7 -->
+        <h2>7. Vaše práva</h2>
+        <p>V souladu s GDPR máte vůči nám tato práva:</p>
+        <ul>
+          <li><strong>Právo na přístup</strong> — kdykoli nás můžete požádat o potvrzení, zda zpracováváme Vaše osobní údaje, a o kopii těchto údajů.</li>
+          <li><strong>Právo na opravu</strong> — pokud jsou Vaše údaje nepřesné nebo neúplné, máte právo požadovat jejich opravu.</li>
+          <li><strong>Právo na výmaz</strong> — můžete požádat o vymazání Vašich osobních údajů, pokud pominul účel zpracování nebo odvoláte souhlas (byl-li souhlas právním základem).</li>
+          <li><strong>Právo na omezení zpracování</strong> — v zákonem stanovených případech můžete požadovat, abychom omezili zpracování Vašich údajů.</li>
+          <li><strong>Právo na přenositelnost</strong> — máte právo obdržet Vaše osobní údaje ve strukturovaném, běžně používaném a strojově čitelném formátu.</li>
+          <li><strong>Právo vznést námitku</strong> — pokud zpracování probíhá na základě oprávněného zájmu, máte právo kdykoli vznést námitku. Zpracování pak ukončíme, pokud neprokážeme závažné oprávněné důvody.</li>
+        </ul>
+        <p>Veškerá práva můžete uplatnit písemně na e-mailové adrese <a href="mailto:info@finkli.cz">info@finkli.cz</a>. Na Vaši žádost odpovíme bez zbytečného odkladu, nejpozději do 30 dnů.</p>
+
+        <!-- 8 -->
+        <h2>8. Právo podat stížnost u dozorového úřadu</h2>
+        <p>Pokud se domníváte, že zpracování Vašich osobních údajů porušuje GDPR, máte právo podat stížnost u příslušného dozorového orgánu:</p>
+        <div class="gdpr-card">
+          <p><strong>Úřad pro ochranu osobních údajů (ÚOOÚ)</strong></p>
+          <p>Pplk. Sochora 27, 170 00 Praha 7</p>
+          <p>Web: <a href="https://www.uoou.cz" target="_blank" rel="noopener noreferrer">www.uoou.cz</a></p>
+          <p>E-mail: <a href="mailto:posta@uoou.cz">posta@uoou.cz</a></p>
+        </div>
+
+        <!-- 9 -->
+        <h2>9. Změny těchto zásad</h2>
+        <p>Tyto zásady zpracování osobních údajů můžeme příležitostně aktualizovat, zejména v reakci na změny právních předpisů nebo způsobu zpracování dat. Aktuální verze je vždy dostupná na této stránce. Datum platnosti je uvedeno v záhlaví dokumentu.</p>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Patička ── -->
+  <footer class="gdpr-footer">
+    <div class="container">
+      <div class="gdpr-footer__inner">
+        <span>© 2026 Finkli s.r.o. &nbsp;·&nbsp; IČO: 24380555</span>
+        <a href="index.html" class="gdpr-footer__link">← Zpět na finkli.cz</a>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
