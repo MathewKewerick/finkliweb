@@ -2181,9 +2181,23 @@ strong { font-weight: 600; }
     inset 0 1px 0 rgba(255, 255, 255, 0.75);
 }
 
+/* Auto-pulse: replicates hover without real hover — JS adds/removes this class */
+@media (hover: hover) and (pointer: fine) {
+  .chip--auto-pulse {
+    transform: scale(var(--hover-scale));
+    background: var(--bg-mint-tint);
+    border-color: var(--brand-green);
+    box-shadow:
+      0 12px 28px rgba(3, 217, 140, 0.16),
+      inset 0 1px 0 rgba(255, 255, 255, 0.6);
+    transition-duration: 0.42s; /* trochu pomalejší než real hover (0.28s) */
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .chip { transition: background 0.2s var(--ease), box-shadow 0.2s var(--ease); }
   .chip:hover { transform: none !important; }
+  .chip--auto-pulse { transform: none !important; }
 }
 
 /* Mobile: chips full-width, centered label, bigger touch target */

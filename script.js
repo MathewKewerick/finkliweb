@@ -420,6 +420,52 @@ const WEB3FORMS = {
       btn.addEventListener('click', () => answer(btn.dataset.answer));
     });
 
+    // ----- Auto-pulse chips (desktop only) -----
+    // Randomly scales one chip at a time — same as hover, no hover needed.
+    // Signals interactivity. Stops the moment user shows interest (mouseenter / click).
+    (function initChipAutoPulse() {
+      // Only on pointer devices (desktop) — touch users don't have hover affordance anyway
+      if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+
+      const chips = Array.from(chipButtons);
+      let lastIdx = -1;
+      let timer   = null;
+      let active  = true;
+
+      function stop() {
+        active = false;
+        clearTimeout(timer);
+        // Clean up any lingering pulse class
+        chips.forEach(c => c.classList.remove('chip--auto-pulse'));
+      }
+
+      function pulse() {
+        if (!active) return;
+
+        // Pick a random chip, never the same as last time
+        let idx;
+        do { idx = Math.floor(Math.random() * chips.length); }
+        while (idx === lastIdx && chips.length > 1);
+        lastIdx = idx;
+
+        const chip = chips[idx];
+        // Skip if user is already hovering this chip
+        if (!chip.matches(':hover')) {
+          chip.classList.add('chip--auto-pulse');
+          setTimeout(() => chip.classList.remove('chip--auto-pulse'), 680);
+        }
+
+        // Next pulse: random 2.4 – 5 s gap
+        timer = setTimeout(pulse, 2400 + Math.random() * 2600);
+      }
+
+      // Stop on any real user interaction with chips
+      chips.forEach(c => c.addEventListener('mouseenter', stop, { once: true }));
+
+      // First pulse after the page has settled
+      timer = setTimeout(pulse, 2800);
+    })();
+
     elBack.addEventListener('click', goBackToChips);
 
     elForm.addEventListener('submit', async (e) => {
