@@ -775,28 +775,25 @@ const WEB3FORMS = {
     }, 3000);
   })();
 
-  /* ---- Share tray (Poslat dál) ---- */
-  (function initShareButton() {
-    const btn  = document.getElementById('shareBtn');
-    const tray = document.getElementById('shareTray');
+  /* ---- Share tray (Poslat dál) — sdílená inicializační funkce ---- */
+  function initShareTray(btnId, trayId, waId, fbId, emailId, copyId, copyLabelId) {
+    const btn  = document.getElementById(btnId);
+    const tray = document.getElementById(trayId);
     if (!btn || !tray) return;
 
     const url   = 'https://finkli.cz';
     const title = 'Finkli — finance s plánem a dlouhodobou péčí';
     const text  = 'Ahoj, své finance řeším ve Finkli. Můžeš se s nimi taky sejít na nezávaznou schůzku a probrat svou situaci. Přistupují ke každému klientovi opravdu komplexně a individuálně, ne jen jak ti prodat nějaký produkt.';
 
-    /* Naplnit share linky */
-    document.getElementById('shareWa').href =
+    document.getElementById(waId).href =
       'https://wa.me/?text=' + encodeURIComponent(text + ' ' + url);
-    document.getElementById('shareFb').href =
+    document.getElementById(fbId).href =
       'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(url);
-    document.getElementById('shareEmail').href =
+    document.getElementById(emailId).href =
       'mailto:?subject=' + encodeURIComponent(title) +
       '&body=' + encodeURIComponent(text + '\n\n' + url);
 
-    /* Portálovat tray do <body> — unikne stacking contextu .family-note
-       (backdrop-filter vytváří nový stacking context, tray by jinak
-       skočil za sousední sekce). */
+    /* Portálovat do <body> — unikne stacking contextu backdrop-filter */
     document.body.appendChild(tray);
 
     function positionTray() {
@@ -818,42 +815,37 @@ const WEB3FORMS = {
       setTimeout(() => { tray.hidden = true; }, 180);
     }
 
-    function toggleTray() {
-      tray.hidden ? openTray() : closeTray();
-    }
-
     btn.addEventListener('click', (e) => {
       e.stopPropagation();
-      toggleTray();
+      tray.hidden ? openTray() : closeTray();
     });
 
-    /* Repozicovat při scrollu / resizu, pokud je otevřený */
     window.addEventListener('scroll', () => { if (!tray.hidden) positionTray(); }, { passive: true });
     window.addEventListener('resize', () => { if (!tray.hidden) positionTray(); });
 
-    /* Zavřít klikem mimo */
     document.addEventListener('click', (e) => {
       if (e.target !== btn && !tray.contains(e.target)) closeTray();
     });
 
-    /* Escape */
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') closeTray();
     });
 
-    /* Kopírovat odkaz */
-    document.getElementById('shareCopy').addEventListener('click', async () => {
+    document.getElementById(copyId).addEventListener('click', async () => {
       closeTray();
-      const label = document.getElementById('shareCopyLabel');
+      const label = document.getElementById(copyLabelId);
       try {
         await navigator.clipboard.writeText(url);
         label.textContent = 'Zkopírováno ✓';
         setTimeout(() => { label.textContent = 'Kopírovat odkaz'; }, 2000);
-      } catch {
-        /* clipboard nedostupný — nic */
-      }
+      } catch { /* clipboard nedostupný */ }
     });
-  })();
+  }
+
+  /* Inicializace — family note */
+  initShareTray('shareBtn', 'shareTray', 'shareWa', 'shareFb', 'shareEmail', 'shareCopy', 'shareCopyLabel');
+  /* Inicializace — FAQ */
+  initShareTray('shareBtnFaq', 'shareTrayFaq', 'shareWaFaq', 'shareFbFaq', 'shareEmailFaq', 'shareCopyFaq', 'shareCopyLabelFaq');
 
   // ----- Mobilní chip pulse -----
   // Stejný rytmus jako desktop badge, ale bez podmínky hover:hover.

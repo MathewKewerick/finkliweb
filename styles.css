@@ -4816,6 +4816,55 @@ strong { font-weight: 600; }
   flex-shrink: 0;
 }
 
+/* =Section: EUCS report button= */
+.btn--eucs-report {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 22px;
+  padding: 15px 22px;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  border-radius: 12px;
+  border: 1px solid transparent;
+  min-height: 50px;
+  cursor: pointer;
+  white-space: nowrap;
+  text-decoration: none;
+  background: transparent;
+  color: var(--brand-dark);
+  border-color: rgba(3, 217, 140, 0.55);
+  box-shadow: none;
+  transition:
+    transform var(--hover-duration) var(--ease),
+    background var(--hover-duration) var(--ease),
+    border-color var(--hover-duration) var(--ease);
+}
+
+.btn--eucs-report:hover {
+  transform: scale(var(--hover-scale));
+  background: rgba(3, 217, 140, 0.1);
+  border-color: var(--brand-green);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn--eucs-report { transition: box-shadow 0.2s var(--ease); }
+  .btn--eucs-report:hover { transform: none; }
+}
+
+/* Prompt věta nad share tlačítkem */
+.faq-share__prompt {
+  margin: 0 0 10px;
+  font-size: 15px;
+  color: var(--text-muted);
+}
+
+.faq-item__answer .share-wrap {
+  margin-top: 20px;
+}
+
 /* Share tray wrapper — relativní kontext pro absolutní dropdown */
 .share-wrap {
   position: relative;
