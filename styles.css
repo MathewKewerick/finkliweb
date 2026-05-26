@@ -1414,12 +1414,12 @@ strong { font-weight: 600; }
     box-shadow: 0 10px 28px rgba(3, 217, 140, 0.12);
   }
 
-  /* Head row: icon + number badge stacked vertically (icon on top) */
+  /* Head row: number → ikona, vertikálně centrované */
   .cycle-steps__head {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 10px;
+    gap: 18px;
     margin-bottom: 12px;
   }
 
@@ -1434,19 +1434,19 @@ strong { font-weight: 600; }
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-width: 28px;
-    height: 28px;
-    padding: 0 8px;
-    border-radius: 999px;
-    background: var(--brand-dark);
-    color: var(--bg-base);
+    min-width: 38px;
+    padding: 5px 11px;
+    border-radius: 10px;
+    background: var(--brand-green);
+    color: #ffffff;
     font-size: 13px;
     font-weight: 600;
+    letter-spacing: 0.04em;
     line-height: 1;
+    box-shadow: 0 4px 12px rgba(3, 217, 140, 0.22);
   }
 
   .cycle-steps__item--accent .cycle-steps__num {
-    background: var(--brand-green);
     color: var(--brand-dark);
   }
 
@@ -1512,30 +1512,309 @@ strong { font-weight: 600; }
     border-bottom-color: var(--brand-green);
   }
 
-  /* ----- Loop note: closing pill below step 5 that explains the cycle ----- */
+  /* ----- Loop note: chip styl shodný s desktop verzí ----- */
   .cycle-steps__loop {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
-    max-width: 320px;
+    gap: 7px;
+    width: fit-content;
     margin: 0 auto;
-    padding: 12px 18px;
-    border: 1px dashed var(--brand-green);
-    border-radius: 999px;
-    background: rgba(221, 251, 240, 0.45);
-    color: var(--brand-dark);
-    font-size: 13.5px;
+    padding: 7px 14px;
+    border: 1px solid rgba(3, 217, 140, 0.35);
+    border-radius: 10px;
+    background: rgba(221, 251, 240, 0.5);
+    color: var(--text-muted);
+    font-size: 13px;
+    font-weight: 500;
     line-height: 1.4;
     list-style: none;
   }
 
   .cycle-steps__loop-icon {
-    font-size: 16px;
+    font-size: 14px;
     line-height: 1;
     color: var(--brand-green);
     font-weight: 600;
   }
+
+  /* Pulse mobilního chipu — přidáno/odebráno přes JS */
+  .cycle-steps__loop {
+    transition:
+      background var(--hover-duration) var(--ease),
+      border-color var(--hover-duration) var(--ease),
+      transform var(--hover-duration) var(--ease);
+  }
+
+  .cycle-steps__loop--pulse {
+    background: var(--bg-mint-tint);
+    border-color: rgba(3, 217, 140, 0.6);
+    transform: scale(1.02);
+    transition-duration: 0.42s;
+  }
+}
+
+/* ==========================================================================
+   =Section: Cycle Bento Grid=
+
+   Bento grid — tablet & desktop náhrada za SVG kolečko.
+   Kroky 1–4 v mřížce 2×2 (tablet) / 4-col (desktop).
+   Krok 5 přes celou šířku dole — zvýrazněný jako "Finkli difference".
+   Mobil (< 560px) stále používá .cycle-steps (vertikální seznam).
+
+   REVERT NA SVG KOLEČKO:
+   1. index.html → odstraň třídu "cycle-figure--hidden" z <figure>.
+   2. index.html → odstraň celý .cycle-bento blok.
+   3. styles.css → odstraň tuto =Section: Cycle Bento Grid= sekci.
+   ========================================================================== */
+
+/* Na mobilu schované — .cycle-steps přebírá pod 560px */
+.cycle-bento {
+  display: none;
+}
+
+/* Bento jako full-width child gridu .coop-card--wide */
+.coop-card--wide .cycle-bento {
+  grid-column: 1 / -1;
+  margin: 44px 0 0;
+  width: 100%;
+}
+
+@media (min-width: 560px) {
+  .cycle-bento { display: block; }
+}
+
+@media (min-width: 768px) {
+  .coop-card--wide .cycle-bento { margin-top: 52px; }
+}
+
+@media (min-width: 1024px) {
+  .coop-card--wide .cycle-bento { margin-top: 60px; }
+}
+
+/* ----- Řada kroků 1–4 ----- */
+.cycle-bento__row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+  margin-bottom: 14px;
+}
+
+@media (min-width: 768px) {
+  .cycle-bento__row {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+}
+
+/* ----- Karta kroku — shodný glass pattern s area-card ----- */
+.cycle-bento__cell {
+  position: relative;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid rgba(11, 46, 52, 0.05);
+  border-radius: 20px;
+  backdrop-filter: blur(20px) saturate(140%);
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
+  box-shadow: 0 6px 22px rgba(11, 46, 52, 0.025);
+  padding: 60px 24px 30px;
+  transition:
+    background var(--hover-duration) var(--ease),
+    border-color var(--hover-duration) var(--ease),
+    box-shadow var(--hover-duration) var(--ease),
+    transform var(--hover-duration) var(--ease);
+}
+
+/* Zelený glow dole — shodný s area-card::after */
+.cycle-bento__cell::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(80% 55% at 50% 100%, rgba(3, 217, 140, 0.08), transparent 65%);
+  opacity: 0.85;
+  transition: opacity var(--hover-duration) var(--ease);
+}
+
+/* Hover jen na malých kartách 1–4 */
+.cycle-bento__row .cycle-bento__cell:hover {
+  background: rgba(255, 255, 255, 0.72);
+  border-color: rgba(3, 217, 140, 0.16);
+  box-shadow: 0 18px 44px rgba(3, 217, 140, 0.10);
+  transform: scale(var(--hover-scale));
+}
+
+.cycle-bento__row .cycle-bento__cell:hover::after {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cycle-bento__row .cycle-bento__cell:hover { transform: none; }
+}
+
+/* ----- Krok 5 — wide accent karta, vše centrované ----- */
+.cycle-bento__cell--accent {
+  background: rgba(221, 251, 240, 0.65);
+  border-color: rgba(3, 217, 140, 0.22);
+  box-shadow: 0 8px 28px rgba(3, 217, 140, 0.10);
+  text-align: center;
+  padding-top: 28px;
+}
+
+/* Glow nepotřeba — karta má vlastní zelené pozadí */
+.cycle-bento__cell--accent::after {
+  display: none;
+}
+
+.cycle-bento__cell--accent:hover {
+  background: rgba(221, 251, 240, 0.88);
+  border-color: rgba(3, 217, 140, 0.40);
+  box-shadow: 0 18px 48px rgba(3, 217, 140, 0.18);
+  transform: none; /* full-width karta se nescaluje */
+}
+
+/* ----- Číselný badge — green pill, top-left (shodný styl s area-card__number) ----- */
+.cycle-bento__num {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 38px;
+  padding: 5px 11px;
+  background: var(--brand-green);
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(3, 217, 140, 0.22);
+}
+
+/* V accent kartě — badge centrovaný, ne absolute */
+.cycle-bento__cell--accent .cycle-bento__num {
+  position: static;
+  color: var(--brand-dark);
+  margin: 0 auto 16px;
+}
+
+/* ----- Ikona — centrovaná v kartě ----- */
+.cycle-bento__icon {
+  display: block;
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+  margin: 0 auto 18px;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 1;
+}
+
+/* Accent header — nadpis + ikona na jednom řádku, centrované */
+.cycle-bento__accent-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.cycle-bento__accent-header .cycle-bento__title {
+  margin: 0;
+}
+
+/* Ikona v accent header řádku — inline vedle nadpisu */
+.cycle-bento__cell--accent .cycle-bento__icon {
+  width: 34px;
+  height: 34px;
+  margin: 0;
+  flex-shrink: 0;
+}
+
+/* ----- Nadpis kroku ----- */
+.cycle-bento__title {
+  margin: 0 0 10px;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--brand-dark);
+  position: relative;
+  z-index: 1;
+}
+
+.cycle-bento__cell--accent .cycle-bento__title {
+  color: var(--brand-green);
+}
+
+/* ----- Popis kroku ----- */
+.cycle-bento__text {
+  margin: 0;
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: var(--text-muted);
+  position: relative;
+  z-index: 1;
+}
+
+/* ----- Smyčka — odlehčený chip, sekundární element karty ----- */
+.cycle-bento__loop {
+  display: flex;
+  align-items: center;
+  width: fit-content;
+  margin: 16px auto 0;
+  gap: 7px;
+  padding: 7px 14px;
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--text-soft);
+  background: rgba(221, 251, 240, 0.5);
+  border: 1px solid rgba(3, 217, 140, 0.35);
+  border-radius: 10px;
+  position: relative;
+  z-index: 1;
+  cursor: default;
+  transition:
+    transform var(--hover-duration) var(--ease),
+    box-shadow var(--hover-duration) var(--ease),
+    background var(--hover-duration) var(--ease),
+    border-color var(--hover-duration) var(--ease);
+}
+
+.cycle-bento__loop-icon {
+  color: var(--brand-green);
+  font-weight: 600;
+  line-height: 1;
+}
+
+/* Auto-pulse badge */
+.cycle-bento__loop--pulse {
+  transform: scale(1.012);
+  background: var(--bg-mint-tint);
+  border-color: var(--brand-green);
+  box-shadow: 0 6px 18px rgba(3, 217, 140, 0.18);
+  transition-duration: 0.42s;
+}
+
+/* Auto-pulse karta Analýzy — jemný nádech, ne plná zelená */
+.cycle-bento__cell--pulse {
+  background: var(--bg-mint-card) !important;
+  border-color: var(--brand-green) !important;
+  box-shadow: 0 8px 22px rgba(3, 217, 140, 0.11) !important;
+  transform: scale(1.018);
+  transition-duration: 0.55s !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cycle-bento__loop--pulse { transform: none !important; }
+}
+
+/* ----- Schování SVG kolečka (bento přebírá na tabletu/desktopu) -----
+   REVERT: odstraň třídu "cycle-figure--hidden" z <figure> v index.html. */
+.cycle-figure--hidden {
+  display: none !important;
 }
 
 /* ----- Sub-section heading (used inside a larger section for sub-topics) -----

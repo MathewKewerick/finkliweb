@@ -742,4 +742,58 @@ const WEB3FORMS = {
   })();
   */
 
+  // ----- Bento cycle pulse (tablet/desktop only) -----
+  // Loop badge (krok 5) pulzuje každých 4,5 s — pevný interval, hover neruší.
+  // 1 s po badge pulzuje i karta 1 (Analýza) — vizuálně potvrzuje uzavření cyklu.
+  (function initBentoPulse() {
+    if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+    if (prefersReducedMotion) return;
+
+    const badge = document.querySelector('.cycle-bento__loop');
+    const anal  = document.querySelector('.cycle-bento__row .cycle-bento__cell:first-child');
+    if (!badge || !anal) return;
+
+    const PULSE_MS = 680;   // délka pulzu (shodná s chipy)
+    const DELAY_MS = 1500;  // prodleva mezi badge a kartou Analýzy
+    const INTERVAL = 4500;  // pevný interval mezi cykly
+
+    function pulse() {
+      badge.classList.add('cycle-bento__loop--pulse');
+      setTimeout(() => badge.classList.remove('cycle-bento__loop--pulse'), PULSE_MS);
+
+      setTimeout(() => {
+        anal.classList.add('cycle-bento__cell--pulse');
+        setTimeout(() => anal.classList.remove('cycle-bento__cell--pulse'), PULSE_MS);
+      }, DELAY_MS);
+    }
+
+    // První pulz po 3 s, interval startuje AŽ po něm — jinak by setInterval
+    // tikal od spuštění a druhý pulz přišel za 1,5 s místo 4,5 s.
+    setTimeout(() => {
+      pulse();
+      setInterval(pulse, INTERVAL);
+    }, 3000);
+  })();
+
+  // ----- Mobilní chip pulse -----
+  // Stejný rytmus jako desktop badge, ale bez podmínky hover:hover.
+  (function initMobileChipPulse() {
+    if (prefersReducedMotion) return;
+    const mobileChip = document.querySelector('.cycle-steps__loop');
+    if (!mobileChip) return;
+
+    const PULSE_MS = 680;
+    const INTERVAL = 4500;
+
+    function pulse() {
+      mobileChip.classList.add('cycle-steps__loop--pulse');
+      setTimeout(() => mobileChip.classList.remove('cycle-steps__loop--pulse'), PULSE_MS);
+    }
+
+    setTimeout(() => {
+      pulse();
+      setInterval(pulse, INTERVAL);
+    }, 3000);
+  })();
+
 })();

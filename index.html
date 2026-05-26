@@ -341,7 +341,7 @@
                  NOTE: SVG is shown on tablet & desktop only. On phones the
                  texts inside the SVG become unreadable, so we render the
                  list version below (.cycle-steps) instead. -->
-            <figure class="cycle-figure"
+            <figure class="cycle-figure cycle-figure--hidden"
                     aria-label="Cyklus spolupráce s klientem — 5 kroků (Analýza, Plán, Výběr produktu, Realizace, Péče a servis) s návratem od péče zpět k analýze">
               <img src="assets/kolecko-outline.svg" alt="" class="cycle-figure__svg" />
 
@@ -354,6 +354,56 @@
               </div>
             </figure>
 
+            <!-- =CYCLE-BENTO= Bento grid (tablet & desktop).
+                 REVERT NA SVG KOLEČKO:
+                 1. Odstraň třídu "cycle-figure--hidden" z <figure> výše.
+                 2. Odstraň celý tento .cycle-bento blok. -->
+            <div class="cycle-bento" aria-label="Cyklus spolupráce s klientem — 5 kroků">
+
+              <div class="cycle-bento__row">
+
+                <article class="cycle-bento__cell">
+                  <div class="cycle-bento__num">1</div>
+                  <img src="assets/analyza_icon.png" alt="" class="cycle-bento__icon" />
+                  <h4 class="cycle-bento__title">Analýza</h4>
+                  <p class="cycle-bento__text">Podíváme se na Vaši finanční situaci jako celek, příjmy, výdaje, závazky, cíle. Bez analýzy nelze dobře plánovat.</p>
+                </article>
+
+                <article class="cycle-bento__cell">
+                  <div class="cycle-bento__num">2</div>
+                  <img src="assets/plan_icon.png" alt="" class="cycle-bento__icon" />
+                  <h4 class="cycle-bento__title">Plán</h4>
+                  <p class="cycle-bento__text">Na základě analýzy vzniká mapa: co, proč a&nbsp;v&nbsp;jakém pořadí řešit. Finanční plán je základ všeho, co následuje.</p>
+                </article>
+
+                <article class="cycle-bento__cell">
+                  <div class="cycle-bento__num">3</div>
+                  <img src="assets/nastaveni_icon.png" alt="" class="cycle-bento__icon" />
+                  <h4 class="cycle-bento__title">Výběr produktu</h4>
+                  <p class="cycle-bento__text">Teprve teď přicházejí konkrétní produkty a&nbsp;nástroje. Vybíráme je jako důsledek plánu, nikdy ne jako výchozí bod.</p>
+                </article>
+
+                <article class="cycle-bento__cell">
+                  <div class="cycle-bento__num">4</div>
+                  <img src="assets/realizace_icon.png" alt="" class="cycle-bento__icon" />
+                  <h4 class="cycle-bento__title">Realizace</h4>
+                  <p class="cycle-bento__text">Vybraná řešení uvedeme do praxe. Postaráme se o&nbsp;veškeré sjednání a&nbsp;administrativu za&nbsp;Vás.</p>
+                </article>
+
+              </div><!-- /.cycle-bento__row -->
+
+              <article class="cycle-bento__cell cycle-bento__cell--accent">
+                <div class="cycle-bento__num">5</div>
+                <div class="cycle-bento__accent-header">
+                  <h4 class="cycle-bento__title">Péče &amp;&nbsp;servis</h4>
+                  <img src="assets/pece_icon.png" alt="" class="cycle-bento__icon" />
+                </div>
+                <p class="cycle-bento__text">Pravidelně kontrolujeme vývoj Vaší situace a&nbsp;upravujeme plán podle reality. Váš plán žije a&nbsp;přináší výsledky v&nbsp;čase.</p>
+                <p class="cycle-bento__loop"><span class="cycle-bento__loop-icon" aria-hidden="true">↻</span> Cyklus se uzavírá péčí a&nbsp;vrací se zpět k&nbsp;analýze</p>
+              </article>
+
+            </div><!-- /.cycle-bento -->
+
             <!-- Mobile-only: vertical step list (same content as the SVG above
                  but readable on a phone). Connectors:
                  1 → 2 → 3 → 4 solid (regular process)
@@ -362,8 +412,8 @@
             <ol class="cycle-steps" aria-label="Cyklus spolupráce v 5 krocích">
               <li class="cycle-steps__item">
                 <div class="cycle-steps__head">
-                  <img src="assets/analyza_icon.png" alt="" class="cycle-steps__icon" />
                   <span class="cycle-steps__num">1</span>
+                  <img src="assets/analyza_icon.png" alt="" class="cycle-steps__icon" />
                 </div>
                 <h4 class="cycle-steps__title">Analýza</h4>
                 <p class="cycle-steps__text">Podíváme se na Vaši finanční situaci jako celek — příjmy, výdaje, závazky, cíle. Bez analýzy nelze dobře plánovat.</p>
@@ -373,8 +423,8 @@
 
               <li class="cycle-steps__item">
                 <div class="cycle-steps__head">
-                  <img src="assets/plan_icon.png" alt="" class="cycle-steps__icon" />
                   <span class="cycle-steps__num">2</span>
+                  <img src="assets/plan_icon.png" alt="" class="cycle-steps__icon" />
                 </div>
                 <h4 class="cycle-steps__title">Plán</h4>
                 <p class="cycle-steps__text">Na základě analýzy vzniká mapa: co, proč a&nbsp;v&nbsp;jakém pořadí řešit. Finanční plán je základ všeho, co následuje.</p>
@@ -384,8 +434,8 @@
 
               <li class="cycle-steps__item">
                 <div class="cycle-steps__head">
-                  <img src="assets/nastaveni_icon.png" alt="" class="cycle-steps__icon" />
                   <span class="cycle-steps__num">3</span>
+                  <img src="assets/nastaveni_icon.png" alt="" class="cycle-steps__icon" />
                 </div>
                 <h4 class="cycle-steps__title">Výběr produktu</h4>
                 <p class="cycle-steps__text">Teprve teď přicházejí konkrétní produkty a&nbsp;nástroje. Vybíráme je jako důsledek plánu, nikdy ne jako výchozí bod.</p>
@@ -395,8 +445,8 @@
 
               <li class="cycle-steps__item">
                 <div class="cycle-steps__head">
-                  <img src="assets/realizace_icon.png" alt="" class="cycle-steps__icon" />
                   <span class="cycle-steps__num">4</span>
+                  <img src="assets/realizace_icon.png" alt="" class="cycle-steps__icon" />
                 </div>
                 <h4 class="cycle-steps__title">Realizace</h4>
                 <p class="cycle-steps__text">Vybraná řešení uvedeme do praxe. Postaráme se o&nbsp;veškeré sjednání a&nbsp;administrativu za&nbsp;Vás.</p>
@@ -406,8 +456,8 @@
 
               <li class="cycle-steps__item cycle-steps__item--accent">
                 <div class="cycle-steps__head">
-                  <img src="assets/pece_icon.png" alt="" class="cycle-steps__icon" />
                   <span class="cycle-steps__num">5</span>
+                  <img src="assets/pece_icon.png" alt="" class="cycle-steps__icon" />
                 </div>
                 <h4 class="cycle-steps__title">Péče &amp;&nbsp;servis</h4>
                 <p class="cycle-steps__text">Pravidelně kontrolujeme vývoj Vaší situace a&nbsp;upravujeme plán podle reality. Váš plán žije a&nbsp;přináší výsledky v&nbsp;čase.</p>
@@ -417,7 +467,7 @@
 
               <li class="cycle-steps__loop">
                 <span class="cycle-steps__loop-icon" aria-hidden="true">↻</span>
-                <span>Cyklus se uzavírá péčí a&nbsp;vrací zpět k&nbsp;1.&nbsp;Analýze</span>
+                <span>Cyklus se uzavírá péčí a&nbsp;vrací k&nbsp;analýze</span>
               </li>
             </ol>
         </article>
