@@ -775,6 +775,86 @@ const WEB3FORMS = {
     }, 3000);
   })();
 
+  /* ---- Share tray (Poslat dál) ---- */
+  (function initShareButton() {
+    const btn  = document.getElementById('shareBtn');
+    const tray = document.getElementById('shareTray');
+    if (!btn || !tray) return;
+
+    const url   = 'https://finkli.cz';
+    const title = 'Finkli — finance s plánem a dlouhodobou péčí';
+    const text  = 'Ahoj, své finance řeším ve Finkli. Můžeš se s nimi taky sejít na nezávaznou schůzku a probrat svou situaci. Přistupují ke každému klientovi opravdu komplexně a individuálně, ne jen jak ti prodat nějaký produkt.';
+
+    /* Naplnit share linky */
+    document.getElementById('shareWa').href =
+      'https://wa.me/?text=' + encodeURIComponent(text + ' ' + url);
+    document.getElementById('shareFb').href =
+      'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(url);
+    document.getElementById('shareEmail').href =
+      'mailto:?subject=' + encodeURIComponent(title) +
+      '&body=' + encodeURIComponent(text + '\n\n' + url);
+
+    /* Portálovat tray do <body> — unikne stacking contextu .family-note
+       (backdrop-filter vytváří nový stacking context, tray by jinak
+       skočil za sousední sekce). */
+    document.body.appendChild(tray);
+
+    function positionTray() {
+      const r = btn.getBoundingClientRect();
+      tray.style.top  = (r.bottom + window.scrollY + 8) + 'px';
+      tray.style.left = (r.left  + window.scrollX) + 'px';
+    }
+
+    function openTray() {
+      positionTray();
+      tray.hidden = false;
+      btn.setAttribute('aria-expanded', 'true');
+      requestAnimationFrame(() => tray.classList.add('is-open'));
+    }
+
+    function closeTray() {
+      tray.classList.remove('is-open');
+      btn.setAttribute('aria-expanded', 'false');
+      setTimeout(() => { tray.hidden = true; }, 180);
+    }
+
+    function toggleTray() {
+      tray.hidden ? openTray() : closeTray();
+    }
+
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      toggleTray();
+    });
+
+    /* Repozicovat při scrollu / resizu, pokud je otevřený */
+    window.addEventListener('scroll', () => { if (!tray.hidden) positionTray(); }, { passive: true });
+    window.addEventListener('resize', () => { if (!tray.hidden) positionTray(); });
+
+    /* Zavřít klikem mimo */
+    document.addEventListener('click', (e) => {
+      if (e.target !== btn && !tray.contains(e.target)) closeTray();
+    });
+
+    /* Escape */
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeTray();
+    });
+
+    /* Kopírovat odkaz */
+    document.getElementById('shareCopy').addEventListener('click', async () => {
+      closeTray();
+      const label = document.getElementById('shareCopyLabel');
+      try {
+        await navigator.clipboard.writeText(url);
+        label.textContent = 'Zkopírováno ✓';
+        setTimeout(() => { label.textContent = 'Kopírovat odkaz'; }, 2000);
+      } catch {
+        /* clipboard nedostupný — nic */
+      }
+    });
+  })();
+
   // ----- Mobilní chip pulse -----
   // Stejný rytmus jako desktop badge, ale bez podmínky hover:hover.
   (function initMobileChipPulse() {

@@ -736,6 +736,54 @@
           <p class="family-note__text">
             Finance často neřeší jen jednotlivec, ale třeba celá domácnost. <strong>Cena balíčků se vztahuje na&nbsp;jeden finanční plán, pokud tak pracujeme pouze s&nbsp;jedním společným, platíte pouze jeden balíček.</strong>
           </p>
+          <div class="share-wrap" id="shareWrap">
+            <button type="button" class="family-note__share" id="shareBtn" aria-haspopup="true" aria-expanded="false" aria-controls="shareTray" aria-label="Sdílet stránku Finkli">
+              <svg class="family-note__share-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                <circle cx="12.5" cy="3" r="1.75" stroke="currentColor" stroke-width="1.5"/>
+                <circle cx="12.5" cy="13" r="1.75" stroke="currentColor" stroke-width="1.5"/>
+                <circle cx="3.5" cy="8" r="1.75" stroke="currentColor" stroke-width="1.5"/>
+                <line x1="5.2" y1="7.1" x2="10.8" y2="4.1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                <line x1="5.2" y1="8.9" x2="10.8" y2="11.9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+              Poslat dál
+            </button>
+
+            <div class="share-tray" id="shareTray" role="menu" aria-label="Vyberte platformu pro sdílení" hidden>
+              <!-- WhatsApp -->
+              <a class="share-tray__item" href="#" id="shareWa" role="menuitem" target="_blank" rel="noopener noreferrer">
+                <svg class="share-tray__icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M12 2C6.477 2 2 6.477 2 12c0 1.89.525 3.66 1.438 5.168L2 22l4.978-1.413A9.956 9.956 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2z" fill="#25D366"/>
+                  <path d="M17.006 14.57c-.274-.137-1.62-.8-1.872-.89-.251-.092-.434-.137-.617.137-.183.274-.709.89-.869 1.073-.16.183-.32.206-.594.069-.274-.137-1.157-.426-2.204-1.36-.815-.727-1.365-1.624-1.525-1.898-.16-.274-.017-.422.12-.559.123-.122.274-.32.411-.48.137-.16.183-.274.274-.457.092-.183.046-.343-.023-.48-.069-.137-.617-1.487-.846-2.036-.223-.535-.45-.463-.617-.472l-.526-.009c-.183 0-.48.069-.731.343-.252.274-.96.938-.96 2.287 0 1.348.983 2.651 1.12 2.834.137.183 1.934 2.953 4.686 4.14.655.283 1.166.452 1.565.578.658.209 1.257.18 1.73.109.528-.079 1.62-.662 1.849-1.302.228-.64.228-1.189.16-1.302-.069-.114-.251-.183-.526-.32z" fill="white"/>
+                </svg>
+                <span>WhatsApp</span>
+              </a>
+              <!-- Facebook -->
+              <a class="share-tray__item" href="#" id="shareFb" role="menuitem" target="_blank" rel="noopener noreferrer">
+                <svg class="share-tray__icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <circle cx="12" cy="12" r="10" fill="#1877F2"/>
+                  <path d="M15.5 8H13.5C13.2 8 13 8.2 13 8.5V10H15.5L15.2 12.5H13V19H10.5V12.5H9V10H10.5V8.5C10.5 6.6 11.6 5.5 13.5 5.5H15.5V8Z" fill="white"/>
+                </svg>
+                <span>Facebook</span>
+              </a>
+              <!-- Email -->
+              <a class="share-tray__item" href="#" id="shareEmail" role="menuitem">
+                <svg class="share-tray__icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <rect x="2" y="5" width="20" height="14" rx="2.5" fill="var(--brand-dark)" opacity="0.12"/>
+                  <rect x="2" y="5" width="20" height="14" rx="2.5" stroke="var(--brand-dark)" stroke-width="1.5"/>
+                  <path d="M2 8l10 6 10-6" stroke="var(--brand-dark)" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+                <span>Email</span>
+              </a>
+              <!-- Kopírovat -->
+              <button type="button" class="share-tray__item" id="shareCopy" role="menuitem">
+                <svg class="share-tray__icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <rect x="9" y="9" width="11" height="13" rx="2" stroke="var(--brand-dark)" stroke-width="1.5"/>
+                  <path d="M15 9V6a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2h3" stroke="var(--brand-dark)" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+                <span id="shareCopyLabel">Kopírovat odkaz</span>
+              </button>
+            </div>
+          </div>
         </div>
         <img src="assets/rodina.png" alt="" class="family-note__icon" />
       </aside>
