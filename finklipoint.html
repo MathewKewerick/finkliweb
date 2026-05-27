@@ -196,6 +196,24 @@
     }
     .fp-login__card.is-shaking { animation: shake 0.42s var(--ease); }
 
+    .fp-login__back {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 20px;
+      font-size: 13px;
+      font-weight: 500;
+      color: rgba(11, 46, 52, 0.5);
+      text-decoration: none;
+      padding: 6px 10px;
+      border-radius: 8px;
+      transition: color 0.2s var(--ease), background 0.2s var(--ease);
+    }
+    .fp-login__back:hover {
+      color: var(--brand-dark);
+      background: rgba(11, 46, 52, 0.05);
+    }
+
     /* ======================================================
        DASHBOARD VIEW
     ====================================================== */
@@ -422,6 +440,12 @@
     <button class="fp-login__btn" id="fpLoginBtn" type="button">Vstoupit</button>
 
   </div>
+  <a href="index.html" class="fp-login__back">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    Zpět na web
+  </a>
 </div>
 
 <!-- =====================================================

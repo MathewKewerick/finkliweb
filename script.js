@@ -847,6 +847,94 @@ const WEB3FORMS = {
   /* Inicializace — FAQ */
   initShareTray('shareBtnFaq', 'shareTrayFaq', 'shareWaFaq', 'shareFbFaq', 'shareEmailFaq', 'shareCopyFaq', 'shareCopyLabelFaq');
 
+  // ----- Testimonials: line-clamp detekce + modal -----
+  (function initTestimonialModal() {
+    // Sestavíme modal DOM jednou (sdílený pro všechny karty)
+    const overlay = document.createElement('div');
+    overlay.className = 'testimonial-modal-overlay';
+    overlay.setAttribute('role', 'dialog');
+    overlay.setAttribute('aria-modal', 'true');
+    overlay.setAttribute('aria-label', 'Celá recenze');
+    overlay.innerHTML =
+      '<div class="testimonial-modal">' +
+        '<button class="testimonial-modal__close" aria-label="Zavřít recenzi">Zavřít&nbsp;×</button>' +
+        '<blockquote class="testimonial-modal__quote"><p></p></blockquote>' +
+        '<footer class="testimonial-modal__author">' +
+          '<span class="testimonial-modal__name"></span>' +
+          '<span class="testimonial-modal__role"></span>' +
+        '</footer>' +
+      '</div>';
+    document.body.appendChild(overlay);
+
+    const modalP    = overlay.querySelector('.testimonial-modal__quote p');
+    const modalName = overlay.querySelector('.testimonial-modal__name');
+    const modalRole = overlay.querySelector('.testimonial-modal__role');
+    const closeBtn  = overlay.querySelector('.testimonial-modal__close');
+
+    // Uložíme si trigger (pro obnovení focusu po zavření)
+    let lastTrigger = null;
+
+    function openModal(text, name, role, trigger) {
+      lastTrigger = trigger || null;
+      modalP.textContent    = text;
+      modalName.textContent = name;
+      modalRole.textContent = role;
+      overlay.classList.add('is-open');
+      document.body.style.overflow = 'hidden';
+      closeBtn.focus();
+    }
+
+    function closeModal() {
+      overlay.classList.remove('is-open');
+      document.body.style.overflow = '';
+      if (lastTrigger) lastTrigger.focus();
+      lastTrigger = null;
+    }
+
+    // Zavření kliknutím na overlay (ne na samotný modal)
+    overlay.addEventListener('click', function (e) {
+      if (e.target === overlay) closeModal();
+    });
+
+    // Zavření klávesou Escape
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && overlay.classList.contains('is-open')) closeModal();
+    });
+
+    closeBtn.addEventListener('click', closeModal);
+
+    // Pro každou testimonial kartu: zjistíme, zda text přeteče přes line-clamp
+    document.querySelectorAll('.testimonial-card').forEach(function (card) {
+      const p = card.querySelector('.testimonial-card__quote p');
+      if (!p) return;
+
+      // Počkáme na vykreslení layoutu, pak porovnáme výšky
+      requestAnimationFrame(function () {
+        if (p.scrollHeight <= p.clientHeight + 2) return; // Nepřetéká — link nepotřebujeme
+
+        var fullText = p.textContent;
+        var name = (card.querySelector('.testimonial-card__name') || {}).textContent || '';
+        var role = (card.querySelector('.testimonial-card__role') || {}).textContent || '';
+
+        var btn = document.createElement('button');
+        btn.className   = 'testimonial-read-more';
+        btn.textContent = 'Přečíst celou recenzi →';
+
+        btn.addEventListener('click', function () {
+          openModal(fullText, name, role, btn);
+        });
+
+        // Vložíme odkaz za <blockquote>, před <figcaption>
+        var quote = card.querySelector('.testimonial-card__quote');
+        if (quote && quote.nextSibling) {
+          card.insertBefore(btn, quote.nextSibling);
+        } else {
+          card.appendChild(btn);
+        }
+      });
+    });
+  })();
+
   // ----- Mobilní chip pulse -----
   // Stejný rytmus jako desktop badge, ale bez podmínky hover:hover.
   (function initMobileChipPulse() {
