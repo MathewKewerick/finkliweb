@@ -919,9 +919,29 @@ const WEB3FORMS = {
         var btn = document.createElement('button');
         btn.className   = 'testimonial-read-more';
         btn.textContent = 'Přečíst celou recenzi →';
+        btn.setAttribute('tabindex', '-1'); // fokus přebírá karta, ne button samotný
+        btn.setAttribute('aria-hidden', 'true');
 
-        btn.addEventListener('click', function () {
-          openModal(fullText, name, role, btn);
+        // Klik na tlačítko — stopPropagation, aby se nespustil i card listener
+        btn.addEventListener('click', function (e) {
+          e.stopPropagation();
+          openModal(fullText, name, role, card);
+        });
+
+        // Klik kdekoliv na kartě otevře modal
+        card.classList.add('is-expandable');
+        card.addEventListener('click', function () {
+          openModal(fullText, name, role, card);
+        });
+        // Klávesnice: Enter / Space na kartě
+        card.setAttribute('role', 'button');
+        card.setAttribute('tabindex', '0');
+        card.setAttribute('aria-label', 'Přečíst celou recenzi — ' + name);
+        card.addEventListener('keydown', function (e) {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            openModal(fullText, name, role, card);
+          }
         });
 
         // Vložíme odkaz za <blockquote>, před <figcaption>
@@ -933,6 +953,39 @@ const WEB3FORMS = {
         }
       });
     });
+  })();
+
+  // ----- Smart store button — platform detection -----
+  // iOS / macOS  → App Store   (Mac users have iPhones; iOS apps run on Apple Silicon)
+  // Android      → Google Play
+  // Windows / other → Google Play (most common non-Apple default)
+  (function initStoreBtn() {
+    const btn = document.getElementById('store-btn');
+    if (!btn) return;
+
+    const ua  = navigator.userAgent;
+    const isIOS     = /iPhone|iPad|iPod/i.test(ua);
+    const isAndroid = /Android/i.test(ua);
+    const isMac     = !isIOS && /Mac/i.test(ua);
+    const useApple  = isIOS || isMac;
+
+    btn.href = useApple ? btn.dataset.urlApple : btn.dataset.urlAndroid;
+    btn.setAttribute('aria-label', useApple ? 'Stáhnout myPLANN z App Store' : 'Stáhnout myPLANN z Google Play');
+  })();
+
+  // ----- myPlann phone slider (crossfade) -----
+  (function initPhoneSlider() {
+    const phones = Array.from(document.querySelectorAll('.myplann__phone'));
+    if (phones.length < 2) return;
+
+    let current = 0;
+    const INTERVAL = 3800;
+
+    setInterval(() => {
+      phones[current].classList.remove('is-active');
+      current = (current + 1) % phones.length;
+      phones[current].classList.add('is-active');
+    }, INTERVAL);
   })();
 
   // ----- Mobilní chip pulse -----
@@ -954,6 +1007,216 @@ const WEB3FORMS = {
       pulse();
       setInterval(pulse, INTERVAL);
     }, 3000);
+  })();
+
+  // ----- Advisor profile modal -----
+  (function initAdvisorModal() {
+    const overlay = document.createElement('div');
+    overlay.className = 'advisor-modal-overlay';
+    overlay.setAttribute('role', 'dialog');
+    overlay.setAttribute('aria-modal', 'true');
+    overlay.setAttribute('aria-label', 'Profil poradce');
+    overlay.innerHTML =
+      '<div class="advisor-modal">' +
+        '<button class="advisor-modal__close" aria-label="Zavřít profil">Zavřít&nbsp;×</button>' +
+        '<div class="advisor-modal__header">' +
+          '<img class="advisor-modal__photo" src="" alt="" />' +
+          '<div class="advisor-modal__identity">' +
+            '<h3 class="advisor-modal__name"></h3>' +
+            '<div class="advisor-modal__contacts">' +
+              '<a class="advisor-modal__contact-link advisor-modal__email" href=""></a>' +
+              '<a class="advisor-modal__contact-link advisor-modal__phone" href=""></a>' +
+            '</div>' +
+            '<p class="advisor-modal__ico"></p>' +
+          '</div>' +
+        '</div>' +
+        '<p class="advisor-modal__bio"></p>' +
+        '<a class="advisor-modal__efa" href="https://efpa.cz/zkousky/zkouska-efa" target="_blank" rel="noopener noreferrer">' +
+          '<span class="advisor-modal__efa-icon"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 15a3 3 0 1 0 6 0a3 3 0 1 0 -6 0"/><path d="M13 17.5v4.5l2 -1.5l2 1.5v-4.5"/><path d="M10 19h-5a2 2 0 0 1 -2 -2v-10c0 -1.1 .9 -2 2 -2h14a2 2 0 0 1 2 2v10a2 2 0 0 1 -1 1.73"/><path d="M6 9l12 0"/><path d="M6 12l3 0"/><path d="M6 15l2 0"/></svg></span>' +
+          '<span class="advisor-modal__efa-text">Certifikace EFA — European Financial Advisor' +
+            '<span class="advisor-modal__efa-sub">Uděluje EFPA Czech Republic · efpa.cz</span>' +
+          '</span>' +
+        '</a>' +
+        '<p class="advisor-modal__licenses-title">Licence a oprávnění</p>' +
+        '<ul class="advisor-modal__licenses"></ul>' +
+      '</div>';
+    document.body.appendChild(overlay);
+
+    const modalPhoto    = overlay.querySelector('.advisor-modal__photo');
+    const modalName     = overlay.querySelector('.advisor-modal__name');
+    const modalEmail    = overlay.querySelector('.advisor-modal__email');
+    const modalPhone    = overlay.querySelector('.advisor-modal__phone');
+    const modalIco      = overlay.querySelector('.advisor-modal__ico');
+    const modalBio      = overlay.querySelector('.advisor-modal__bio');
+    const modalEfa      = overlay.querySelector('.advisor-modal__efa');
+    const modalLicenses = overlay.querySelector('.advisor-modal__licenses');
+    const closeBtn      = overlay.querySelector('.advisor-modal__close');
+    let lastTrigger     = null;
+
+    function openModal(card) {
+      lastTrigger = card;
+      const d = card.dataset;
+      modalPhoto.src         = d.photo || '';
+      modalPhoto.alt         = d.name || '';
+      modalName.textContent  = d.name || '';
+      if (d.email) {
+        modalEmail.href        = 'mailto:' + d.email;
+        modalEmail.textContent = d.email;
+        modalEmail.hidden      = false;
+      } else {
+        modalEmail.hidden = true;
+      }
+      if (d.phone) {
+        var phoneDisplay = d.phone.replace(/(\+420)(\d{3})(\d{3})(\d{3})/, '$1 $2 $3 $4');
+        modalPhone.href        = 'tel:' + d.phone;
+        modalPhone.textContent = phoneDisplay;
+        modalPhone.hidden      = false;
+      } else {
+        modalPhone.hidden = true;
+      }
+      modalIco.textContent  = d.ico ? 'IČO: ' + d.ico : '';
+      modalBio.textContent  = d.bio || '';
+      modalEfa.hidden = d.efa !== 'true';
+      modalLicenses.innerHTML = '';
+      (d.licenses || '').split('|').filter(Boolean).forEach(function (l) {
+        const li = document.createElement('li');
+        li.textContent = l.trim();
+        modalLicenses.appendChild(li);
+      });
+      overlay.classList.add('is-open');
+      document.body.style.overflow = 'hidden';
+      closeBtn.focus();
+    }
+
+    function closeModal() {
+      overlay.classList.remove('is-open');
+      document.body.style.overflow = '';
+      if (lastTrigger) lastTrigger.focus();
+      lastTrigger = null;
+    }
+
+    overlay.addEventListener('click', function (e) {
+      if (e.target === overlay) closeModal();
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && overlay.classList.contains('is-open')) closeModal();
+    });
+    closeBtn.addEventListener('click', closeModal);
+
+    document.querySelectorAll('.contact-person[data-name]').forEach(function (card) {
+      card.addEventListener('click', function (e) {
+        if (e.target.closest('.contact-person__link')) return;
+        if (e.target.closest('.contact-person__cta')) e.preventDefault();
+        openModal(card);
+      });
+      card.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          openModal(card);
+        }
+      });
+    });
+  })();
+
+  // ----- Předmět kontaktního formuláře — předvyplnění podle origine -----
+  (function initContactSubject() {
+    const select = document.getElementById('contact-subject');
+    if (!select) return;
+
+    function setSubject(value) {
+      select.value = value || 'Kontakt z webu';
+    }
+
+    // EUCS button → Sjednání garance EUCS
+    document.querySelectorAll('.btn--eucs-report').forEach(function (btn) {
+      btn.addEventListener('click', function () { setSubject('Sjednání garance EUCS'); });
+    });
+
+    // Packages CTA "Plán zdarma" (line in #balicky) + sticky widget btn → Plán zdarma
+    // Identifikujeme je podle href="#kontakt-form" a přítomnosti třídy btn--primary
+    // mimo hlavní nav (kde je jen obecné "Kontakt")
+    var planSelectors = [
+      '#balicky a.btn--primary[href="#kontakt-form"]',
+      '.cta-widget__btn',
+    ];
+    planSelectors.forEach(function (sel) {
+      document.querySelectorAll(sel).forEach(function (btn) {
+        btn.addEventListener('click', function () { setSubject('Plán zdarma'); });
+      });
+    });
+
+    // Dynamicky přidaný widget se vytvoří až po tomto kódu — použijeme delegaci na body
+    document.body.addEventListener('click', function (e) {
+      if (e.target.closest('.cta-widget__btn')) { setSubject('Plán zdarma'); }
+    });
+  })();
+
+  // ----- Sticky CTA widget -----
+  (function initCtaWidget() {
+    const trigger = document.getElementById('aplikace');
+    if (!trigger) return;
+
+    const widget = document.createElement('div');
+    widget.className = 'cta-widget';
+    widget.setAttribute('role', 'complementary');
+    widget.setAttribute('aria-label', 'Nezávazný finanční plán zdarma');
+    widget.innerHTML =
+      '<button class="cta-widget__minimize" aria-label="Minimalizovat">−</button>' +
+      '<div class="cta-widget__body">' +
+        '<p class="cta-widget__title">Líbí se Vám náš koncept spolupráce?</p>' +
+        '<p class="cta-widget__sub">Připravíme Vám ukázkový finanční plán zdarma. Žádný závazek, jen konkrétní představa.</p>' +
+        '<a href="#kontakt-form" class="btn btn--primary cta-widget__btn">Chci zkusit plán zdarma</a>' +
+      '</div>' +
+      '<span class="cta-widget__pill">Plán zdarma <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12l14 0"/><path d="M15 16l4 -4"/><path d="M15 8l4 4"/></svg></span>';
+    document.body.appendChild(widget);
+
+    const minBtn = widget.querySelector('.cta-widget__minimize');
+    let minimized = false;
+    let shown = false;
+
+    function show() {
+      if (shown) return;
+      shown = true;
+      // Small delay so the slide-in feels intentional, not instant
+      setTimeout(function () { widget.classList.add('is-visible'); }, 120);
+    }
+
+    minBtn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      minimized = !minimized;
+      widget.classList.toggle('is-minimized', minimized);
+      minBtn.textContent = minimized ? '+' : '−';
+      minBtn.setAttribute('aria-label', minimized ? 'Rozbalit' : 'Minimalizovat');
+    });
+
+    // Click on minimized pill → expand
+    widget.addEventListener('click', function () {
+      if (!minimized) return;
+      minimized = false;
+      widget.classList.remove('is-minimized');
+      minBtn.textContent = '−';
+      minBtn.setAttribute('aria-label', 'Minimalizovat');
+    });
+
+    if ('IntersectionObserver' in window) {
+      var observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            show();
+            observer.disconnect();
+          }
+        });
+      }, { threshold: 0.05 });
+      observer.observe(trigger);
+    } else {
+      window.addEventListener('scroll', function onScroll() {
+        var rect = trigger.getBoundingClientRect();
+        if (rect.top < window.innerHeight * 0.9) {
+          show();
+          window.removeEventListener('scroll', onScroll);
+        }
+      }, { passive: true });
+    }
   })();
 
 })();

@@ -1,0 +1,1419 @@
+<!doctype html>
+<html lang="cs">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Dotazník životního pojištění — Finkli</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <meta name="theme-color" content="#F4FFF9" />
+  <link rel="icon" type="image/svg+xml" href="assets/ikona_favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:opsz,wght@8..144,100..1000&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+
+  <style>
+    /* ── Page intro ─────────────────────────────────────────── */
+    .dq-intro {
+      padding: 140px 0 64px;
+    }
+    .dq-intro__eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(3,217,140,.10);
+      border: 1px solid rgba(3,217,140,.25);
+      border-radius: 100px;
+      padding: 5px 14px 5px 10px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      color: var(--brand-green);
+      margin-bottom: 24px;
+    }
+    .dq-intro__title { margin-bottom: 16px; }
+    .dq-intro__sub {
+      font-size: 17px;
+      color: var(--text-muted);
+      max-width: 560px;
+      line-height: 1.65;
+    }
+
+    /* ── Body ───────────────────────────────────────────────── */
+    .dq-body { padding: 0 0 100px; }
+    .dq-form { max-width: 760px; display: flex; flex-direction: column; gap: 16px; }
+
+    /* ── Card (glass — same as .coop-card) ─────────────────── */
+    .dq-card {
+      background: rgba(255,255,255,.55);
+      border: 1px solid rgba(11,46,52,.05);
+      border-radius: 20px;
+      backdrop-filter: blur(20px) saturate(140%);
+      -webkit-backdrop-filter: blur(20px) saturate(140%);
+      box-shadow: 0 6px 22px rgba(11,46,52,.025);
+      padding: 32px;
+      transition: box-shadow var(--hover-duration) var(--ease);
+    }
+    @media (min-width: 768px) { .dq-card { padding: 36px 40px; } }
+
+    /* ── Card header ────────────────────────────────────────── */
+    .dq-card__head {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 28px;
+    }
+    .dq-card__num {
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      background: var(--bg-mint-tint);
+      border: 1.5px solid var(--border-green-soft);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 700;
+      color: var(--brand-dark);
+      flex-shrink: 0;
+    }
+    .dq-card__title {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--brand-dark);
+      margin: 0;
+      line-height: 1.2;
+    }
+
+    /* ── Subsection label ───────────────────────────────────── */
+    .dq-sub {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--brand-green);
+      margin: 28px 0 14px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border-green-soft);
+    }
+    .dq-sub:first-of-type { margin-top: 0; }
+
+    /* ── Hint text ──────────────────────────────────────────── */
+    .dq-hint {
+      font-size: 13px;
+      color: var(--text-soft);
+      line-height: 1.5;
+      margin: -6px 0 14px;
+      font-style: italic;
+    }
+
+    /* ── Grid ───────────────────────────────────────────────── */
+    .dq-grid { display: grid; gap: 20px; }
+    .dq-grid--2 { grid-template-columns: 1fr 1fr; }
+    @media (max-width: 600px) {
+      .dq-grid--2 { grid-template-columns: 1fr; }
+    }
+
+    /* ── Field ──────────────────────────────────────────────── */
+    .dq-field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .dq-field label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      letter-spacing: .02em;
+    }
+    .dq-field input[type="text"],
+    .dq-field input[type="number"],
+    .dq-field input[type="date"],
+    .dq-field textarea {
+      width: 100%;
+      background: transparent;
+      border: none;
+      border-bottom: 1.5px solid rgba(11,46,52,.15);
+      border-radius: 0;
+      padding: 8px 0;
+      font-family: inherit;
+      font-size: 15px;
+      color: var(--brand-dark);
+      outline: none;
+      transition: border-color .2s var(--ease);
+      box-sizing: border-box;
+      resize: vertical;
+    }
+    .dq-field input:focus,
+    .dq-field textarea:focus {
+      border-bottom-color: var(--brand-green);
+    }
+    .dq-field textarea { min-height: 72px; line-height: 1.5; }
+    .dq-field input::placeholder,
+    .dq-field textarea::placeholder {
+      color: rgba(11,46,52,.25);
+      font-size: 14px;
+    }
+
+    /* ── Radio / Checkbox group ─────────────────────────────── */
+    .dq-choice-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      letter-spacing: .02em;
+      display: block;
+      margin-bottom: 10px;
+    }
+    .dq-choices {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .dq-choices label {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 16px;
+      border: 1.5px solid rgba(11,46,52,.12);
+      border-radius: 100px;
+      font-size: 14px;
+      color: var(--brand-dark);
+      cursor: pointer;
+      user-select: none;
+      transition: border-color .18s var(--ease),
+                  background .18s var(--ease);
+      background: rgba(255,255,255,.5);
+    }
+    .dq-choices label:hover {
+      border-color: var(--brand-green);
+      background: rgba(3,217,140,.06);
+    }
+    .dq-choices input[type="radio"],
+    .dq-choices input[type="checkbox"] {
+      appearance: none;
+      width: 15px; height: 15px;
+      border: 1.5px solid rgba(11,46,52,.25);
+      border-radius: 50%;
+      background: #fff;
+      cursor: pointer;
+      flex-shrink: 0;
+      position: relative;
+      transition: border-color .18s, background .18s;
+    }
+    .dq-choices input[type="checkbox"] { border-radius: 4px; }
+    .dq-choices input[type="radio"]:checked,
+    .dq-choices input[type="checkbox"]:checked {
+      background: var(--brand-green);
+      border-color: var(--brand-green);
+    }
+    .dq-choices input[type="radio"]:checked::after {
+      content: '';
+      position: absolute;
+      left: 3.5px; top: 3.5px;
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--brand-dark);
+    }
+    .dq-choices input[type="checkbox"]:checked::after {
+      content: '';
+      position: absolute;
+      left: 3px; top: 0.5px;
+      width: 5px; height: 9px;
+      border: 2px solid var(--brand-dark);
+      border-top: none; border-left: none;
+      transform: rotate(45deg);
+    }
+    /* selected pill highlight */
+    .dq-choices label:has(input:checked) {
+      border-color: var(--brand-green);
+      background: rgba(3,217,140,.10);
+    }
+
+    /* ── Group (spacing between question blocks) ────────────── */
+    .dq-group { display: flex; flex-direction: column; gap: 20px; }
+
+    /* ── Divider ────────────────────────────────────────────── */
+    .dq-divider {
+      border: none;
+      border-top: 1px solid var(--border-soft);
+      margin: 4px 0;
+    }
+
+    /* ── Repeatable child card ──────────────────────────────── */
+    .dq-repeat-item {
+      background: var(--bg-mint-card);
+      border: 1px solid var(--border-green-soft);
+      border-radius: 14px;
+      padding: 22px 24px;
+      position: relative;
+    }
+    .dq-repeat-item__title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--brand-dark);
+      margin: 0 0 16px;
+      letter-spacing: .02em;
+    }
+    .dq-repeat-remove {
+      position: absolute;
+      top: 16px; right: 16px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--text-soft);
+      padding: 4px;
+      border-radius: 6px;
+      line-height: 1;
+      transition: color .18s, background .18s;
+      font-size: 18px;
+    }
+    .dq-repeat-remove:hover {
+      color: var(--brand-dark);
+      background: rgba(11,46,52,.06);
+    }
+
+    /* ── Add button ─────────────────────────────────────────── */
+    .btn--add {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: none;
+      border: 1.5px dashed rgba(3,217,140,.45);
+      border-radius: 12px;
+      padding: 12px 20px;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--brand-dark);
+      cursor: pointer;
+      transition: border-color .2s var(--ease),
+                  background .2s var(--ease);
+      align-self: flex-start;
+      margin-top: 4px;
+    }
+    .btn--add:hover {
+      border-color: var(--brand-green);
+      background: rgba(3,217,140,.06);
+    }
+    .btn--add svg { color: var(--brand-green); flex-shrink: 0; }
+
+    /* ── Expense rows ───────────────────────────────────────── */
+    .dq-expense-list { display: flex; flex-direction: column; }
+    .dq-expense-row {
+      display: grid;
+      grid-template-columns: 1fr 120px 60px;
+      gap: 12px;
+      align-items: center;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border-soft);
+    }
+    .dq-expense-row:last-child { border-bottom: none; }
+    .dq-expense-label { font-size: 14px; color: var(--brand-dark); }
+    .dq-expense-row input[type="number"],
+    .dq-expense-row input[type="text"] {
+      background: transparent;
+      border: none;
+      border-bottom: 1.5px solid rgba(11,46,52,.12);
+      padding: 5px 0;
+      font-family: inherit;
+      font-size: 14px;
+      color: var(--brand-dark);
+      outline: none;
+      width: 100%;
+      text-align: right;
+      transition: border-color .18s;
+    }
+    .dq-expense-row input:focus { border-bottom-color: var(--brand-green); }
+    .dq-expense-head {
+      display: grid;
+      grid-template-columns: 1fr 120px 60px;
+      gap: 12px;
+      padding: 0 0 8px;
+      margin-bottom: 2px;
+      border-bottom: 1.5px solid var(--brand-dark);
+    }
+    .dq-expense-head span {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .07em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+    .dq-expense-head span:not(:first-child) { text-align: right; }
+    .dq-expense-total {
+      display: grid;
+      grid-template-columns: 1fr 120px 60px;
+      gap: 12px;
+      padding: 12px 0 0;
+      margin-top: 4px;
+      border-top: 1.5px solid var(--brand-dark);
+    }
+    .dq-expense-total .dq-el {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--brand-dark);
+      text-align: right;
+    }
+    .dq-expense-total .dq-el:first-child { text-align: left; }
+    @media (max-width: 560px) {
+      .dq-expense-row,
+      .dq-expense-head,
+      .dq-expense-total {
+        grid-template-columns: 1fr 100px;
+      }
+      .dq-expense-row input[type="text"],
+      .dq-expense-head span:last-child,
+      .dq-expense-total div:last-child { display: none; }
+    }
+
+    /* ── Sticky download bar ────────────────────────────────── */
+    .dq-bar {
+      position: sticky;
+      bottom: 0;
+      z-index: 40;
+      background: rgba(244,255,249,.88);
+      backdrop-filter: blur(18px);
+      border-top: 1px solid var(--border-soft);
+      padding: 14px 0;
+    }
+    .dq-bar__inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .dq-bar__hint {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+    .dq-bar__hint strong { color: var(--brand-dark); font-weight: 600; }
+    .btn--download {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      background: var(--brand-green);
+      color: var(--brand-dark);
+      font-family: inherit;
+      font-weight: 700;
+      font-size: 15px;
+      padding: 13px 26px;
+      border-radius: 12px;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 8px 22px rgba(3,217,140,.18);
+      transition: transform var(--hover-duration) var(--ease),
+                  box-shadow var(--hover-duration) var(--ease);
+      white-space: nowrap;
+    }
+    .btn--download:hover {
+      transform: scale(var(--hover-scale));
+      box-shadow: 0 14px 32px rgba(3,217,140,.28);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== Header ===== -->
+  <header class="header" id="site-header">
+    <div class="header__inner">
+      <a href="index.html" class="header__brand" aria-label="Finkli — domů">
+        <img src="assets/finkli_logo_dark.svg" alt="Finkli" class="header__logo" />
+      </a>
+      <nav class="header__nav" aria-label="Hlavní">
+        <a href="index.html#onas">Přístup</a>
+        <a href="index.html#balicky">Balíčky</a>
+        <a href="index.html#aplikace">Aplikace</a>
+        <a href="index.html#lide">Lidé</a>
+        <a href="index.html#reference">Reference</a>
+        <a href="index.html#faq">F&amp;Q</a>
+      </nav>
+      <a href="index.html#kontakt-form" class="header__cta header__cta--desktop" data-desktop>Kontakt</a>
+      <button class="header__burger" type="button" aria-label="Otevřít menu" aria-controls="mobile-menu" aria-expanded="false">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <div class="mobile-menu" id="mobile-menu" aria-hidden="true">
+    <div class="mobile-menu__top">
+      <a href="index.html" class="header__brand" aria-label="Finkli — domů">
+        <img src="assets/finkli_logo_dark.svg" alt="Finkli" class="header__logo" />
+      </a>
+      <button class="mobile-menu__close" type="button" aria-label="Zavřít menu">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" aria-hidden="true">
+          <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </button>
+    </div>
+    <nav class="mobile-menu__nav" aria-label="Mobilní">
+      <a href="index.html#onas">Přístup</a>
+      <a href="index.html#balicky">Balíčky</a>
+      <a href="index.html#aplikace">Aplikace</a>
+      <a href="index.html#lide">Lidé</a>
+      <a href="index.html#faq">F&amp;Q</a>
+    </nav>
+    <a href="index.html#kontakt-form" class="mobile-menu__cta">Kontakt</a>
+  </div>
+
+  <!-- ===== Intro ===== -->
+  <section class="dq-intro">
+    <div class="container">
+      <div class="dq-intro__eyebrow">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+          <circle cx="7" cy="7" r="6" stroke="#03D98C" stroke-width="1.5"/>
+          <path d="M4.5 7l2 2 3-3" stroke="#03D98C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Příprava na konzultaci
+      </div>
+      <h1 class="h2 dq-intro__title">Dotazník životního pojištění</h1>
+      <p class="dq-intro__sub">Vyplňte v klidu sami — čím přesnější informace, tím přesnější doporučení. Po dokončení stáhněte PDF a zašlete nám jej přes myPlann.</p>
+    </div>
+  </section>
+
+  <!-- ===== Form ===== -->
+  <div class="dq-body">
+    <div class="container">
+      <form class="dq-form" id="dq-form" autocomplete="off" novalidate>
+
+        <!-- ── Meta ─────────────────────────────────────────── -->
+        <div class="dq-card">
+          <div class="dq-group">
+            <div class="dq-grid dq-grid--2">
+              <div class="dq-field">
+                <label for="meta-datum">Datum vyplnění</label>
+                <input type="date" id="meta-datum" name="meta-datum" />
+              </div>
+              <div class="dq-field">
+                <label for="meta-poradce">Jméno poradce</label>
+                <input type="text" id="meta-poradce" name="meta-poradce" placeholder="Jaroslav / Matěj" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── 1. Klient ─────────────────────────────────────── -->
+        <div class="dq-card">
+          <div class="dq-card__head">
+            <div class="dq-card__num">1</div>
+            <h2 class="dq-card__title">Klient</h2>
+          </div>
+          <div class="dq-group">
+
+            <p class="dq-sub">Osobní údaje</p>
+            <div class="dq-grid dq-grid--2">
+              <div class="dq-field">
+                <label for="k-jmeno">Jméno a příjmení</label>
+                <input type="text" id="k-jmeno" name="k-jmeno" />
+              </div>
+              <div class="dq-field">
+                <label for="k-rc">Rodné číslo</label>
+                <input type="text" id="k-rc" name="k-rc" />
+              </div>
+            </div>
+            <div class="dq-field">
+              <label for="k-adresa">Adresa</label>
+              <input type="text" id="k-adresa" name="k-adresa" />
+            </div>
+
+            <hr class="dq-divider" />
+            <p class="dq-sub">Povolání a příjmy</p>
+            <div class="dq-grid dq-grid--2">
+              <div class="dq-field">
+                <label for="k-povolani">Povolání / pozice</label>
+                <input type="text" id="k-povolani" name="k-povolani" />
+              </div>
+              <div>
+                <span class="dq-choice-label">Typ pracovního poměru</span>
+                <div class="dq-choices">
+                  <label><input type="radio" name="k-typ" value="Zaměstnanec" /> Zaměstnanec</label>
+                  <label><input type="radio" name="k-typ" value="OSVČ" /> OSVČ</label>
+                  <label><input type="radio" name="k-typ" value="Kombinace" /> Kombinace</label>
+                </div>
+              </div>
+            </div>
+            <div class="dq-grid dq-grid--2">
+              <div class="dq-field">
+                <label for="k-prijem-cist">Čistý příjem (Kč/měs.)</label>
+                <input type="number" id="k-prijem-cist" name="k-prijem-cist" min="0" placeholder="0" />
+              </div>
+              <div class="dq-field">
+                <label for="k-prijem-hrub">Hrubý příjem (Kč/měs.)</label>
+                <input type="number" id="k-prijem-hrub" name="k-prijem-hrub" min="0" placeholder="0" />
+              </div>
+            </div>
+            <div class="dq-grid dq-grid--2" id="osvc-fields" style="display:none">
+              <div class="dq-field">
+                <label for="k-dp">Příjem dle DP (Kč/rok)</label>
+                <input type="number" id="k-dp" name="k-dp" min="0" placeholder="0" />
+              </div>
+              <div class="dq-field">
+                <label for="k-zalohy">Zálohy soc.+zdrav. (Kč/měs.)</label>
+                <input type="number" id="k-zalohy" name="k-zalohy" min="0" placeholder="0" />
+              </div>
+            </div>
+            <div id="osvc-nem" style="display:none">
+              <span class="dq-choice-label">Platí dobrovolné nemocenské pojištění?</span>
+              <div class="dq-choices">
+                <label><input type="radio" name="k-nem" value="Ano" /> Ano</label>
+                <label><input type="radio" name="k-nem" value="Ne" /> Ne</label>
+              </div>
+            </div>
+            <div class="dq-field">
+              <label for="k-jine-prijmy">Jiné příjmy (nájem, podíly…)</label>
+              <input type="text" id="k-jine-prijmy" name="k-jine-prijmy" placeholder="popis a výše" />
+            </div>
+            <div class="dq-field">
+              <label for="k-odprac-roky">Odpracované roky celkem</label>
+              <input type="text" id="k-odprac-roky" name="k-odprac-roky" placeholder="vč. brigád a studia" />
+            </div>
+
+            <hr class="dq-divider" />
+            <p class="dq-sub">Sport a aktivity</p>
+            <div>
+              <span class="dq-choice-label">Jak aktivně sportujete?</span>
+              <div class="dq-choices">
+                <label><input type="radio" name="k-sport-int" value="Příležitostně" /> Příležitostně</label>
+                <label><input type="radio" name="k-sport-int" value="Registrovaně" /> Registrovaně</label>
+                <label><input type="radio" name="k-sport-int" value="Profesionálně" /> Profesionálně</label>
+                <label><input type="radio" name="k-sport-int" value="Nesportuji" /> Nesportuji</label>
+              </div>
+            </div>
+            <div class="dq-field">
+              <label for="k-sport-det">Jaké sporty / adrenalinové aktivity?</label>
+              <input type="text" id="k-sport-det" name="k-sport-det" />
+            </div>
+
+            <hr class="dq-divider" />
+            <p class="dq-sub">Zdravotní stav</p>
+            <p class="dq-hint">Vše 10 let zpětně, závažnější komplikace od narození.</p>
+            <div class="dq-grid dq-grid--2">
+              <div class="dq-field">
+                <label for="k-vyska">Výška (cm)</label>
+                <input type="number" id="k-vyska" name="k-vyska" min="100" max="250" />
+              </div>
+              <div class="dq-field">
+                <label for="k-vaha">Váha (kg)</label>
+                <input type="number" id="k-vaha" name="k-vaha" min="30" max="300" />
+              </div>
+            </div>
+            <div class="dq-grid dq-grid--2">
+              <div>
+                <span class="dq-choice-label">Kuřák?</span>
+                <div class="dq-choices">
+                  <label><input type="radio" name="k-kurak" value="Ano" /> Ano</label>
+                  <label><input type="radio" name="k-kurak" value="Ne" /> Ne</label>
+                  <label><input type="radio" name="k-kurak" value="Ex-kuřák" /> Ex-kuřák</label>
+                </div>
+              </div>
+              <div>
+                <span class="dq-choice-label">Alkohol?</span>
+                <div class="dq-choices">
+                  <label><input type="radio" name="k-alkohol" value="Příležitostně" /> Příležitostně</label>
+                  <label><input type="radio" name="k-alkohol" value="Pravidelně" /> Pravidelně</label>
+                  <label><input type="radio" name="k-alkohol" value="Nepije" /> Nepije</label>
+                </div>
+              </div>
+            </div>
+            <div class="dq-field">
+              <label for="k-leky">Pravidelné léky (název, dávka)</label>
+              <input type="text" id="k-leky" name="k-leky" />
+            </div>
+            <div class="dq-field">
+              <label for="k-urazy">Úrazy, operace (typ, rok)</label>
+              <input type="text" id="k-urazy" name="k-urazy" />
+            </div>
+            <div class="dq-field">
+              <label for="k-pn">PN delší než 4 týdny (důvod, rok)</label>
+              <input type="text" id="k-pn" name="k-pn" />
+            </div>
+            <div class="dq-field">
+              <label for="k-specialisti">Specialisté mimo preventivní prohlídky</label>
+              <input type="text" id="k-specialisti" name="k-specialisti" />
+            </div>
+            <div class="dq-field">
+              <label for="k-zdravi-jine">Jiné závažnější komplikace</label>
+              <textarea id="k-zdravi-jine" name="k-zdravi-jine"></textarea>
+            </div>
+
+            <hr class="dq-divider" />
+            <p class="dq-sub">Závislé osoby</p>
+            <div>
+              <span class="dq-choice-label">Kdo je na Vás finančně závislý?</span>
+              <div class="dq-choices">
+                <label><input type="checkbox" name="k-zavisle" value="Partner/ka" /> Partner/ka</label>
+                <label><input type="checkbox" name="k-zavisle" value="Děti" /> Děti</label>
+                <label><input type="checkbox" name="k-zavisle" value="Rodiče" /> Rodiče</label>
+                <label><input type="checkbox" name="k-zavisle" value="Nikdo" /> Nikdo</label>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- ── 2. Partner ─────────────────────────────────────── -->
+        <div class="dq-card">
+          <div class="dq-card__head">
+            <div class="dq-card__num">2</div>
+            <h2 class="dq-card__title">Partner / partnerka</h2>
+          </div>
+          <div class="dq-group">
+
+            <div class="dq-grid dq-grid--2">
+              <div>
+                <span class="dq-choice-label">Máte partnera/partnerku?</span>
+                <div class="dq-choices">
+                  <label><input type="radio" name="p-ma" value="Ano" /> Ano</label>
+                  <label><input type="radio" name="p-ma" value="Ne" /> Ne</label>
+                </div>
+              </div>
+              <div>
+                <span class="dq-choice-label">Finance</span>
+                <div class="dq-choices">
+                  <label><input type="radio" name="p-finance" value="Společné" /> Společné</label>
+                  <label><input type="radio" name="p-finance" value="Oddělené" /> Oddělené</label>
+                  <label><input type="radio" name="p-finance" value="Částečně" /> Částečně</label>
+                </div>
+              </div>
+            </div>
+
+            <div id="partner-detail" style="display:none">
+              <div class="dq-group">
+                <div class="dq-grid dq-grid--2">
+                  <div class="dq-field">
+                    <label for="p-jmeno">Jméno a příjmení</label>
+                    <input type="text" id="p-jmeno" name="p-jmeno" />
+                  </div>
+                  <div class="dq-field">
+                    <label for="p-rc">Rodné číslo</label>
+                    <input type="text" id="p-rc" name="p-rc" />
+                  </div>
+                </div>
+                <div class="dq-grid dq-grid--2">
+                  <div class="dq-field">
+                    <label for="p-povolani">Povolání</label>
+                    <input type="text" id="p-povolani" name="p-povolani" />
+                  </div>
+                  <div class="dq-field">
+                    <label for="p-prijem">Čistý příjem (Kč/měs.)</label>
+                    <input type="number" id="p-prijem" name="p-prijem" min="0" placeholder="0" />
+                  </div>
+                </div>
+                <div>
+                  <span class="dq-choice-label">Typ pracovního poměru</span>
+                  <div class="dq-choices">
+                    <label><input type="radio" name="p-typ" value="Zaměstnanec" /> Zaměstnanec</label>
+                    <label><input type="radio" name="p-typ" value="OSVČ" /> OSVČ</label>
+                    <label><input type="radio" name="p-typ" value="V domácnosti" /> V domácnosti</label>
+                  </div>
+                </div>
+                <div class="dq-field">
+                  <label for="p-zdravi">Zdravotní stav — stručně</label>
+                  <textarea id="p-zdravi" name="p-zdravi" style="min-height:52px"></textarea>
+                </div>
+                <div class="dq-field">
+                  <label for="p-sport">Sport a aktivity</label>
+                  <input type="text" id="p-sport" name="p-sport" />
+                </div>
+                <hr class="dq-divider" />
+                <p class="dq-sub" style="margin-top:0">Hodnota péče o domácnost</p>
+                <p class="dq-hint">Jaké výdaje by vznikly při výpadku péče druhého? (hlídání, úklid, stravování…)</p>
+                <div class="dq-grid dq-grid--2">
+                  <div class="dq-field">
+                    <label for="p-pece-kc">Odhadovaná hodnota péče (Kč/měs.)</label>
+                    <input type="number" id="p-pece-kc" name="p-pece-kc" min="0" placeholder="0" />
+                  </div>
+                  <div class="dq-field">
+                    <label for="p-pece-alt">Alternativa (rodina, au-pair…)</label>
+                    <input type="text" id="p-pece-alt" name="p-pece-alt" />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- ── 3. Děti ────────────────────────────────────────── -->
+        <div class="dq-card">
+          <div class="dq-card__head">
+            <div class="dq-card__num">3</div>
+            <h2 class="dq-card__title">Děti</h2>
+          </div>
+          <div class="dq-group">
+
+            <div>
+              <span class="dq-choice-label">Máte vyživované děti?</span>
+              <div class="dq-choices">
+                <label><input type="radio" name="d-ma" value="Ano" /> Ano</label>
+                <label><input type="radio" name="d-ma" value="Ne" /> Ne</label>
+              </div>
+            </div>
+
+            <div id="deti-list" style="display:none">
+              <div class="dq-group">
+                <div id="deti-items"></div>
+                <button type="button" class="btn--add" id="btn-add-dite">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                    <path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                  </svg>
+                  Přidat dítě
+                </button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- ── 4. Výdaje ──────────────────────────────────────── -->
+        <div class="dq-card">
+          <div class="dq-card__head">
+            <div class="dq-card__num">4</div>
+            <h2 class="dq-card__title">Výdaje</h2>
+          </div>
+          <div class="dq-group">
+            <p class="dq-hint" style="margin:0">Měsíční výdaje v Kč. Sloupec N/Z: N = nezbytné, Z = zbytné.</p>
+            <div class="dq-expense-head">
+              <span>Položka</span>
+              <span>Kč / měs.</span>
+              <span>N / Z</span>
+            </div>
+            <div class="dq-expense-list" id="expense-rows"></div>
+            <div class="dq-expense-total">
+              <div class="dq-el">Celkem</div>
+              <div class="dq-el" id="expense-total">—</div>
+              <div></div>
+            </div>
+
+            <div class="dq-field" style="margin-top:8px">
+              <label for="v-snizeni">O kolik by se výdaje snížily při úmrtí partnera? (Kč/měs.)</label>
+              <input type="number" id="v-snizeni" name="v-snizeni" min="0" placeholder="0" />
+            </div>
+
+            <hr class="dq-divider" />
+            <p class="dq-sub" style="margin-top:0">Stávající finanční produkty</p>
+            <p class="dq-hint">Pravidelná platba, výše ochrany nebo zůstatku.</p>
+            <div class="dq-group" style="gap:16px">
+              <div class="dq-field">
+                <label for="fp-zp">Životní pojištění (pojišťovna, platba, pojistné částky)</label>
+                <input type="text" id="fp-zp" name="fp-zp" />
+              </div>
+              <div class="dq-field">
+                <label for="fp-up">Úrazové / nemocenské pojištění</label>
+                <input type="text" id="fp-up" name="fp-up" />
+              </div>
+              <div class="dq-field">
+                <label for="fp-inv">Investice a spoření (účel, výše)</label>
+                <input type="text" id="fp-inv" name="fp-inv" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── 5. Závazky ─────────────────────────────────────── -->
+        <div class="dq-card">
+          <div class="dq-card__head">
+            <div class="dq-card__num">5</div>
+            <h2 class="dq-card__title">Závazky</h2>
+          </div>
+          <div class="dq-group">
+            <p class="dq-hint" style="margin:0">Zůstatek a splatnost jsou klíčové pro výpočet pojistné ochrany.</p>
+
+            <div id="zavazky-items"></div>
+            <button type="button" class="btn--add" id="btn-add-zavazek">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                <path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+              Přidat úvěr / závazek
+            </button>
+          </div>
+        </div>
+
+        <!-- ── 6. Rezervy ─────────────────────────────────────── -->
+        <div class="dq-card">
+          <div class="dq-card__head">
+            <div class="dq-card__num">6</div>
+            <h2 class="dq-card__title">Rezervy a majetek</h2>
+          </div>
+          <div class="dq-group">
+
+            <p class="dq-sub" style="margin-top:0">Likvidní rezervy</p>
+            <div class="dq-field">
+              <label for="r-lik">Běžný / spořicí účet, hotovost (Kč)</label>
+              <input type="number" id="r-lik" name="r-lik" min="0" placeholder="0" />
+            </div>
+            <div>
+              <span class="dq-choice-label">Rezerva pokrývá:</span>
+              <div class="dq-choices">
+                <label><input type="radio" name="r-pokryti" value="méně než 3 měs." /> méně než 3 měs.</label>
+                <label><input type="radio" name="r-pokryti" value="3–6 měs." /> 3–6 měs.</label>
+                <label><input type="radio" name="r-pokryti" value="více než 6 měs." /> více než 6 měs.</label>
+              </div>
+            </div>
+
+            <hr class="dq-divider" />
+            <p class="dq-sub" style="margin-top:0">Finanční produkty — zůstatky</p>
+            <div class="dq-grid dq-grid--2">
+              <div class="dq-field">
+                <label for="r-inv">Investice (výše, cíl)</label>
+                <input type="text" id="r-inv" name="r-inv" />
+              </div>
+              <div class="dq-field">
+                <label for="r-penz">Penzijní / životní spoření (výše)</label>
+                <input type="text" id="r-penz" name="r-penz" />
+              </div>
+            </div>
+            <div class="dq-field">
+              <label for="r-jine">Jiné úspory (výše, účel)</label>
+              <input type="text" id="r-jine" name="r-jine" />
+            </div>
+
+            <hr class="dq-divider" />
+            <p class="dq-sub" style="margin-top:0">Podíly ve firmách</p>
+            <div>
+              <span class="dq-choice-label">Vlastní klient podíl ve firmě?</span>
+              <div class="dq-choices">
+                <label><input type="radio" name="r-firma-ma" value="Ano" /> Ano</label>
+                <label><input type="radio" name="r-firma-ma" value="Ne" /> Ne</label>
+              </div>
+            </div>
+            <div class="dq-grid dq-grid--2" id="firma-detail" style="display:none">
+              <div class="dq-field">
+                <label for="r-firma-hodnota">Tržní hodnota (Kč)</label>
+                <input type="number" id="r-firma-hodnota" name="r-firma-hodnota" min="0" placeholder="0" />
+              </div>
+              <div class="dq-field">
+                <label for="r-firma-prodej">Rychlost prodeje (měs.)</label>
+                <input type="number" id="r-firma-prodej" name="r-firma-prodej" min="0" />
+              </div>
+            </div>
+            <div class="dq-field" id="firma-zavislost" style="display:none">
+              <label for="r-firma-popis">Závislost firmy na Vás</label>
+              <textarea id="r-firma-popis" name="r-firma-popis" style="min-height:52px"></textarea>
+            </div>
+
+            <hr class="dq-divider" />
+            <p class="dq-sub" style="margin-top:0">Nemovitosti a pozemky</p>
+            <div class="dq-field">
+              <label for="r-nem">Jiné nemovitosti než bydliště (typ, odh. hodnota)</label>
+              <input type="text" id="r-nem" name="r-nem" />
+            </div>
+            <div class="dq-grid dq-grid--2">
+              <div class="dq-field">
+                <label for="r-najem">Příjem z nájmu (Kč/měs.)</label>
+                <input type="number" id="r-najem" name="r-najem" min="0" placeholder="0" />
+              </div>
+              <div>
+                <span class="dq-choice-label">Prodej jako záchrana?</span>
+                <div class="dq-choices">
+                  <label><input type="radio" name="r-nem-prodej" value="Ano" /> Ano</label>
+                  <label><input type="radio" name="r-nem-prodej" value="Ne" /> Ne</label>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- ── Sticky bar ─────────────────────────────────────── -->
+        <div class="dq-bar">
+          <div class="container dq-bar__inner">
+            <p class="dq-bar__hint">Vše probíhá <strong>jen ve Vašem prohlížeči</strong> — nic se nikam neposílá.</p>
+            <button type="button" class="btn--download" id="btn-download">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                <path d="M8 1v9M5 7l3 3 3-3M2 13h12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              Stáhnout PDF
+            </button>
+          </div>
+        </div>
+
+      </form>
+    </div>
+  </div>
+
+  <!-- ===== Footer ===== -->
+  <footer class="site-footer" id="site-footer">
+    <div class="container">
+      <div class="site-footer__grid">
+        <div class="site-footer__col site-footer__col--brand">
+          <a href="index.html" class="site-footer__brand" aria-label="Finkli — domů">
+            <img src="assets/finkli_logo_dark.svg" alt="Finkli" class="site-footer__logo" />
+          </a>
+          <p class="site-footer__claim">Na finance se díváme jako na dlouhodobý proces, ne jednorázové rozhodnutí.</p>
+          <p class="site-footer__copy"><a href="gdpr.html" class="site-footer__fp-link">Zásady zpracování osobních údajů</a></p>
+          <p class="site-footer__copy">© 2026 Finkli. Všechna práva vyhrazena.</p>
+        </div>
+        <nav class="site-footer__col" aria-label="Mapa webu">
+          <h4 class="site-footer__heading">Mapa webu</h4>
+          <ul class="site-footer__list">
+            <li><a href="index.html#onas" class="site-footer__link">Přístup</a></li>
+            <li><a href="index.html#balicky" class="site-footer__link">Balíčky</a></li>
+            <li><a href="index.html#aplikace" class="site-footer__link">Aplikace</a></li>
+            <li><a href="index.html#lide" class="site-footer__link">Lidé</a></li>
+            <li><a href="index.html#kontakt-form" class="site-footer__link">Kontakt</a></li>
+          </ul>
+        </nav>
+        <div class="site-footer__col">
+          <h4 class="site-footer__heading">Kontakty</h4>
+          <ul class="site-footer__list">
+            <li><a href="mailto:info@finkli.cz" class="site-footer__link">info@finkli.cz</a></li>
+            <li><a href="tel:+420739237615" class="site-footer__link">+420&nbsp;739&nbsp;237&nbsp;615</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="script.js" defer></script>
+  <script>
+  // ── Helpers ───────────────────────────────────────────────────────────────
+  const $ = id => document.getElementById(id);
+  const fv = id => ($( id)?.value || '').trim();
+  const rv = name => document.querySelector(`input[name="${name}"]:checked`)?.value || '';
+  const cvs = name => [...document.querySelectorAll(`input[name="${name}"]:checked`)].map(e=>e.value).join(', ');
+
+  // ── Init date ─────────────────────────────────────────────────────────────
+  const datumEl = $('meta-datum');
+  if (datumEl && !datumEl.value) datumEl.value = new Date().toISOString().slice(0,10);
+
+  // ── OSVČ conditional fields ───────────────────────────────────────────────
+  document.querySelectorAll('input[name="k-typ"]').forEach(el => {
+    el.addEventListener('change', () => {
+      const isOsvc = el.value === 'OSVČ' || el.value === 'Kombinace';
+      $('osvc-fields').style.display = isOsvc ? '' : 'none';
+      $('osvc-nem').style.display   = isOsvc ? '' : 'none';
+    });
+  });
+
+  // ── Partner conditional ───────────────────────────────────────────────────
+  document.querySelectorAll('input[name="p-ma"]').forEach(el => {
+    el.addEventListener('change', () => {
+      $('partner-detail').style.display = el.value === 'Ano' ? '' : 'none';
+    });
+  });
+
+  // ── Firma conditional ─────────────────────────────────────────────────────
+  document.querySelectorAll('input[name="r-firma-ma"]').forEach(el => {
+    el.addEventListener('change', () => {
+      const show = el.value === 'Ano';
+      $('firma-detail').style.display    = show ? '' : 'none';
+      $('firma-zavislost').style.display = show ? '' : 'none';
+    });
+  });
+
+  // ── Děti ─────────────────────────────────────────────────────────────────
+  let diteCount = 0;
+  document.querySelectorAll('input[name="d-ma"]').forEach(el => {
+    el.addEventListener('change', () => {
+      $('deti-list').style.display = el.value === 'Ano' ? '' : 'none';
+      if (el.value === 'Ano' && diteCount === 0) addDite();
+    });
+  });
+
+  function addDite() {
+    diteCount++;
+    const n = diteCount;
+    const div = document.createElement('div');
+    div.className = 'dq-repeat-item';
+    div.id = `dite-${n}`;
+    div.innerHTML = `
+      <p class="dq-repeat-item__title">Dítě ${n}</p>
+      <button type="button" class="dq-repeat-remove" aria-label="Odebrat" onclick="removeDite(${n})">×</button>
+      <div class="dq-group">
+        <div class="dq-grid dq-grid--2">
+          <div class="dq-field"><label>Jméno a rok narození</label><input type="text" name="d${n}-jmeno" /></div>
+          <div class="dq-field"><label>Zdravotní stav — stručně</label><input type="text" name="d${n}-zdravi" /></div>
+        </div>
+        <div class="dq-field"><label>Sport a aktivity</label><input type="text" name="d${n}-sport" /></div>
+        <div class="dq-field"><label>Sirotčí důchod — po kom?</label><input type="text" name="d${n}-sirotci" /></div>
+        <div>
+          <span class="dq-choice-label">Uvažujete o VŠ?</span>
+          <div class="dq-choices">
+            <label><input type="radio" name="d${n}-vs" value="Ano" /> Ano</label>
+            <label><input type="radio" name="d${n}-vs" value="Ne" /> Ne</label>
+            <label><input type="radio" name="d${n}-vs" value="Nevím" /> Nevím</label>
+          </div>
+        </div>
+        <div class="dq-grid dq-grid--2">
+          <div>
+            <span class="dq-choice-label">Kdo uplatňuje odpočet?</span>
+            <div class="dq-choices">
+              <label><input type="radio" name="d${n}-odpocet" value="Klient" /> Klient</label>
+              <label><input type="radio" name="d${n}-odpocet" value="Partner" /> Partner</label>
+              <label><input type="radio" name="d${n}-odpocet" value="Oba" /> Oba</label>
+            </div>
+          </div>
+          <div>
+            <span class="dq-choice-label">Způsob odpočtu</span>
+            <div class="dq-choices">
+              <label><input type="radio" name="d${n}-odpjak" value="Měsíčně" /> Měsíčně</label>
+              <label><input type="radio" name="d${n}-odpjak" value="Ročně v DP" /> Ročně v DP</label>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+    $('deti-items').appendChild(div);
+  }
+
+  function removeDite(n) {
+    const el = $(`dite-${n}`);
+    if (el) el.remove();
+  }
+
+  $('btn-add-dite').addEventListener('click', addDite);
+
+  // ── Závazky ───────────────────────────────────────────────────────────────
+  let zavazekCount = 0;
+  addZavazek(); // start with one
+
+  function addZavazek() {
+    zavazekCount++;
+    const n = zavazekCount;
+    const div = document.createElement('div');
+    div.className = 'dq-repeat-item';
+    div.id = `zavazek-${n}`;
+    div.innerHTML = `
+      <div>
+        <span class="dq-choice-label">Typ úvěru / závazku</span>
+        <div class="dq-choices">
+          <label><input type="radio" name="z${n}-typ" value="Hypotéka" /> Hypotéka</label>
+          <label><input type="radio" name="z${n}-typ" value="Spotřebitelský" /> Spotřebitelský</label>
+          <label><input type="radio" name="z${n}-typ" value="Leasing" /> Leasing</label>
+          <label><input type="radio" name="z${n}-typ" value="Firemní" /> Firemní</label>
+        </div>
+      </div>
+      ${n > 1 ? `<button type="button" class="dq-repeat-remove" aria-label="Odebrat" onclick="removeZavazek(${n})">×</button>` : ''}
+      <div class="dq-grid dq-grid--2" style="margin-top:16px">
+        <div class="dq-field"><label>Zůstatek (Kč)</label><input type="number" name="z${n}-zusatek" min="0" placeholder="0" /></div>
+        <div class="dq-field"><label>Měsíční splátka (Kč)</label><input type="number" name="z${n}-splatka" min="0" placeholder="0" /></div>
+        <div class="dq-field"><label>Splatnost (rok)</label><input type="number" name="z${n}-splatnost" min="2024" max="2060" placeholder="2035" /></div>
+        <div class="dq-field"><label>Úroková sazba (%)</label><input type="number" name="z${n}-urok" step="0.01" min="0" placeholder="0,00" /></div>
+      </div>
+      <div style="margin-top:14px">
+        <span class="dq-choice-label">Přístup při pojistné události</span>
+        <div class="dq-choices">
+          <label><input type="radio" name="z${n}-pristup" value="Zajistit zůstatek" /> Zajistit zůstatek</label>
+          <label><input type="radio" name="z${n}-pristup" value="Zajistit splátku" /> Zajistit splátku</label>
+        </div>
+      </div>
+    `;
+    $('zavazky-items').appendChild(div);
+  }
+
+  function removeZavazek(n) {
+    const el = $(`zavazek-${n}`);
+    if (el) el.remove();
+  }
+
+  $('btn-add-zavazek').addEventListener('click', addZavazek);
+
+  // ── Expense rows ──────────────────────────────────────────────────────────
+  const EXPENSES = [
+    'Bydlení (nájem / hypotéka / energie / fond oprav)',
+    'Telefon / internet / TV',
+    'Jídlo + drogerie',
+    'Kosmetika, kadeřník',
+    'Pohonné hmoty / doprava',
+    'Servis auta',
+    'Oblečení',
+    'Zdraví',
+    'Výdaje na děti',
+    'Zvířata / mazlíčci',
+    'Vzdělávání',
+    'Životní styl (kouření, koníčky…)',
+    'Sport / kultura / zábava',
+    'Dárky / dovolená',
+    'Výdaje s podnikáním (OSVČ)',
+    'Budoucí plánované výdaje',
+    'Alimenty / jiné závazky',
+  ];
+
+  const expContainer = $('expense-rows');
+  EXPENSES.forEach((label, i) => {
+    const row = document.createElement('div');
+    row.className = 'dq-expense-row';
+    row.innerHTML = `
+      <div class="dq-expense-label">${label}</div>
+      <input type="number" name="v${i}kc" min="0" placeholder="0" />
+      <input type="text"   name="v${i}nz" placeholder="N/Z" maxlength="1" style="text-align:center" />
+    `;
+    expContainer.appendChild(row);
+  });
+
+  expContainer.addEventListener('input', () => {
+    let total = 0;
+    EXPENSES.forEach((_, i) => {
+      total += parseInt(document.querySelector(`[name="v${i}kc"]`)?.value || 0, 10);
+    });
+    $('expense-total').textContent = total ? total.toLocaleString('cs-CZ') + ' Kč' : '—';
+  });
+
+  // ── PDF generation ────────────────────────────────────────────────────────
+  $('btn-download').addEventListener('click', generatePDF);
+
+  function generatePDF() {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({ unit: 'mm', format: 'a4' });
+    const W = 210, H = 297, ML = 14, MR = 14;
+    const CW = W - ML - MR;
+    const DARK = [11,46,52], GREEN = [3,217,140], MINT = [234,251,244], WHITE = [255,255,255], GREY = [100,115,115];
+
+    let y = 0;
+    let page = 1;
+
+    function newPage() {
+      doc.addPage(); page++;
+      y = 18;
+      // subtle top line
+      doc.setFillColor(...GREEN);
+      doc.rect(0, 0, W, 1.5, 'F');
+    }
+
+    function chk(need = 12) {
+      if (y + need > H - 14) newPage();
+    }
+
+    // ── Header ──────────────────────────────────────────────────
+    doc.setFillColor(...DARK);
+    doc.rect(0, 0, W, 30, 'F');
+    doc.setFillColor(...GREEN);
+    doc.rect(0, 30, W, 1.5, 'F');
+
+    doc.setFont('helvetica','bold'); doc.setFontSize(18); doc.setTextColor(...GREEN);
+    doc.text('Finkli', ML, 14);
+    doc.setFont('helvetica','normal'); doc.setFontSize(7.5); doc.setTextColor(160,210,190);
+    doc.text('finanční klinika', ML, 19.5);
+    doc.setFont('helvetica','bold'); doc.setFontSize(13); doc.setTextColor(...WHITE);
+    doc.text('Dotazník životního pojištění', W - MR, 13, { align:'right' });
+    doc.setFont('helvetica','normal'); doc.setFontSize(8); doc.setTextColor(160,210,190);
+    doc.text('Podklady pro analýzu pojistné ochrany', W - MR, 20, { align:'right' });
+
+    // meta row
+    doc.setFillColor(...MINT);
+    doc.rect(0, 31.5, W, 9, 'F');
+    doc.setFont('helvetica','normal'); doc.setFontSize(8); doc.setTextColor(...DARK);
+    doc.text(`Datum: ${fv('meta-datum') || '—'}`, ML, 37.5);
+    doc.text(`Poradce: ${fv('meta-poradce') || '—'}`, W/2, 37.5);
+
+    y = 47;
+
+    // ── Helpers ──────────────────────────────────────────────────
+    function sHead(num, title) {
+      chk(14);
+      doc.setFillColor(...MINT);
+      doc.rect(ML, y, CW, 8, 'F');
+      doc.setFillColor(...GREEN);
+      doc.rect(ML, y, 3, 8, 'F');
+      doc.setFont('helvetica','bold'); doc.setFontSize(7.5); doc.setTextColor(...DARK);
+      doc.text(`${num}.  ${title.toUpperCase()}`, ML + 7, y + 5.3);
+      y += 12;
+    }
+
+    function sub(t) {
+      chk(10);
+      doc.setFont('helvetica','bold'); doc.setFontSize(7); doc.setTextColor(...GREEN);
+      doc.text(t.toUpperCase(), ML, y + 3.5);
+      doc.setDrawColor(...GREEN); doc.setLineWidth(0.3);
+      doc.line(ML, y + 5, ML + CW, y + 5);
+      y += 9;
+    }
+
+    function note(t) {
+      doc.setFont('helvetica','italic'); doc.setFontSize(7); doc.setTextColor(...GREY);
+      const lines = doc.splitTextToSize(t, CW);
+      doc.text(lines, ML, y + 3.5);
+      y += lines.length * 4 + 1;
+    }
+
+    function field(label, value, opts={}) {
+      const x = opts.x ?? ML, w = opts.w ?? CW;
+      chk(11);
+      doc.setFont('helvetica','bold'); doc.setFontSize(6.5); doc.setTextColor(...GREY);
+      doc.text(label, x, y + 3.5);
+      doc.setDrawColor(3,217,140); doc.setLineWidth(0.35);
+      doc.line(x, y + 7.5, x + w, y + 7.5);
+      if (value) {
+        doc.setFont('helvetica','normal'); doc.setFontSize(9); doc.setTextColor(...DARK);
+        const lines = doc.splitTextToSize(String(value), w - 2);
+        doc.text(lines[0], x + 1, y + 7);
+      }
+      y += 11;
+    }
+
+    function field2(l1,v1,l2,v2) {
+      const half = (CW - 8) / 2;
+      const sy = y;
+      field(l1, v1, { w: half });
+      y = sy;
+      field(l2, v2, { x: ML + half + 8, w: half });
+    }
+
+    function radio(label, value) {
+      chk(8);
+      doc.setFont('helvetica','bold'); doc.setFontSize(7); doc.setTextColor(...GREY);
+      doc.text(label + ':', ML, y + 4);
+      doc.setFont('helvetica','normal'); doc.setFontSize(8.5); doc.setTextColor(...DARK);
+      doc.text(value || '—', ML + 68, y + 4);
+      y += 7.5;
+    }
+
+    function spc(h=5) { y += h; }
+
+    // ═══════ CONTENT ═══════
+
+    sHead(1, 'Klient');
+    sub('Osobní údaje');
+    field2('Jméno a příjmení', fv('k-jmeno'), 'Rodné číslo', fv('k-rc'));
+    field('Adresa', fv('k-adresa'));
+    sub('Povolání a příjmy');
+    field2('Povolání / pozice', fv('k-povolani'), 'Typ PP', rv('k-typ'));
+    field2('Čistý příjem (Kč/měs.)', fv('k-prijem-cist'), 'Hrubý příjem (Kč/měs.)', fv('k-prijem-hrub'));
+    const isOsvc = ['OSVČ','Kombinace'].includes(rv('k-typ'));
+    if (isOsvc) {
+      field2('Příjem dle DP (Kč)', fv('k-dp'), 'Zálohy OSVČ (Kč/měs.)', fv('k-zalohy'));
+      radio('Nemocenské pojištění OSVČ', rv('k-nem'));
+    }
+    field('Jiné příjmy', fv('k-jine-prijmy'));
+    field('Odpracované roky', fv('k-odprac-roky'));
+    sub('Sport a aktivity');
+    radio('Intenzita', rv('k-sport-int'));
+    field('Sporty / aktivity', fv('k-sport-det'));
+    sub('Zdravotní stav');
+    field2('Výška (cm)', fv('k-vyska'), 'Váha (kg)', fv('k-vaha'));
+    radio('Kuřák', rv('k-kurak'));
+    radio('Alkohol', rv('k-alkohol'));
+    field('Léky', fv('k-leky'));
+    field('Úrazy a operace', fv('k-urazy'));
+    field('PN delší 4 týdny', fv('k-pn'));
+    field('Specialisté', fv('k-specialisti'));
+    field('Jiné komplikace', fv('k-zdravi-jine'));
+    sub('Závislé osoby');
+    radio('Finančně závislí', cvs('k-zavisle') || '—');
+
+    spc(4);
+    sHead(2, 'Partner / partnerka');
+    radio('Má partnera?', rv('p-ma'));
+    radio('Finance', rv('p-finance'));
+    if (rv('p-ma') === 'Ano') {
+      field2('Jméno a příjmení', fv('p-jmeno'), 'Rodné číslo', fv('p-rc'));
+      field2('Povolání', fv('p-povolani'), 'Čistý příjem (Kč/měs.)', fv('p-prijem'));
+      radio('Typ PP', rv('p-typ'));
+      field('Zdravotní stav', fv('p-zdravi'));
+      field('Sport a aktivity', fv('p-sport'));
+      field2('Hodnota péče (Kč/měs.)', fv('p-pece-kc'), 'Alternativa péče', fv('p-pece-alt'));
+    }
+
+    spc(4);
+    sHead(3, 'Děti');
+    radio('Vyživované děti?', rv('d-ma'));
+    if (rv('d-ma') === 'Ano') {
+      for (let n = 1; n <= diteCount; n++) {
+        if (!document.getElementById(`dite-${n}`)) continue;
+        const jmeno = document.querySelector(`[name="d${n}-jmeno"]`)?.value || '';
+        spc(3);
+        sub(`Dítě ${n}`);
+        field2('Jméno a rok narození', jmeno, 'Zdravotní stav', document.querySelector(`[name="d${n}-zdravi"]`)?.value || '');
+        field2('Sport a aktivity', document.querySelector(`[name="d${n}-sport"]`)?.value || '', 'Sirotčí důchod — po kom', document.querySelector(`[name="d${n}-sirotci"]`)?.value || '');
+        radio('VŠ?', rv(`d${n}-vs`));
+        radio('Odpočet uplatňuje', rv(`d${n}-odpocet`));
+        radio('Způsob odpočtu', rv(`d${n}-odpjak`));
+      }
+    }
+
+    spc(4);
+    sHead(4, 'Výdaje (Kč/měs.)');
+    // table header
+    chk(10);
+    doc.setFillColor(...MINT);
+    doc.rect(ML, y, CW, 6, 'F');
+    doc.setFont('helvetica','bold'); doc.setFontSize(6.5); doc.setTextColor(...GREY);
+    doc.text('POLOŽKA', ML + 2, y + 4);
+    doc.text('KČ / MĚS.', ML + CW - 32, y + 4);
+    doc.text('N/Z', ML + CW - 6, y + 4, { align:'right' });
+    y += 7;
+
+    let totalKc = 0;
+    EXPENSES.forEach((label, i) => {
+      chk(7);
+      const kc = parseInt(document.querySelector(`[name="v${i}kc"]`)?.value || 0, 10);
+      const nz = document.querySelector(`[name="v${i}nz"]`)?.value || '';
+      totalKc += kc;
+      const bg = i % 2 === 0 ? [250,255,252] : WHITE;
+      doc.setFillColor(...bg); doc.rect(ML, y, CW, 6, 'F');
+      doc.setFont('helvetica','normal'); doc.setFontSize(8); doc.setTextColor(...DARK);
+      doc.text(label, ML + 2, y + 4.2);
+      if (kc) doc.text(kc.toLocaleString('cs-CZ') + ' Kč', ML + CW - 32, y + 4.2);
+      if (nz) doc.text(nz.toUpperCase(), ML + CW - 2, y + 4.2, { align:'right' });
+      doc.setDrawColor(220,240,230); doc.setLineWidth(0.1);
+      doc.line(ML, y + 6, ML + CW, y + 6);
+      y += 6;
+    });
+
+    chk(10);
+    doc.setFillColor(...DARK); doc.rect(ML, y, CW, 8, 'F');
+    doc.setFont('helvetica','bold'); doc.setFontSize(8.5); doc.setTextColor(...WHITE);
+    doc.text('CELKEM', ML + 2, y + 5.5);
+    doc.setTextColor(...GREEN);
+    doc.text(totalKc.toLocaleString('cs-CZ') + ' Kč', ML + CW - 2, y + 5.5, { align:'right' });
+    y += 12;
+
+    field('Snížení výdajů při úmrtí partnera (Kč/měs.)', fv('v-snizeni'));
+    sub('Stávající produkty');
+    field('Životní pojištění', fv('fp-zp'));
+    field('Úrazové / nemocenské pojištění', fv('fp-up'));
+    field('Investice a spoření', fv('fp-inv'));
+
+    spc(4);
+    sHead(5, 'Závazky');
+    for (let n = 1; n <= zavazekCount; n++) {
+      if (!document.getElementById(`zavazek-${n}`)) continue;
+      const typ = rv(`z${n}-typ`);
+      const zus = document.querySelector(`[name="z${n}-zusatek"]`)?.value || '';
+      const spl = document.querySelector(`[name="z${n}-splatka"]`)?.value || '';
+      const slat = document.querySelector(`[name="z${n}-splatnost"]`)?.value || '';
+      const urok = document.querySelector(`[name="z${n}-urok"]`)?.value || '';
+      const pris = rv(`z${n}-pristup`);
+      if (!typ && !zus) continue;
+      sub(typ || `Závazek ${n}`);
+      field2('Zůstatek (Kč)', zus, 'Měsíční splátka (Kč)', spl);
+      field2('Splatnost (rok)', slat, 'Úroková sazba (%)', urok);
+      radio('Přístup při PU', pris);
+    }
+
+    spc(4);
+    sHead(6, 'Rezervy a majetek');
+    sub('Likvidní rezervy');
+    field('Běžný / spořicí účet, hotovost (Kč)', fv('r-lik'));
+    radio('Rezerva pokrývá', rv('r-pokryti'));
+    sub('Finanční produkty');
+    field2('Investice', fv('r-inv'), 'Penzijní / životní spoření', fv('r-penz'));
+    field('Jiné úspory', fv('r-jine'));
+    sub('Podíly ve firmách');
+    radio('Vlastní podíl ve firmě?', rv('r-firma-ma'));
+    if (rv('r-firma-ma') === 'Ano') {
+      field2('Tržní hodnota (Kč)', fv('r-firma-hodnota'), 'Rychlost prodeje (měs.)', fv('r-firma-prodej'));
+      field('Závislost firmy', fv('r-firma-popis'));
+    }
+    sub('Nemovitosti');
+    field2('Jiné nemovitosti (typ, hodnota)', fv('r-nem'), 'Příjem z nájmu (Kč/měs.)', fv('r-najem'));
+    radio('Prodej jako záchrana?', rv('r-nem-prodej'));
+
+    // ── Footers ──────────────────────────────────────────────────
+    const totalPages = doc.internal.getNumberOfPages();
+    for (let p = 1; p <= totalPages; p++) {
+      doc.setPage(p);
+      doc.setFillColor(...DARK); doc.rect(0, H - 8, W, 8, 'F');
+      doc.setFont('helvetica','normal'); doc.setFontSize(7); doc.setTextColor(160,210,190);
+      doc.text('Finkli — finanční klinika  ·  info@finkli.cz  ·  finkli.cz', ML, H - 3);
+      doc.text(`${p} / ${totalPages}`, W - MR, H - 3, { align:'right' });
+    }
+
+    const klient = fv('k-jmeno').replace(/\s+/g,'_') || 'klient';
+    doc.save(`Dotaznik_ZP_Finkli_${klient}.pdf`);
+  }
+  </script>
+</body>
+</html>

@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1080" width="1080" height="1080">
+  <defs>
+    <radialGradient id="blob1" cx="50%" cy="50%" r="50%" gradientUnits="objectBoundingBox">
+      <stop offset="0%"   stop-color="#03D98C" stop-opacity="0.08"/>
+      <stop offset="60%"  stop-color="#03D98C" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#03D98C" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="blob2" cx="50%" cy="50%" r="50%" gradientUnits="objectBoundingBox">
+      <stop offset="0%"   stop-color="#03D98C" stop-opacity="0.06"/>
+      <stop offset="60%"  stop-color="#03D98C" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#03D98C" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="blob3" cx="50%" cy="50%" r="50%" gradientUnits="objectBoundingBox">
+      <stop offset="0%"   stop-color="#03D98C" stop-opacity="0.04"/>
+      <stop offset="65%"  stop-color="#03D98C" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#03D98C" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Mint background -->
+  <rect width="1080" height="1080" fill="#F4FFF9"/>
+
+  <!-- Blob 1 — top left (18% 12%), 55% × 50% of canvas -->
+  <ellipse cx="194" cy="130" rx="297" ry="270" fill="url(#blob1)"/>
+
+  <!-- Blob 2 — bottom right (85% 88%), 50% × 45% of canvas -->
+  <ellipse cx="918" cy="950" rx="270" ry="243" fill="url(#blob2)"/>
+
+  <!-- Blob 3 — centre right (70% 30%), 40% × 40% of canvas -->
+  <ellipse cx="756" cy="324" rx="216" ry="216" fill="url(#blob3)"/>
+</svg>
