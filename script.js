@@ -1037,6 +1037,10 @@ const WEB3FORMS = {
             '<span class="advisor-modal__efa-sub">Uděluje EFPA Czech Republic · efpa.cz</span>' +
           '</span>' +
         '</a>' +
+        '<div class="advisor-modal__booking" hidden>' +
+          '<p class="advisor-modal__booking-title">Rezervovat termín online</p>' +
+          '<div class="advisor-modal__koalendar-wrap"><div id="advisor-koalendar-widget"></div></div>' +
+        '</div>' +
         '<p class="advisor-modal__licenses-title">Licence a oprávnění</p>' +
         '<ul class="advisor-modal__licenses"></ul>' +
       '</div>';
@@ -1050,6 +1054,7 @@ const WEB3FORMS = {
     const modalBio      = overlay.querySelector('.advisor-modal__bio');
     const modalEfa      = overlay.querySelector('.advisor-modal__efa');
     const modalLicenses = overlay.querySelector('.advisor-modal__licenses');
+    const modalBooking  = overlay.querySelector('.advisor-modal__booking');
     const closeBtn      = overlay.querySelector('.advisor-modal__close');
     let lastTrigger     = null;
 
@@ -1083,6 +1088,22 @@ const WEB3FORMS = {
         li.textContent = l.trim();
         modalLicenses.appendChild(li);
       });
+      // Koalendar booking widget
+      if (d.koalendar) {
+        modalBooking.hidden = false;
+        var kwrap = document.getElementById('advisor-koalendar-widget');
+        kwrap.innerHTML = '';
+        window.Koalendar = window.Koalendar || function () { (Koalendar.props = Koalendar.props || []).push(arguments); };
+        if (!document.querySelector('script[src*="koalendar.com/assets/widget.js"]')) {
+          var ks = document.createElement('script');
+          ks.src = 'https://koalendar.com/assets/widget.js';
+          ks.async = true;
+          document.head.appendChild(ks);
+        }
+        Koalendar('inline', { url: 'https://koalendar.com/u/' + d.koalendar, selector: '#advisor-koalendar-widget' });
+      } else {
+        modalBooking.hidden = true;
+      }
       overlay.classList.add('is-open');
       document.body.style.overflow = 'hidden';
       closeBtn.focus();
