@@ -587,14 +587,19 @@ strong { font-weight: 600; }
   display: grid;
   grid-template-columns: 1fr 0.8fr;
   column-gap: 48px;
-  row-gap: 0;
-  align-items: start;
+  align-items: center;
 }
 
-/* Desktop: copy = row 1 col 1, image = col 2 span rows 1+2, actions = row 2 col 1 */
-.hero__copy        { grid-column: 1; grid-row: 1; padding: 18vh 0 0; }
-.hero__image-wrap  { grid-column: 2; grid-row: 1 / span 2; }
-.hero__actions     { grid-column: 1; grid-row: 2; padding-bottom: 40px; }
+@media (min-width: 768px) {
+  .hero__content {
+    padding: 22vh 0 40px;
+  }
+}
+
+.hero__left {
+  display: flex;
+  flex-direction: column;
+}
 
 .hero__image-wrap {
   border-radius: 20px;
@@ -607,7 +612,7 @@ strong { font-weight: 600; }
   z-index: 2;
   height: clamp(320px, 45vh, 500px);
   align-self: center;
-  margin-top: 110px; /* ← upravit: kladné = dolů, záporné = nahoru */
+  margin-top: 0;
 }
 
 .hero__image-wrap:hover {
@@ -629,16 +634,17 @@ strong { font-weight: 600; }
 }
 
 @media (max-width: 767px) {
-  /* Mobile: flex column — přirozené pořadí HTML: nadpis → sub → fotka → CTA */
+  /* Mobile: flex column — pořadí: nadpis → sub → fotka → CTA */
   .hero__content {
     display: flex;
     flex-direction: column;
     gap: 0;
   }
-  /* Reset desktop grid placement */
-  .hero__copy       { grid-column: unset; grid-row: unset; padding: 0; }
-  .hero__image-wrap { grid-column: unset; grid-row: unset; margin-top: 24px; height: auto; aspect-ratio: 4 / 3; max-height: none; }
-  .hero__actions    { grid-column: unset; grid-row: unset; padding-bottom: 0; margin-top: 24px; width: 100%; }
+  /* display: contents zpřístupní copy a actions jako přímé flex děti → order pak určí pořadí */
+  .hero__left       { display: contents; }
+  .hero__copy       { order: 1; padding: 0; }
+  .hero__image-wrap { order: 2; margin-top: 24px; height: auto; aspect-ratio: 4 / 3; max-height: none; }
+  .hero__actions    { order: 3; padding-bottom: 0; margin-top: 24px; width: 100%; }
 }
 
 .hero__title {
@@ -673,7 +679,7 @@ strong { font-weight: 600; }
     grid-template-columns: auto auto;
     justify-content: flex-start;
     gap: 12px;
-    margin-top: 4px;
+    margin-top: 32px;
   }
 }
 
@@ -1271,13 +1277,11 @@ strong { font-weight: 600; }
   }
 }
 
-/* Tablet/desktop: situations sekce začíná pod foldem, hero copy vyplňuje 100svh */
+/* Tablet/desktop: situations sekce začíná pod foldem */
 @media (min-width: 560px) {
-  .hero__copy { padding: 18vh 0 60px; }
   .hero__situations { padding-bottom: 80px; }
 }
 @media (min-width: 1024px) {
-  .hero__copy { padding: 20vh 0 60px; }
   .hero__situations { padding-bottom: 120px; }
 }
 
