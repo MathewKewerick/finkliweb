@@ -52,8 +52,8 @@
         <a href="#onas">Přístup</a>
         <a href="#aplikace">Aplikace</a>
         <a href="#balicky">Balíčky</a>
-        <a href="#lide">Lidé</a>
         <a href="#reference">Reference</a>
+        <a href="#lide">Lidé</a>
         <a href="#faq">FAQ</a>
       </nav>
 
@@ -97,150 +97,53 @@
     <div class="hero__bg" aria-hidden="true"></div>
     <img src="assets/finkli_vector_line.svg" alt="" class="hero__deco" aria-hidden="true" />
 
-    <div class="container hero__inner">
-      <div class="hero__copy">
-        <h1 class="h1 hero__title">Finance postavené na&nbsp;plánu, systému a&nbsp;péči v&nbsp;čase.</h1>
-        <p class="hero__sub">
-          Na finance se díváme jako na dlouhodobý proces, ne jednorázové rozhodnutí.
-          <strong>Nejsme postavení na prodeji produktů, ale na dlouhodobé spolupráci a&nbsp;péči.</strong>
-        </p>
-        <div class="hero__actions">
-          <a href="#pristup" class="btn btn--secondary">Zjistit, jak spolupráce funguje</a>
-          <a href="#kontakt-form" class="btn btn--primary">Nezávazná konzultace</a>
+    <!-- First fold: hero copy + trust bar -->
+    <div class="hero__fold">
+      <div class="container">
+        <div class="hero__content">
+          <div class="hero__copy">
+            <h1 class="h1 hero__title">Přepisujeme zastaralá <br class="hero-br">pravidla finančního <br class="hero-br">poradenství.</h1>
+            <p class="hero__sub">
+              Jsme finanční poradci, nikoli finanční prodejci. Finance vnímáme jako dlouhodobý proces postavený na strategii, systému a&nbsp;péči v&nbsp;čase, ne jednorázový prodej.
+            </p>
+          </div>
+          <a href="#onas" class="hero__image-wrap">
+            <img src="assets/heroimage.png" alt="Jak ve Finkli přistupujeme ke klientům" class="hero__image" />
+          </a>
+          <div class="hero__actions">
+            <a href="#kontakt-form" class="btn btn--primary">Nezávazná konzultace</a>
+            <a href="#onas" class="btn btn--secondary">Jak spolupráce funguje</a>
+          </div>
         </div>
       </div>
 
-      <!-- Situations: in-hero "hook" — gives the visitor an instant reason to engage.
-           Clicking a chip starts the diagnostic flow (script.js → diagnostic). -->
-      <div class="hero__situations" id="situace">
-        <div class="diagnostic" id="diagnostic">
-
-          <!-- VIEW 1: Chip selection (default) -->
-          <div class="diagnostic__view is-active" data-view="chips">
-            <h2 class="h2 hero__situations-title">Začněte tím, co je Vám nejbližší.</h2>
-            <p class="diagnostic__hint">Během pár kliknutí zjistíte, co by Vám nemělo uniknout a&nbsp;jaký další krok může dávat&nbsp;smysl.</p>
-
-            <div class="chip-hint-arrow" aria-hidden="true">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M12 5v14M5 12l7 7 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-              <span>vyberte svou situaci</span>
+      <!-- Trust bar — full width -->
+      <div class="hero__trust" aria-label="Finkli v číslech">
+        <div class="container">
+          <div class="hero__trust-inner">
+            <div class="hero__trust-item">
+              <div class="hero__trust-number-wrap">
+                <span class="hero__trust-number hero__trust-number--dark" data-target="150">0</span><span class="hero__trust-suffix hero__trust-suffix--dark">+</span>
+              </div>
+              <p class="hero__trust-label">Spokojených klientů, kteří s&nbsp;námi dlouhodobě spolupracují.</p>
             </div>
-
-            <div class="situations__grid">
-              <button type="button" class="chip chip--filled" data-situation="0">Chci konečně přehled o&nbsp;svých financích</button>
-              <button type="button" class="chip" data-situation="1">Řeším hypotéku, úvěr nebo refinancování</button>
-              <button type="button" class="chip" data-situation="2">Čeká mě velké životní rozhodnutí</button>
-              <button type="button" class="chip chip--filled" data-situation="3">Mám produkty, ale nevím zda fungují správně</button>
-              <button type="button" class="chip" data-situation="4">Podnikám a&nbsp;chci mít finance i&nbsp;důchod pod kontrolou</button>
-              <button type="button" class="chip chip--filled" data-situation="5">Začínám investovat</button>
-              <button type="button" class="chip" data-situation="6">Mám pojištění, ale nevím zda mě skutečně chrání</button>
-              <button type="button" class="chip chip--filled" data-situation="7">Začínám a&nbsp;chci to dělat správně</button>
+            <div class="hero__trust-item">
+              <div class="hero__trust-number-wrap">
+                <span class="hero__trust-number" data-target="70">0</span><span class="hero__trust-suffix">+</span>
+              </div>
+              <p class="hero__trust-label">Partnerských institucí, ze&nbsp;kterých vybíráme to nejlepší pro&nbsp;Vaše cíle.</p>
+            </div>
+            <div class="hero__trust-item">
+              <div class="hero__trust-number-wrap">
+                <span class="hero__trust-number hero__trust-number--infinity">∞</span>
+              </div>
+              <p class="hero__trust-label">Délka spolupráce, kterou plánujeme. Pro&nbsp;Vás, Vaše děti i&nbsp;vnoučata.</p>
             </div>
           </div>
-
-          <!-- VIEW 2: Diagnostic card (questions / result / thanks) -->
-          <div class="diagnostic__view diagnostic__card" data-view="card">
-
-            <header class="diagnostic__top">
-              <button type="button" class="diagnostic__back" data-action="back">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                  <path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-                <span>Zpět na výběr situace</span>
-              </button>
-            </header>
-
-            <!-- Progress (centered) → situation label (centered) → question step -->
-            <div class="diagnostic__progress" data-progress data-current="1" aria-label="Krok 1 ze 3">
-              <span></span>
-              <span></span>
-              <span></span>
-            </div>
-
-            <p class="diagnostic__situation-label" data-situation-label></p>
-
-            <!-- Steps container — grid-stacked so card height = max(step heights) -->
-            <div class="diagnostic__steps">
-
-              <!-- STEP: Question -->
-              <div class="diagnostic__step is-active" data-step="question">
-                <div class="diagnostic__question-content" data-question-content>
-                  <h3 class="diagnostic__question" data-question></h3>
-                  <div class="diagnostic__answers">
-                    <button type="button" class="diag-btn diag-btn--yes" data-answer="yes">
-                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                        <path d="M5 12l5 5L20 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
-                      </svg>
-                      Ano
-                    </button>
-                    <button type="button" class="diag-btn diag-btn--no" data-answer="no">
-                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                        <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/>
-                      </svg>
-                      Ne
-                    </button>
-                  </div>
-                </div>
-              </div>
-
-              <!-- STEP: Result + lead form -->
-              <div class="diagnostic__step" data-step="result">
-                <div class="diagnostic__result-layout">
-                  <div class="diagnostic__result-copy">
-                    <p class="diagnostic__aha" data-result></p>
-                    <p class="diagnostic__cta-text">
-                      Většina lidí odkládá finance proto, že neví, kde začít. Jedna schůzka to může změnit. Potkejme se osobně — projdeme Vaši situaci v&nbsp;klidu, bez spěchu a&nbsp;bez prodejního tlaku. Jsme tady pro dlouhodobou péči a&nbsp;spolupráci, ne pro jednorázový prodej.
-                    </p>
-                  </div>
-                  <form class="diagnostic__form" data-form novalidate>
-                    <!-- Tři krátká pole vedle sebe na ≥640px (mobile: stack) -->
-                    <div class="diagnostic__form-row">
-                      <label class="diagnostic__field">
-                        <span class="diagnostic__field-label">Jméno</span>
-                        <input type="text" name="name" required autocomplete="name" placeholder="Vaše jméno" />
-                      </label>
-                      <label class="diagnostic__field">
-                        <span class="diagnostic__field-label">
-                          Telefon&nbsp;<span class="diagnostic__field-optional">(nepovinné)</span>
-                        </span>
-                        <input type="tel" name="phone" autocomplete="tel" placeholder="+420…" />
-                      </label>
-                      <label class="diagnostic__field">
-                        <span class="diagnostic__field-label">Váš e-mail</span>
-                        <input type="email" name="email" required placeholder="vas@email.cz" autocomplete="email" />
-                      </label>
-                    </div>
-                    <label class="diagnostic__field">
-                      <span class="diagnostic__field-label">Chcete nám k&nbsp;tomu něco doplnit?&nbsp;<span class="diagnostic__field-optional">(nepovinné)</span></span>
-                      <textarea name="note" rows="2" placeholder="Volitelná poznámka…"></textarea>
-                    </label>
-                    <!-- Honeypot (Web3Forms spam protection) — invisible to humans -->
-                    <input type="checkbox" name="botcheck" style="display:none" tabindex="-1" autocomplete="off" aria-hidden="true" />
-                    <button type="submit" class="btn btn--primary diagnostic__submit">Odeslat</button>
-                    <p class="diagnostic__error" data-error hidden></p>
-                    <p class="form-gdpr-note">Odesláním souhlasíte se zpracováním osobních údajů dle našich <a href="gdpr.html" target="_blank" class="form-gdpr-note__link">Zásad ochrany osobních údajů</a>.</p>
-                  </form>
-                </div>
-              </div>
-
-              <!-- STEP: Thanks -->
-              <div class="diagnostic__step" data-step="thanks">
-                <div class="diagnostic__seal" aria-hidden="true">
-                  <svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M40 6C43.65 6 46.25 9.05 49.4 10.08C52.73 11.18 56.63 10.13 59.28 12.15C61.95 14.2 62.15 18.25 64.2 21.05C66.23 23.83 70 25.25 70.8 28.63C71.6 31.93 69.33 35.25 69.33 38.75C69.33 42.25 71.6 45.58 70.8 48.88C70 52.25 66.23 53.68 64.2 56.45C62.15 59.25 61.95 63.3 59.28 65.35C56.63 67.38 52.73 66.33 49.4 67.43C46.25 68.45 43.65 71.5 40 71.5C36.35 71.5 33.75 68.45 30.6 67.43C27.28 66.33 23.38 67.38 20.73 65.35C18.05 63.3 17.85 59.25 15.8 56.45C13.78 53.68 10 52.25 9.2 48.88C8.4 45.58 10.68 42.25 10.68 38.75C10.68 35.25 8.4 31.93 9.2 28.63C10 25.25 13.78 23.83 15.8 21.05C17.85 18.25 18.05 14.2 20.73 12.15C23.38 10.13 27.28 11.18 30.6 10.08C33.75 9.05 36.35 6 40 6Z" fill="#03D98C"/>
-                    <path d="M25.5 41L35.25 50.5L55 31.5" stroke="#0B2E34" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                </div>
-                <h3 class="diagnostic__thanks-title">Děkujeme, víme, s&nbsp;čím Vám můžeme pomoct.</h3>
-                <p class="diagnostic__thanks-sub">Podíváme se na&nbsp;Vaše odpovědi v&nbsp;souvislostech a&nbsp;ozveme se Vám s&nbsp;dalším krokem.</p>
-              </div>
-
-            </div>
-          </div>
-
         </div>
       </div>
+    </div>
+
     </div>
   </section>
 
@@ -280,7 +183,8 @@
                 </svg>
               </div>
               <h4 class="coop-pillar__title">Dlouhodobá spolupráce</h4>
-              <p class="coop-pillar__text">Nejsme postavení na prodeji produktů, ale na dlouhodobém partnerství. Partnersky, čestně a transparentně.</p>
+              <p class="coop-pillar__text">Nejsme postavení na prodeji produktů, 
+                ale&nbsp;na dlouhodobém a transparentním partnerství.</p>
             </div>
 
             <div class="coop-pillar">
@@ -294,7 +198,7 @@
                 </svg>
               </div>
               <h4 class="coop-pillar__title">Plán před produktem</h4>
-              <p class="coop-pillar__text">Začínáme pochopením Vaší situace jako celku. Teprve podle robustního plánu hledáme konkrétní řešení.</p>
+              <p class="coop-pillar__text">Začínáme pochopením Vaší situace jako celku. Teprve podle robustního plánu hledáme konkrétní řešení a produkty.</p>
             </div>
 
             <div class="coop-pillar">
@@ -544,6 +448,117 @@
     </div>
   </section>
 
+  <!-- ===== Section: Diagnostika — "Začněte tím, co je Vám nejbližší" ===== -->
+  <section class="section section--situace" id="situace">
+    <div class="container">
+      <div class="section__head">
+        <h2 class="h2 section__title">Začněte tím, co je&nbsp;Vám nejbližší.</h2>
+        <p class="lead">Během pár kliknutí zjistíte, co by Vám nemělo uniknout a&nbsp;jaký další krok může dávat smysl.</p>
+      </div>
+
+      <div class="diagnostic" id="diagnostic">
+
+        <!-- VIEW 1: chip grid -->
+        <div class="diagnostic__view is-active" data-view="chips">
+          <div class="situations__grid">
+            <button class="chip" data-situation="0">Chci konečně přehled o&nbsp;svých financích</button>
+            <button class="chip" data-situation="1">Řeším hypotéku, úvěr nebo refinancování</button>
+            <button class="chip" data-situation="2">Čeká mě velké životní rozhodnutí</button>
+            <button class="chip" data-situation="3">Mám produkty, ale nevím, zda fungují správně</button>
+            <button class="chip" data-situation="4">Podnikám a chci mít finance i&nbsp;důchod pod kontrolou</button>
+            <button class="chip" data-situation="5">Začínám investovat</button>
+            <button class="chip" data-situation="6">Mám pojištění, ale nevím, zda mě skutečně chrání</button>
+            <button class="chip" data-situation="7">Začínám a chci to dělat správně</button>
+          </div>
+          <p class="chip-hint-arrow" aria-hidden="true">↑ Klikněte na situaci, která je Vám nejbližší</p>
+        </div>
+
+        <!-- VIEW 2: diagnostic card -->
+        <div class="diagnostic__view" data-view="card">
+          <div class="diagnostic__card">
+
+            <!-- Card header -->
+            <div class="diagnostic__top">
+              <button class="diagnostic__back" data-action="back" aria-label="Zpět na výběr situace">← Zpět</button>
+            </div>
+            <div class="diagnostic__progress" data-progress data-current="1" aria-label="Krok 1 ze 3">
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+            <p class="diagnostic__situation-label" data-situation-label></p>
+
+            <!-- Steps container — grid-stacked, karta = výška největšího kroku -->
+            <div class="diagnostic__steps">
+
+            <!-- Step: question -->
+            <div class="diagnostic__step is-active" data-step="question">
+              <div class="diagnostic__question-content" data-question-content>
+                <p class="diagnostic__question" data-question></p>
+                <div class="diagnostic__answers">
+                  <button class="diag-btn diag-btn--yes" data-answer="yes">Ano</button>
+                  <button class="diag-btn diag-btn--no" data-answer="no">Ne</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Step: result -->
+            <div class="diagnostic__step" data-step="result">
+              <div class="diagnostic__result-layout">
+                <div class="diagnostic__result-copy">
+                  <p class="diagnostic__aha" data-result></p>
+                  <p class="diagnostic__cta-text">
+                    Většina lidí odkládá finance proto, že neví, kde začít. Jedna schůzka to může změnit. Potkejme se osobně — projdeme Vaši situaci v&nbsp;klidu, bez spěchu a&nbsp;bez prodejního tlaku. Jsme tady pro dlouhodobou péči a&nbsp;spolupráci, ne pro jednorázový prodej.
+                  </p>
+                </div>
+                <form class="diagnostic__form" data-form novalidate>
+                  <input type="checkbox" name="botcheck" style="display:none" tabindex="-1" autocomplete="off" aria-hidden="true">
+                  <div class="diagnostic__form-row">
+                    <label class="diagnostic__field">
+                      <span class="diagnostic__field-label">Jméno</span>
+                      <input type="text" name="name" required autocomplete="name" placeholder="Vaše jméno" />
+                    </label>
+                    <label class="diagnostic__field">
+                      <span class="diagnostic__field-label">Telefon&nbsp;<span class="diagnostic__field-optional">(nepovinné)</span></span>
+                      <input type="tel" name="phone" autocomplete="tel" placeholder="+420…" />
+                    </label>
+                    <label class="diagnostic__field">
+                      <span class="diagnostic__field-label">Váš e-mail</span>
+                      <input type="email" name="email" required placeholder="vas@email.cz" autocomplete="email" />
+                    </label>
+                  </div>
+                  <label class="diagnostic__field">
+                    <span class="diagnostic__field-label">Chcete nám k&nbsp;tomu něco doplnit?&nbsp;<span class="diagnostic__field-optional">(nepovinné)</span></span>
+                    <textarea name="note" rows="2" placeholder="Volitelná poznámka…"></textarea>
+                  </label>
+                  <button type="submit" class="btn btn--primary diagnostic__submit">Odeslat</button>
+                  <p class="diagnostic__error" data-error hidden></p>
+                  <p class="form-gdpr-note">Odesláním souhlasíte se zpracováním osobních údajů dle našich <a href="gdpr.html" target="_blank" class="form-gdpr-note__link">Zásad ochrany osobních údajů</a>.</p>
+                </form>
+              </div>
+            </div>
+
+            <!-- Step: thanks -->
+            <div class="diagnostic__step" data-step="thanks">
+              <div class="diagnostic__seal" aria-hidden="true">
+                <svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M40 6C43.65 6 46.25 9.05 49.4 10.08C52.73 11.18 56.63 10.13 59.28 12.15C61.95 14.2 62.15 18.25 64.2 21.05C66.23 23.83 70 25.25 70.8 28.63C71.6 31.93 69.33 35.25 69.33 38.75C69.33 42.25 71.6 45.58 70.8 48.88C70 52.25 66.23 53.68 64.2 56.45C62.15 59.25 61.95 63.3 59.28 65.35C56.63 67.38 52.73 66.33 49.4 67.43C46.25 68.45 43.65 71.5 40 71.5C36.35 71.5 33.75 68.45 30.6 67.43C27.28 66.33 23.38 67.38 20.73 65.35C18.05 63.3 17.85 59.25 15.8 56.45C13.78 53.68 10 52.25 9.2 48.88C8.4 45.58 10.68 42.25 10.68 38.75C10.68 35.25 8.4 31.93 9.2 28.63C10 25.25 13.78 23.83 15.8 21.05C17.85 18.25 18.05 14.2 20.73 12.15C23.38 10.13 27.28 11.18 30.6 10.08C33.75 9.05 36.35 6 40 6Z" fill="#03D98C"/>
+                  <path d="M25.5 41L35.25 50.5L55 31.5" stroke="#0B2E34" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <h3 class="diagnostic__thanks-title">Děkujeme, víme, s&nbsp;čím Vám můžeme pomoct.</h3>
+              <p class="diagnostic__thanks-sub">Podíváme se na&nbsp;Vaše odpovědi v&nbsp;souvislostech a&nbsp;ozveme se Vám s&nbsp;dalším krokem.</p>
+            </div>
+
+            </div><!-- /.diagnostic__steps -->
+
+          </div><!-- /.diagnostic__card -->
+        </div><!-- /.diagnostic__view[card] -->
+
+      </div><!-- /#diagnostic -->
+    </div><!-- /.container -->
+  </section>
+
   <!-- ===== Section: myPlann — klientská aplikace =====
        Open editorial layout (no card wrapper) so the phone breathes against
        the page backdrop. 2-col on desktop: copy left, composed visual right
@@ -615,10 +630,7 @@
           Protože spolupráce ve&nbsp;Finkli stojí na&nbsp;dlouhodobé péči, ne na&nbsp;jednorázovém prodeji, funguje formou měsíčních balíčků za&nbsp;servis, plánování a&nbsp;průběžnou podporu.
         </p>
         <p class="packages-head__lead">
-          Provize z&nbsp;produktů jsou ze své podstaty jednorázové a&nbsp;mohou vytvářet tlak na&nbsp;prodej. <strong>Přímá platba tento tlak odstraňuje, spolupráce je tak dlouhodobě udržitelná, transparentní a&nbsp;bez skrytých motivací. Řešení vybíráme podle Vašich potřeb, ne podle výše provize.</strong>
-        </p>
-        <p class="packages-head__lead">
-          Níže najdete orientační přehled balíčků a&nbsp;kombinací služeb, které poskytujeme. Není cílem si hned vybrat konkrétní variantu. Na&nbsp;schůzce spolu v&nbsp;klidu projdeme Vaši situaci a&nbsp;ukážeme si, jaká cesta pro Vás dává největší smysl.
+          <strong>Provize z&nbsp;produktů jsou ze své podstaty jednorázové a&nbsp;mohou vytvářet tlak na&nbsp;prodej. Přímá platba tento tlak odstraňuje,</strong> spolupráce je tak dlouhodobě udržitelná, transparentní a&nbsp;bez skrytých motivací. Řešení vybíráme podle Vašich potřeb, ne podle výše provize.
         </p>
       </div>
 
@@ -974,8 +986,11 @@
             <p>„Po dlouhé době mám klidné spaní. Vím, že se nemusím tolik bát budoucnosti, protože mám plán. Zjistila jsem že i z mála se dá postupně něco vybudovat a naučila jsem se co a jak funguje. Matěj mi se vším pomohl, do ničeho mě nenutil, vše mi v klidu vysvětlil."</p>
           </blockquote>
           <figcaption class="testimonial-card__author">
-            <span class="testimonial-card__name">Kamila, 28 let</span>
-            <span class="testimonial-card__role">Královéhradecký kraj</span>
+            <span class="testimonial-card__avatar"></span>
+            <div class="testimonial-card__author-text">
+              <span class="testimonial-card__name">Kamila, 28 let</span>
+              <span class="testimonial-card__role">Královéhradecký kraj</span>
+            </div>
           </figcaption>
         </figure>
 
@@ -994,8 +1009,11 @@ s ním však podám ruku a budu mu vděčná za realitu, která byla ještě pá
 zbožným přáním."</p>
           </blockquote>
           <figcaption class="testimonial-card__author">
-            <span class="testimonial-card__name">Nikola, 28 let</span>
-            <span class="testimonial-card__role">Praha</span>
+            <span class="testimonial-card__avatar"></span>
+            <div class="testimonial-card__author-text">
+              <span class="testimonial-card__name">Nikola, 28 let</span>
+              <span class="testimonial-card__role">Praha</span>
+            </div>
           </figcaption>
         </figure>
 
@@ -1005,8 +1023,11 @@ zbožným přáním."</p>
             <p>„Spolupráce s finanční klinikou mi přinesla něco, co je pro mě velmi cenné – klid a jistotu. Vždy jsem chtěla mít své finance nastavené tak, aby mi dávaly smysl nejen dnes, ale i do budoucna. Díky profesionální péči a lidskému přístupu Matěje vím, že jsou v dobrých rukou. Oceňuji nejen jeho profesionální přístup, ale i to, že všechno dokáže vysvětlit lidsky a srozumitelně. Oceňuji také přehlednost a komplexnost služeb, které mám v aplikaci myPLANN na jednom místě. Pokud hledáte partnera, kterému můžete své finance s důvěrou svěřit, mohu finanční kliniku upřímně doporučit."</p>
           </blockquote>
           <figcaption class="testimonial-card__author">
-            <span class="testimonial-card__name">Nikola, 32 let</span>
-            <span class="testimonial-card__role">Praha</span>
+            <span class="testimonial-card__avatar"></span>
+            <div class="testimonial-card__author-text">
+              <span class="testimonial-card__name">Nikola, 32 let</span>
+              <span class="testimonial-card__role">Praha</span>
+            </div>
           </figcaption>
         </figure>
 
@@ -1470,8 +1491,8 @@ zbožným přáním."</p>
             <li><a href="#onas" class="site-footer__link">Přístup</a></li>
             <li><a href="#balicky" class="site-footer__link">Balíčky</a></li>
             <li><a href="#aplikace" class="site-footer__link">Aplikace</a></li>
-            <li><a href="#lide" class="site-footer__link">Lidé</a></li>
             <li><a href="#reference" class="site-footer__link">Reference</a></li>
+            <li><a href="#lide" class="site-footer__link">Lidé</a></li>
             <li><a href="#novinky" class="site-footer__link">Novinky</a></li>
             <li><a href="#faq" class="site-footer__link">FAQ</a></li>
             <li><a href="#kontakt-form" class="site-footer__link">Kontakt</a></li>

@@ -1,0 +1,930 @@
+<!doctype html>
+<html lang="cs">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Finkli — finanční klinika (preview)</title>
+  <meta name="robots" content="noindex" />
+
+  <!-- Google Sans Flex -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:opsz,wght@8..144,100..1000&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="preview.css" />
+</head>
+<body>
+
+  <!-- ===== Header ===== -->
+  <header class="header" id="site-header">
+    <div class="header__inner">
+      <a href="#" class="header__brand" aria-label="Finkli — domů">
+        <img src="assets/finkli_logo_dark.svg" alt="Finkli" class="header__logo" />
+      </a>
+
+      <nav class="header__nav" aria-label="Hlavní">
+        <a href="#onas">Přístup</a>
+        <a href="#aplikace">Aplikace</a>
+        <a href="#balicky">Balíčky</a>
+        <a href="#lide">Lidé</a>
+        <a href="#reference">Reference</a>
+        <a href="#faq">FAQ</a>
+      </nav>
+
+      <a href="#kontakt-form" class="header__cta header__cta--desktop" data-desktop>Kontakt</a>
+
+      <button class="header__burger" type="button" aria-label="Otevřít menu" aria-controls="mobile-menu" aria-expanded="false">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- ===== Mobile menu overlay ===== -->
+  <div class="mobile-menu" id="mobile-menu" aria-hidden="true">
+    <div class="mobile-menu__top">
+      <a href="#" class="header__brand" aria-label="Finkli — domů">
+        <img src="assets/finkli_logo_dark.svg" alt="Finkli" class="header__logo" />
+      </a>
+      <button class="mobile-menu__close" type="button" aria-label="Zavřít menu">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </button>
+    </div>
+
+    <nav class="mobile-menu__nav" aria-label="Mobilní">
+      <a href="#onas">Přístup</a>
+      <a href="#aplikace">Aplikace</a>
+      <a href="#balicky">Balíčky</a>
+      <a href="#lide">Lidé</a>
+      <a href="#reference">Reference</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+
+    <a href="#kontakt-form" class="mobile-menu__cta">Kontakt</a>
+  </div>
+
+  <!-- ===== Hero — split layout ===== -->
+  <section class="hero" id="hero">
+    <div class="hero__bg" aria-hidden="true"></div>
+    <img src="assets/finkli_vector_line.svg" alt="" class="hero__deco" aria-hidden="true" />
+
+    <div class="container hero__inner">
+
+      <!-- Left: copy -->
+      <div class="hero__copy">
+        <div class="hero__eyebrow" aria-hidden="true">
+          <span class="hero__eyebrow-dot"></span>
+          Finanční klinika
+        </div>
+
+        <h1 class="h1 hero__title">
+          Finance postavené na&nbsp;<span class="hero__title-highlight">plánu,</span> systému a&nbsp;péči.
+        </h1>
+
+        <p class="hero__sub">
+          Na finance se díváme jako na dlouhodobý proces, ne jednorázové rozhodnutí.
+          <strong>Nejsme postavení na prodeji produktů, ale na dlouhodobé spolupráci.</strong>
+        </p>
+
+        <div class="hero__actions">
+          <a href="#kontakt-form" class="btn btn--primary">Nezávazná konzultace</a>
+          <a href="#pristup" class="btn btn--secondary">Jak spolupráce funguje</a>
+        </div>
+      </div>
+
+      <!-- Right: photo composition -->
+      <div class="hero__visual" aria-hidden="true">
+        <span class="hero__disc"></span>
+
+        <!-- Main photo: placeholder (swap for lifestyle photo later) -->
+        <img
+          src="assets/finkli_profilovka_jarda.jpg"
+          alt="Jaroslav Nedvěd — partner ve Finkli"
+          class="hero__photo-main"
+        />
+
+        <!-- Secondary photo -->
+        <img
+          src="assets/finkli_profilovka_matej_square.jpg"
+          alt="Matěj Krejčík — partner ve Finkli"
+          class="hero__photo-secondary"
+        />
+
+        <!-- Floating stat card -->
+        <div class="hero__stat-float">
+          <span class="hero__stat-number">5+</span>
+          <span class="hero__stat-label">let zkušeností</span>
+        </div>
+
+        <!-- Floating rating chip -->
+        <div class="hero__rating-float">
+          <div class="hero__rating-stars">
+            <svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 1l1.9 3.8L14 5.4l-3 2.9.7 4.1L8 10.3l-3.7 2.1.7-4.1L2 5.4l4.1-.6L8 1z"/></svg>
+            <svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 1l1.9 3.8L14 5.4l-3 2.9.7 4.1L8 10.3l-3.7 2.1.7-4.1L2 5.4l4.1-.6L8 1z"/></svg>
+            <svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 1l1.9 3.8L14 5.4l-3 2.9.7 4.1L8 10.3l-3.7 2.1.7-4.1L2 5.4l4.1-.6L8 1z"/></svg>
+            <svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 1l1.9 3.8L14 5.4l-3 2.9.7 4.1L8 10.3l-3.7 2.1.7-4.1L2 5.4l4.1-.6L8 1z"/></svg>
+            <svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 1l1.9 3.8L14 5.4l-3 2.9.7 4.1L8 10.3l-3.7 2.1.7-4.1L2 5.4l4.1-.6L8 1z"/></svg>
+          </div>
+          <span class="hero__rating-text">Spokojení klienti</span>
+        </div>
+      </div>
+
+      <!-- Situations / diagnostic (full width below) -->
+      <div class="hero__situations" id="situace">
+        <div class="diagnostic" id="diagnostic">
+
+          <!-- VIEW 1: Chip selection -->
+          <div class="diagnostic__view is-active" data-view="chips">
+            <h2 class="h2 hero__situations-title">Začněte tím, co je Vám nejbližší.</h2>
+            <p class="diagnostic__hint">Během pár kliknutí zjistíte, co by Vám nemělo uniknout a&nbsp;jaký další krok může dávat&nbsp;smysl.</p>
+
+            <div class="chip-hint-arrow" aria-hidden="true">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 5v14M5 12l7 7 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              <span>vyberte svou situaci</span>
+            </div>
+
+            <div class="situations__grid">
+              <button type="button" class="chip chip--filled" data-situation="0">Chci konečně přehled o&nbsp;svých financích</button>
+              <button type="button" class="chip" data-situation="1">Řeším hypotéku, úvěr nebo refinancování</button>
+              <button type="button" class="chip" data-situation="2">Čeká mě velké životní rozhodnutí</button>
+              <button type="button" class="chip chip--filled" data-situation="3">Mám produkty, ale nevím zda fungují správně</button>
+              <button type="button" class="chip" data-situation="4">Podnikám a&nbsp;chci mít finance i&nbsp;důchod pod kontrolou</button>
+              <button type="button" class="chip chip--filled" data-situation="5">Začínám investovat</button>
+              <button type="button" class="chip" data-situation="6">Mám pojištění, ale nevím zda mě skutečně chrání</button>
+              <button type="button" class="chip chip--filled" data-situation="7">Začínám a&nbsp;chci to dělat správně</button>
+            </div>
+          </div>
+
+          <!-- VIEW 2: Diagnostic card -->
+          <div class="diagnostic__view diagnostic__card" data-view="card">
+            <header class="diagnostic__top">
+              <button type="button" class="diagnostic__back" data-action="back">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span>Zpět na výběr situace</span>
+              </button>
+            </header>
+
+            <div class="diagnostic__progress" data-progress data-current="1" aria-label="Krok 1 ze 3">
+              <span></span><span></span><span></span>
+            </div>
+
+            <p class="diagnostic__situation-label" data-situation-label></p>
+
+            <div class="diagnostic__steps">
+              <div class="diagnostic__step is-active" data-step="question">
+                <div class="diagnostic__question-content" data-question-content>
+                  <h3 class="diagnostic__question" data-question></h3>
+                  <div class="diagnostic__answers">
+                    <button type="button" class="diag-btn diag-btn--yes" data-answer="yes">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path d="M5 12l5 5L20 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+                      </svg>
+                      Ano
+                    </button>
+                    <button type="button" class="diag-btn diag-btn--no" data-answer="no">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/>
+                      </svg>
+                      Ne
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="diagnostic__step" data-step="result">
+                <div class="diagnostic__result-layout">
+                  <div class="diagnostic__result-copy">
+                    <p class="diagnostic__aha" data-result></p>
+                    <p class="diagnostic__cta-text">
+                      Většina lidí odkládá finance proto, že neví, kde začít. Jedna schůzka to může změnit. Potkejme se osobně — projdeme Vaši situaci v&nbsp;klidu, bez spěchu a&nbsp;bez prodejního tlaku.
+                    </p>
+                  </div>
+                  <form class="diagnostic__form" data-form novalidate>
+                    <div class="diagnostic__form-row">
+                      <label class="diagnostic__field">
+                        <span class="diagnostic__field-label">Jméno</span>
+                        <input type="text" name="name" required autocomplete="name" placeholder="Vaše jméno" />
+                      </label>
+                      <label class="diagnostic__field">
+                        <span class="diagnostic__field-label">Telefon&nbsp;<span class="diagnostic__field-optional">(nepovinné)</span></span>
+                        <input type="tel" name="phone" autocomplete="tel" placeholder="+420…" />
+                      </label>
+                      <label class="diagnostic__field">
+                        <span class="diagnostic__field-label">Váš e-mail</span>
+                        <input type="email" name="email" required placeholder="vas@email.cz" autocomplete="email" />
+                      </label>
+                    </div>
+                    <label class="diagnostic__field">
+                      <span class="diagnostic__field-label">Chcete nám k&nbsp;tomu něco doplnit?&nbsp;<span class="diagnostic__field-optional">(nepovinné)</span></span>
+                      <textarea name="note" rows="2" placeholder="Volitelná poznámka…"></textarea>
+                    </label>
+                    <input type="checkbox" name="botcheck" style="display:none" tabindex="-1" autocomplete="off" aria-hidden="true" />
+                    <button type="submit" class="btn btn--primary diagnostic__submit">Odeslat</button>
+                    <p class="diagnostic__error" data-error hidden></p>
+                    <p class="form-gdpr-note">Odesláním souhlasíte se zpracováním osobních údajů dle našich <a href="gdpr.html" target="_blank" class="form-gdpr-note__link">Zásad ochrany osobních údajů</a>.</p>
+                  </form>
+                </div>
+              </div>
+
+              <div class="diagnostic__step" data-step="thanks">
+                <div class="diagnostic__seal" aria-hidden="true">
+                  <svg width="80" height="80" viewBox="0 0 80 80" fill="none">
+                    <path d="M40 6C43.65 6 46.25 9.05 49.4 10.08C52.73 11.18 56.63 10.13 59.28 12.15C61.95 14.2 62.15 18.25 64.2 21.05C66.23 23.83 70 25.25 70.8 28.63C71.6 31.93 69.33 35.25 69.33 38.75C69.33 42.25 71.6 45.58 70.8 48.88C70 52.25 66.23 53.68 64.2 56.45C62.15 59.25 61.95 63.3 59.28 65.35C56.63 67.38 52.73 66.33 49.4 67.43C46.25 68.45 43.65 71.5 40 71.5C36.35 71.5 33.75 68.45 30.6 67.43C27.28 66.33 23.38 67.38 20.73 65.35C18.05 63.3 17.85 59.25 15.8 56.45C13.78 53.68 10 52.25 9.2 48.88C8.4 45.58 10.68 42.25 10.68 38.75C10.68 35.25 8.4 31.93 9.2 28.63C10 25.25 13.78 23.83 15.8 21.05C17.85 18.25 18.05 14.2 20.73 12.15C23.38 10.13 27.28 11.18 30.6 10.08C33.75 9.05 36.35 6 40 6Z" fill="#03D98C"/>
+                    <path d="M25.5 41L35.25 50.5L55 31.5" stroke="#0B2E34" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </div>
+                <h3 class="diagnostic__thanks-title">Děkujeme, víme, s&nbsp;čím Vám můžeme pomoct.</h3>
+                <p class="diagnostic__thanks-sub">Podíváme se na&nbsp;Vaše odpovědi v&nbsp;souvislostech a&nbsp;ozveme se Vám s&nbsp;dalším krokem.</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===== Stats bar ===== -->
+  <section class="stats-bar" aria-label="Klíčová čísla">
+    <div class="container">
+      <div class="stats-bar__grid">
+        <div class="stats-bar__item">
+          <span class="stats-bar__number stats-bar__number--green">5+</span>
+          <span class="stats-bar__label">let praxe v oblasti financí</span>
+        </div>
+        <div class="stats-bar__item">
+          <span class="stats-bar__number">100+</span>
+          <span class="stats-bar__label">spokojených klientů</span>
+        </div>
+        <div class="stats-bar__item">
+          <span class="stats-bar__number">30+</span>
+          <span class="stats-bar__label">institucí a&nbsp;produktů na výběr</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Dark statement ===== -->
+  <section class="section--statement" aria-label="O přístupu Finkli">
+    <div class="container">
+      <div class="statement__inner">
+        <span class="statement__eyebrow">Náš přístup</span>
+        <p class="statement__quote">
+          Většina poradců končí tam,<br>kde <em>my teprve začínáme.</em>
+        </p>
+        <a href="#pristup" class="statement__cta">
+          Přečíst, jak přemýšlíme
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Section: Jak ve Finkli spolupracujeme ===== -->
+  <section class="section section--coop" id="onas">
+    <div class="container">
+
+      <div class="section__head">
+        <h2 class="h2 section__title">Jak ve Finkli s&nbsp;klienty spolupracujeme</h2>
+      </div>
+
+      <div class="coop-cards">
+        <article class="coop-card coop-card--wide coop-card--no-icon">
+          <div class="coop-card__left">
+            <div class="coop-card__head">
+              <h3 class="h3 coop-card__title">Kdo jsme a&nbsp;co děláme</h3>
+            </div>
+            <div class="coop-card__body">
+              <p>
+                Finkli vzniklo z&nbsp;přesvědčení, že finance jsou příliš důležité na&nbsp;to, aby se řešily nahodile, nepravidelně, a&nbsp;že se dají dělat i&nbsp;jinak. Partnersky, čestně, transparentně a&nbsp;dlouhodobě. <strong>Naším cílem je být Vaším dlouhodobým partnerem pro finanční život s&nbsp;přehledem, systémem a&nbsp;klidem.</strong>
+              </p>
+            </div>
+          </div>
+
+          <div class="coop-pillars">
+            <div class="coop-pillar">
+              <div class="coop-pillar__icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                  <path d="M9 7m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" />
+                  <path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+                  <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                  <path d="M21 21v-2a4 4 0 0 0 -3 -3.85" />
+                </svg>
+              </div>
+              <h4 class="coop-pillar__title">Dlouhodobá spolupráce</h4>
+              <p class="coop-pillar__text">Nejsme postavení na prodeji produktů, ale na dlouhodobém partnerství. Partnersky, čestně a transparentně.</p>
+            </div>
+
+            <div class="coop-pillar">
+              <div class="coop-pillar__icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                  <path d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2" />
+                  <path d="M9 3m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v0a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z" />
+                  <path d="M9 12h6" /><path d="M9 16h6" />
+                </svg>
+              </div>
+              <h4 class="coop-pillar__title">Plán před produktem</h4>
+              <p class="coop-pillar__text">Začínáme pochopením Vaší situace jako celku. Teprve podle robustního plánu hledáme konkrétní řešení.</p>
+            </div>
+
+            <div class="coop-pillar">
+              <div class="coop-pillar__icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                  <path d="M20 11a8.1 8.1 0 0 0 -15.5 -2m-.5 -4v4h4" />
+                  <path d="M4 13a8.1 8.1 0 0 0 15.5 2m.5 4v-4h-4" />
+                </svg>
+              </div>
+              <h4 class="coop-pillar__title">Pravidelná péče a&nbsp;servis</h4>
+              <p class="coop-pillar__text">Péče o&nbsp;finance je proces, ne jednorázová událost. Po sjednání s&nbsp;Vámi zůstáváme a&nbsp;plán průběžně aktualizujeme.</p>
+            </div>
+          </div>
+
+          <!-- Areas sub-section -->
+          <div class="subsection-head" id="oblasti">
+            <h3 class="h3 subsection-head__title">Tři oblasti, které propojujeme do&nbsp;jednoho celku</h3>
+          </div>
+
+          <div class="areas">
+            <article class="area-card">
+              <span class="area-card__number" aria-hidden="true">01</span>
+              <div class="area-card__icon"><img src="assets/cile_icon.png" alt="" /></div>
+              <h3 class="area-card__title">Přání a&nbsp;cíle</h3>
+              <div class="area-card__sub">Investice, Penze</div>
+              <div class="area-card__divider" aria-hidden="true"></div>
+              <p class="area-card__text">Skrze investice budujeme <strong>majetek a&nbsp;kapitál, který postupně plní Vaše cíle a&nbsp;přání</strong>, ať už je to vlastní bydlení, finanční nezávislost nebo klidný důchod.</p>
+            </article>
+
+            <article class="area-card">
+              <span class="area-card__number" aria-hidden="true">02</span>
+              <div class="area-card__icon"><img src="assets/pojisteni_icon.png" alt="" /></div>
+              <h3 class="area-card__title">Ochrana</h3>
+              <div class="area-card__sub">Pojištění</div>
+              <div class="area-card__divider" aria-hidden="true"></div>
+              <p class="area-card__text">Majetek, příjmy i&nbsp;lidé, na&nbsp;kterých Vám záleží, to vše je třeba chránit. <strong>Pojištění zajišťuje, abyste o&nbsp;to, co budujete, nepřišli</strong> vlivem neočekávaných událostí.</p>
+            </article>
+
+            <article class="area-card">
+              <span class="area-card__number" aria-hidden="true">03</span>
+              <div class="area-card__icon"><img src="assets/uvery_icon.png" alt="" /></div>
+              <h3 class="area-card__title">Financování</h3>
+              <div class="area-card__sub">Úvěry</div>
+              <div class="area-card__divider" aria-hidden="true"></div>
+              <p class="area-card__text"><strong>Správně nastavený úvěr umožňuje dosáhnout cíle dříve</strong>, zatímco Vaše vlastní peníze dál pracují ve Váš prospěch. Cizí kapitál jako nástroj, ne jako zátěž.</p>
+            </article>
+          </div>
+
+          <aside class="areas-summary">
+            <div class="areas-summary__icon-wrap">
+              <img src="assets/kompas.png" alt="" class="areas-summary__icon" />
+            </div>
+            <p class="areas-summary__text">
+              Propojujeme tyto tři oblasti do jednoho celku, aby Vaše finance měly <strong class="areas-summary__highlight">směr, ochranu a&nbsp;sílu&nbsp;růst</strong>.
+            </p>
+          </aside>
+        </article>
+      </div>
+
+      <!-- Cycle -->
+      <div class="coop-cards coop-cards--cycle" id="pristup">
+        <article class="coop-card coop-card--wide coop-card--no-icon">
+          <div class="coop-card__left">
+            <div class="coop-card__head">
+              <h3 class="h3 coop-card__title">Kde jiní končí, my pokračujeme</h3>
+            </div>
+            <div class="coop-card__body">
+              <p>
+                U&nbsp;běžného poradenství spolupráce často začíná výběrem produktu a&nbsp;končí jeho sjednáním. <strong>Jenže bez následné péče se plán časem odpojí od&nbsp;reality.</strong>
+              </p>
+              <p>
+                Ve&nbsp;Finkli přidáváme krok, který celé spolupráci dává smysl: <strong>dlouhodobou péči a&nbsp;servis.</strong>
+              </p>
+            </div>
+          </div>
+
+          <div class="cycle-bento" aria-label="Cyklus spolupráce s klientem — 5 kroků">
+            <div class="cycle-bento__row">
+              <article class="cycle-bento__cell">
+                <div class="cycle-bento__num">1</div>
+                <img src="assets/analyza_icon.png" alt="" class="cycle-bento__icon" />
+                <h4 class="cycle-bento__title">Analýza</h4>
+                <p class="cycle-bento__text">Podíváme se na Vaši finanční situaci jako celek — příjmy, výdaje, závazky, cíle.</p>
+              </article>
+              <article class="cycle-bento__cell">
+                <div class="cycle-bento__num">2</div>
+                <img src="assets/plan_icon.png" alt="" class="cycle-bento__icon" />
+                <h4 class="cycle-bento__title">Plán</h4>
+                <p class="cycle-bento__text">Na základě analýzy vzniká mapa: co, proč a&nbsp;v&nbsp;jakém pořadí řešit.</p>
+              </article>
+              <article class="cycle-bento__cell">
+                <div class="cycle-bento__num">3</div>
+                <img src="assets/nastaveni_icon.png" alt="" class="cycle-bento__icon" />
+                <h4 class="cycle-bento__title">Výběr produktu</h4>
+                <p class="cycle-bento__text">Teprve teď přicházejí konkrétní produkty a&nbsp;nástroje — jako důsledek plánu.</p>
+              </article>
+              <article class="cycle-bento__cell">
+                <div class="cycle-bento__num">4</div>
+                <img src="assets/realizace_icon.png" alt="" class="cycle-bento__icon" />
+                <h4 class="cycle-bento__title">Realizace</h4>
+                <p class="cycle-bento__text">Vybraná řešení uvedeme do praxe. Postaráme se o&nbsp;veškerou administrativu za&nbsp;Vás.</p>
+              </article>
+            </div>
+
+            <article class="cycle-bento__cell cycle-bento__cell--accent">
+              <div class="cycle-bento__num">5</div>
+              <div class="cycle-bento__accent-header">
+                <h4 class="cycle-bento__title">Péče &amp;&nbsp;servis</h4>
+                <img src="assets/pece_icon.png" alt="" class="cycle-bento__icon" />
+              </div>
+              <p class="cycle-bento__text">Pravidelně kontrolujeme vývoj Vaší situace a&nbsp;upravujeme plán podle reality. Váš plán žije a&nbsp;přináší výsledky v&nbsp;čase.</p>
+              <p class="cycle-bento__loop"><span class="cycle-bento__loop-icon" aria-hidden="true">↻</span> Cyklus se uzavírá péčí a&nbsp;vrací se zpět k&nbsp;analýze</p>
+            </article>
+          </div>
+
+          <!-- mobile steps -->
+          <ol class="cycle-steps" aria-label="Cyklus spolupráce v 5 krocích">
+            <li class="cycle-steps__item">
+              <div class="cycle-steps__head"><span class="cycle-steps__num">1</span><img src="assets/analyza_icon.png" alt="" class="cycle-steps__icon" /></div>
+              <h4 class="cycle-steps__title">Analýza</h4>
+              <p class="cycle-steps__text">Podíváme se na Vaši finanční situaci jako celek.</p>
+            </li>
+            <li class="cycle-steps__connector" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 5l0 14"/><path d="M16 15l-4 4"/><path d="M8 15l4 4"/></svg></li>
+            <li class="cycle-steps__item">
+              <div class="cycle-steps__head"><span class="cycle-steps__num">2</span><img src="assets/plan_icon.png" alt="" class="cycle-steps__icon" /></div>
+              <h4 class="cycle-steps__title">Plán</h4>
+              <p class="cycle-steps__text">Na základě analýzy vzniká mapa: co, proč a v jakém pořadí řešit.</p>
+            </li>
+            <li class="cycle-steps__connector" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 5l0 14"/><path d="M16 15l-4 4"/><path d="M8 15l4 4"/></svg></li>
+            <li class="cycle-steps__item">
+              <div class="cycle-steps__head"><span class="cycle-steps__num">3</span><img src="assets/nastaveni_icon.png" alt="" class="cycle-steps__icon" /></div>
+              <h4 class="cycle-steps__title">Výběr produktu</h4>
+              <p class="cycle-steps__text">Teprve teď přicházejí konkrétní produkty a nástroje.</p>
+            </li>
+            <li class="cycle-steps__connector" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 5l0 14"/><path d="M16 15l-4 4"/><path d="M8 15l4 4"/></svg></li>
+            <li class="cycle-steps__item">
+              <div class="cycle-steps__head"><span class="cycle-steps__num">4</span><img src="assets/realizace_icon.png" alt="" class="cycle-steps__icon" /></div>
+              <h4 class="cycle-steps__title">Realizace</h4>
+              <p class="cycle-steps__text">Vybraná řešení uvedeme do praxe.</p>
+            </li>
+            <li class="cycle-steps__connector cycle-steps__connector--dashed" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 5l0 14"/><path d="M16 15l-4 4"/><path d="M8 15l4 4"/></svg></li>
+            <li class="cycle-steps__item cycle-steps__item--accent">
+              <div class="cycle-steps__head"><span class="cycle-steps__num">5</span><img src="assets/pece_icon.png" alt="" class="cycle-steps__icon" /></div>
+              <h4 class="cycle-steps__title">Péče &amp;&nbsp;servis</h4>
+              <p class="cycle-steps__text">Pravidelně kontrolujeme situaci a upravujeme plán. Váš plán žije.</p>
+            </li>
+            <li class="cycle-steps__connector cycle-steps__connector--dashed" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 5l0 14"/><path d="M16 15l-4 4"/><path d="M8 15l4 4"/></svg></li>
+            <li class="cycle-steps__loop"><span class="cycle-steps__loop-icon" aria-hidden="true">↻</span><span>Cyklus se uzavírá péčí a&nbsp;vrací k&nbsp;analýze</span></li>
+          </ol>
+        </article>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===== App section ===== -->
+  <section class="section section--myplann" id="aplikace">
+    <div class="container">
+      <div class="myplann">
+        <div class="myplann__copy">
+          <h2 class="h2 myplann__title">Vaše finance vždy po&nbsp;ruce</h2>
+          <p class="myplann__text">
+            Součástí spolupráce je i&nbsp;<strong>klientská aplikace, díky které máte své finance přehledně na&nbsp;jednom místě, kdykoliv a&nbsp;kdekoliv.</strong>
+          </p>
+          <p class="myplann__text">
+            Najdete v&nbsp;ní smlouvy, dokumenty i&nbsp;portfolio a&nbsp;<strong>komunikovat s&nbsp;námi bezpečně bez zbytečné administrativy.</strong>
+          </p>
+          <div class="myplann__cta">
+            <a class="btn btn--store btn--store-smart"
+               id="store-btn"
+               href="https://apps.apple.com/cz/app/myplann/id6443604108?l=cs"
+               data-url-apple="https://apps.apple.com/cz/app/myplann/id6443604108?l=cs"
+               data-url-android="https://play.google.com/store/apps/details?id=cz.sabservis.myplann&amp;hl=en_US"
+               target="_blank" rel="noopener noreferrer"
+               aria-label="Stáhnout myPLANN">
+              <svg class="btn__icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2"/>
+                <path d="M7 11l5 5l5 -5"/>
+                <path d="M12 4l0 12"/>
+              </svg>
+              <span class="store-btn__label">Stáhnout pro telefon</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="myplann__visual" aria-hidden="true">
+          <span class="myplann__disc"></span>
+          <img src="assets/finkli_baloon_icon.png" alt="" class="myplann__badge" />
+          <img src="assets/platformy-cestovni-pojisteni-27122025.webp" alt="" class="myplann__phone is-active" />
+          <img src="assets/myplann-produkt-detail-01-09122025.webp" alt="" class="myplann__phone" />
+          <img src="assets/myplann-produkt-detail-04-09122025.webp" alt="" class="myplann__phone" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Packages ===== -->
+  <section class="section section--packages" id="balicky">
+    <div class="container">
+
+      <div class="packages-head">
+        <h2 class="h2 packages-head__title">Placená servisní péče</h2>
+        <p class="packages-head__lead">
+          Protože spolupráce ve&nbsp;Finkli stojí na&nbsp;dlouhodobé péči, ne na&nbsp;jednorázovém prodeji, funguje formou měsíčních balíčků za&nbsp;servis, plánování a&nbsp;průběžnou podporu.
+        </p>
+        <p class="packages-head__lead">
+          <strong>Přímá platba odstraňuje tlak na&nbsp;prodej. Spolupráce je tak dlouhodobě udržitelná, transparentní a&nbsp;bez skrytých motivací.</strong>
+        </p>
+      </div>
+
+      <div class="packages">
+
+        <article class="package-card">
+          <header class="package-card__head">
+            <div class="package-card__title-row">
+              <h3 class="package-card__name">Finkli Silver</h3>
+              <img src="assets/finkli_silver_icon.png" alt="" class="package-card__brick" />
+            </div>
+            <div class="package-card__price">
+              <span class="package-card__amount">550&nbsp;Kč</span>
+              <span class="package-card__period">/&nbsp;měsíčně</span>
+            </div>
+          </header>
+          <ul class="package-card__items">
+            <li><span class="package-card__check" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 32 32" fill="none"><path class="pkg-check__seal" d="M16 2.4C17.46 2.4 18.5 3.62 19.76 4.03C21.09 4.47 22.65 4.05 23.71 4.86C24.78 5.68 24.86 7.3 25.68 8.42C26.49 9.53 28 10.1 28.32 11.45C28.64 12.77 27.73 14.1 27.73 15.5C27.73 16.9 28.64 18.23 28.32 19.55C28 20.9 26.49 21.47 25.68 22.58C24.86 23.7 24.78 25.32 23.71 26.14C22.65 26.95 21.09 26.53 19.76 26.97C18.5 27.38 17.46 28.6 16 28.6C14.54 28.6 13.5 27.38 12.24 26.97C10.91 26.53 9.35 26.95 8.29 26.14C7.22 25.32 7.14 23.7 6.32 22.58C5.51 21.47 4 20.9 3.68 19.55C3.36 18.23 4.27 16.9 4.27 15.5C4.27 14.1 3.36 12.77 3.68 11.45C4 10.1 5.51 9.53 6.32 8.42C7.14 7.3 7.22 5.68 8.29 4.86C9.35 4.05 10.91 4.47 12.24 4.03C13.5 3.62 14.54 2.4 16 2.4Z"/><path class="pkg-check__tick" d="M10.2 16.4L14.1 20.2L22 12.4"/></svg></span><span>Průběžné finanční plánování</span></li>
+            <li><span class="package-card__check" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 32 32" fill="none"><path class="pkg-check__seal" d="M16 2.4C17.46 2.4 18.5 3.62 19.76 4.03C21.09 4.47 22.65 4.05 23.71 4.86C24.78 5.68 24.86 7.3 25.68 8.42C26.49 9.53 28 10.1 28.32 11.45C28.64 12.77 27.73 14.1 27.73 15.5C27.73 16.9 28.64 18.23 28.32 19.55C28 20.9 26.49 21.47 25.68 22.58C24.86 23.7 24.78 25.32 23.71 26.14C22.65 26.95 21.09 26.53 19.76 26.97C18.5 27.38 17.46 28.6 16 28.6C14.54 28.6 13.5 27.38 12.24 26.97C10.91 26.53 9.35 26.95 8.29 26.14C7.22 25.32 7.14 23.7 6.32 22.58C5.51 21.47 4 20.9 3.68 19.55C3.36 18.23 4.27 16.9 4.27 15.5C4.27 14.1 3.36 12.77 3.68 11.45C4 10.1 5.51 9.53 6.32 8.42C7.14 7.3 7.22 5.68 8.29 4.86C9.35 4.05 10.91 4.47 12.24 4.03C13.5 3.62 14.54 2.4 16 2.4Z"/><path class="pkg-check__tick" d="M10.2 16.4L14.1 20.2L22 12.4"/></svg></span><span>Optimalizace výdajů domácnosti</span></li>
+            <li><span class="package-card__check" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 32 32" fill="none"><path class="pkg-check__seal" d="M16 2.4C17.46 2.4 18.5 3.62 19.76 4.03C21.09 4.47 22.65 4.05 23.71 4.86C24.78 5.68 24.86 7.3 25.68 8.42C26.49 9.53 28 10.1 28.32 11.45C28.64 12.77 27.73 14.1 27.73 15.5C27.73 16.9 28.64 18.23 28.32 19.55C28 20.9 26.49 21.47 25.68 22.58C24.86 23.7 24.78 25.32 23.71 26.14C22.65 26.95 21.09 26.53 19.76 26.97C18.5 27.38 17.46 28.6 16 28.6C14.54 28.6 13.5 27.38 12.24 26.97C10.91 26.53 9.35 26.95 8.29 26.14C7.22 25.32 7.14 23.7 6.32 22.58C5.51 21.47 4 20.9 3.68 19.55C3.36 18.23 4.27 16.9 4.27 15.5C4.27 14.1 3.36 12.77 3.68 11.45C4 10.1 5.51 9.53 6.32 8.42C7.14 7.3 7.22 5.68 8.29 4.86C9.35 4.05 10.91 4.47 12.24 4.03C13.5 3.62 14.54 2.4 16 2.4Z"/><path class="pkg-check__tick" d="M10.2 16.4L14.1 20.2L22 12.4"/></svg></span><span>Správa smluv v&nbsp;myPlann</span></li>
+          </ul>
+          <p class="package-card__desc"><strong>Pro klienty bez pojištění</strong> — asistenci s pojistnými událostmi přidáme, jakmile pojištění sjednáme.</p>
+        </article>
+
+        <article class="package-card package-card--featured">
+          <div class="package-card__badge">Nejoblíbenější</div>
+          <header class="package-card__head">
+            <div class="package-card__title-row">
+              <h3 class="package-card__name">Finkli Silver+</h3>
+              <img src="assets/finkli_silver+_icon.png" alt="" class="package-card__brick" />
+            </div>
+            <div class="package-card__price">
+              <span class="package-card__amount">550&nbsp;Kč</span>
+              <span class="package-card__period">/&nbsp;měsíčně</span>
+            </div>
+            <div class="package-card__price-extra">+&nbsp;149&nbsp;Kč / měsíc za Garanci EUCS</div>
+          </header>
+          <ul class="package-card__items">
+            <li class="is-inherited"><span class="package-card__check" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 32 32" fill="none"><path class="pkg-check__seal" d="M16 2.4C17.46 2.4 18.5 3.62 19.76 4.03C21.09 4.47 22.65 4.05 23.71 4.86C24.78 5.68 24.86 7.3 25.68 8.42C26.49 9.53 28 10.1 28.32 11.45C28.64 12.77 27.73 14.1 27.73 15.5C27.73 16.9 28.64 18.23 28.32 19.55C28 20.9 26.49 21.47 25.68 22.58C24.86 23.7 24.78 25.32 23.71 26.14C22.65 26.95 21.09 26.53 19.76 26.97C18.5 27.38 17.46 28.6 16 28.6C14.54 28.6 13.5 27.38 12.24 26.97C10.91 26.53 9.35 26.95 8.29 26.14C7.22 25.32 7.14 23.7 6.32 22.58C5.51 21.47 4 20.9 3.68 19.55C3.36 18.23 4.27 16.9 4.27 15.5C4.27 14.1 3.36 12.77 3.68 11.45C4 10.1 5.51 9.53 6.32 8.42C7.14 7.3 7.22 5.68 8.29 4.86C9.35 4.05 10.91 4.47 12.24 4.03C13.5 3.62 14.54 2.4 16 2.4Z"/><path class="pkg-check__tick" d="M10.2 16.4L14.1 20.2L22 12.4"/></svg></span><span>Průběžné finanční plánování</span></li>
+            <li class="is-inherited"><span class="package-card__check" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 32 32" fill="none"><path class="pkg-check__seal" d="M16 2.4C17.46 2.4 18.5 3.62 19.76 4.03C21.09 4.47 22.65 4.05 23.71 4.86C24.78 5.68 24.86 7.3 25.68 8.42C26.49 9.53 28 10.1 28.32 11.45C28.64 12.77 27.73 14.1 27.73 15.5C27.73 16.9 28.64 18.23 28.32 19.55C28 20.9 26.49 21.47 25.68 22.58C24.86 23.7 24.78 25.32 23.71 26.14C22.65 26.95 21.09 26.53 19.76 26.97C18.5 27.38 17.46 28.6 16 28.6C14.54 28.6 13.5 27.38 12.24 26.97C10.91 26.53 9.35 26.95 8.29 26.14C7.22 25.32 7.14 23.7 6.32 22.58C5.51 21.47 4 20.9 3.68 19.55C3.36 18.23 4.27 16.9 4.27 15.5C4.27 14.1 3.36 12.77 3.68 11.45C4 10.1 5.51 9.53 6.32 8.42C7.14 7.3 7.22 5.68 8.29 4.86C9.35 4.05 10.91 4.47 12.24 4.03C13.5 3.62 14.54 2.4 16 2.4Z"/><path class="pkg-check__tick" d="M10.2 16.4L14.1 20.2L22 12.4"/></svg></span><span>Optimalizace výdajů domácnosti</span></li>
+            <li class="is-inherited"><span class="package-card__check" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 32 32" fill="none"><path class="pkg-check__seal" d="M16 2.4C17.46 2.4 18.5 3.62 19.76 4.03C21.09 4.47 22.65 4.05 23.71 4.86C24.78 5.68 24.86 7.3 25.68 8.42C26.49 9.53 28 10.1 28.32 11.45C28.64 12.77 27.73 14.1 27.73 15.5C27.73 16.9 28.64 18.23 28.32 19.55C28 20.9 26.49 21.47 25.68 22.58C24.86 23.7 24.78 25.32 23.71 26.14C22.65 26.95 21.09 26.53 19.76 26.97C18.5 27.38 17.46 28.6 16 28.6C14.54 28.6 13.5 27.38 12.24 26.97C10.91 26.53 9.35 26.95 8.29 26.14C7.22 25.32 7.14 23.7 6.32 22.58C5.51 21.47 4 20.9 3.68 19.55C3.36 18.23 4.27 16.9 4.27 15.5C4.27 14.1 3.36 12.77 3.68 11.45C4 10.1 5.51 9.53 6.32 8.42C7.14 7.3 7.22 5.68 8.29 4.86C9.35 4.05 10.91 4.47 12.24 4.03C13.5 3.62 14.54 2.4 16 2.4Z"/><path class="pkg-check__tick" d="M10.2 16.4L14.1 20.2L22 12.4"/></svg></span><span>Správa smluv v&nbsp;myPlann</span></li>
+            <li><span class="package-card__check" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 32 32" fill="none"><path class="pkg-check__seal" d="M16 2.4C17.46 2.4 18.5 3.62 19.76 4.03C21.09 4.47 22.65 4.05 23.71 4.86C24.78 5.68 24.86 7.3 25.68 8.42C26.49 9.53 28 10.1 28.32 11.45C28.64 12.77 27.73 14.1 27.73 15.5C27.73 16.9 28.64 18.23 28.32 19.55C28 20.9 26.49 21.47 25.68 22.58C24.86 23.7 24.78 25.32 23.71 26.14C22.65 26.95 21.09 26.53 19.76 26.97C18.5 27.38 17.46 28.6 16 28.6C14.54 28.6 13.5 27.38 12.24 26.97C10.91 26.53 9.35 26.95 8.29 26.14C7.22 25.32 7.14 23.7 6.32 22.58C5.51 21.47 4 20.9 3.68 19.55C3.36 18.23 4.27 16.9 4.27 15.5C4.27 14.1 3.36 12.77 3.68 11.45C4 10.1 5.51 9.53 6.32 8.42C7.14 7.3 7.22 5.68 8.29 4.86C9.35 4.05 10.91 4.47 12.24 4.03C13.5 3.62 14.54 2.4 16 2.4Z"/><path class="pkg-check__tick" d="M10.2 16.4L14.1 20.2L22 12.4"/></svg></span><span>Asistence s&nbsp;pojistnými událostmi</span></li>
+            <li><span class="package-card__check" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 32 32" fill="none"><path class="pkg-check__seal" d="M16 2.4C17.46 2.4 18.5 3.62 19.76 4.03C21.09 4.47 22.65 4.05 23.71 4.86C24.78 5.68 24.86 7.3 25.68 8.42C26.49 9.53 28 10.1 28.32 11.45C28.64 12.77 27.73 14.1 27.73 15.5C27.73 16.9 28.64 18.23 28.32 19.55C28 20.9 26.49 21.47 25.68 22.58C24.86 23.7 24.78 25.32 23.71 26.14C22.65 26.95 21.09 26.53 19.76 26.97C18.5 27.38 17.46 28.6 16 28.6C14.54 28.6 13.5 27.38 12.24 26.97C10.91 26.53 9.35 26.95 8.29 26.14C7.22 25.32 7.14 23.7 6.32 22.58C5.51 21.47 4 20.9 3.68 19.55C3.36 18.23 4.27 16.9 4.27 15.5C4.27 14.1 3.36 12.77 3.68 11.45C4 10.1 5.51 9.53 6.32 8.42C7.14 7.3 7.22 5.68 8.29 4.86C9.35 4.05 10.91 4.47 12.24 4.03C13.5 3.62 14.54 2.4 16 2.4Z"/><path class="pkg-check__tick" d="M10.2 16.4L14.1 20.2L22 12.4"/></svg></span><span>Garance EUCS</span></li>
+          </ul>
+          <p class="package-card__desc"><strong>Pro klienty s&nbsp;pojištěním</strong> — kompletní servis včetně asistence s&nbsp;pojistnými událostmi zdarma.</p>
+        </article>
+
+        <article class="package-card">
+          <header class="package-card__head">
+            <div class="package-card__title-row">
+              <h3 class="package-card__name">Finkli Gold</h3>
+              <img src="assets/finkli_gold_icon.png" alt="" class="package-card__brick" />
+            </div>
+            <div class="package-card__price">
+              <span class="package-card__amount">990&nbsp;Kč</span>
+              <span class="package-card__period">/&nbsp;měsíčně</span>
+            </div>
+            <div class="package-card__price-extra">+&nbsp;149&nbsp;Kč / měsíc za Garanci EUCS</div>
+          </header>
+          <ul class="package-card__items">
+            <li class="is-inherited"><span class="package-card__check" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 32 32" fill="none"><path class="pkg-check__seal" d="M16 2.4C17.46 2.4 18.5 3.62 19.76 4.03C21.09 4.47 22.65 4.05 23.71 4.86C24.78 5.68 24.86 7.3 25.68 8.42C26.49 9.53 28 10.1 28.32 11.45C28.64 12.77 27.73 14.1 27.73 15.5C27.73 16.9 28.64 18.23 28.32 19.55C28 20.9 26.49 21.47 25.68 22.58C24.86 23.7 24.78 25.32 23.71 26.14C22.65 26.95 21.09 26.53 19.76 26.97C18.5 27.38 17.46 28.6 16 28.6C14.54 28.6 13.5 27.38 12.24 26.97C10.91 26.53 9.35 26.95 8.29 26.14C7.22 25.32 7.14 23.7 6.32 22.58C5.51 21.47 4 20.9 3.68 19.55C3.36 18.23 4.27 16.9 4.27 15.5C4.27 14.1 3.36 12.77 3.68 11.45C4 10.1 5.51 9.53 6.32 8.42C7.14 7.3 7.22 5.68 8.29 4.86C9.35 4.05 10.91 4.47 12.24 4.03C13.5 3.62 14.54 2.4 16 2.4Z"/><path class="pkg-check__tick" d="M10.2 16.4L14.1 20.2L22 12.4"/></svg></span><span>Průběžné finanční plánování</span></li>
+            <li class="is-inherited"><span class="package-card__check" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 32 32" fill="none"><path class="pkg-check__seal" d="M16 2.4C17.46 2.4 18.5 3.62 19.76 4.03C21.09 4.47 22.65 4.05 23.71 4.86C24.78 5.68 24.86 7.3 25.68 8.42C26.49 9.53 28 10.1 28.32 11.45C28.64 12.77 27.73 14.1 27.73 15.5C27.73 16.9 28.64 18.23 28.32 19.55C28 20.9 26.49 21.47 25.68 22.58C24.86 23.7 24.78 25.32 23.71 26.14C22.65 26.95 21.09 26.53 19.76 26.97C18.5 27.38 17.46 28.6 16 28.6C14.54 28.6 13.5 27.38 12.24 26.97C10.91 26.53 9.35 26.95 8.29 26.14C7.22 25.32 7.14 23.7 6.32 22.58C5.51 21.47 4 20.9 3.68 19.55C3.36 18.23 4.27 16.9 4.27 15.5C4.27 14.1 3.36 12.77 3.68 11.45C4 10.1 5.51 9.53 6.32 8.42C7.14 7.3 7.22 5.68 8.29 4.86C9.35 4.05 10.91 4.47 12.24 4.03C13.5 3.62 14.54 2.4 16 2.4Z"/><path class="pkg-check__tick" d="M10.2 16.4L14.1 20.2L22 12.4"/></svg></span><span>Optimalizace výdajů domácnosti</span></li>
+            <li class="is-inherited"><span class="package-card__check" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 32 32" fill="none"><path class="pkg-check__seal" d="M16 2.4C17.46 2.4 18.5 3.62 19.76 4.03C21.09 4.47 22.65 4.05 23.71 4.86C24.78 5.68 24.86 7.3 25.68 8.42C26.49 9.53 28 10.1 28.32 11.45C28.64 12.77 27.73 14.1 27.73 15.5C27.73 16.9 28.64 18.23 28.32 19.55C28 20.9 26.49 21.47 25.68 22.58C24.86 23.7 24.78 25.32 23.71 26.14C22.65 26.95 21.09 26.53 19.76 26.97C18.5 27.38 17.46 28.6 16 28.6C14.54 28.6 13.5 27.38 12.24 26.97C10.91 26.53 9.35 26.95 8.29 26.14C7.22 25.32 7.14 23.7 6.32 22.58C5.51 21.47 4 20.9 3.68 19.55C3.36 18.23 4.27 16.9 4.27 15.5C4.27 14.1 3.36 12.77 3.68 11.45C4 10.1 5.51 9.53 6.32 8.42C7.14 7.3 7.22 5.68 8.29 4.86C9.35 4.05 10.91 4.47 12.24 4.03C13.5 3.62 14.54 2.4 16 2.4Z"/><path class="pkg-check__tick" d="M10.2 16.4L14.1 20.2L22 12.4"/></svg></span><span>Správa smluv v&nbsp;myPlann</span></li>
+            <li class="is-inherited"><span class="package-card__check" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 32 32" fill="none"><path class="pkg-check__seal" d="M16 2.4C17.46 2.4 18.5 3.62 19.76 4.03C21.09 4.47 22.65 4.05 23.71 4.86C24.78 5.68 24.86 7.3 25.68 8.42C26.49 9.53 28 10.1 28.32 11.45C28.64 12.77 27.73 14.1 27.73 15.5C27.73 16.9 28.64 18.23 28.32 19.55C28 20.9 26.49 21.47 25.68 22.58C24.86 23.7 24.78 25.32 23.71 26.14C22.65 26.95 21.09 26.53 19.76 26.97C18.5 27.38 17.46 28.6 16 28.6C14.54 28.6 13.5 27.38 12.24 26.97C10.91 26.53 9.35 26.95 8.29 26.14C7.22 25.32 7.14 23.7 6.32 22.58C5.51 21.47 4 20.9 3.68 19.55C3.36 18.23 4.27 16.9 4.27 15.5C4.27 14.1 3.36 12.77 3.68 11.45C4 10.1 5.51 9.53 6.32 8.42C7.14 7.3 7.22 5.68 8.29 4.86C9.35 4.05 10.91 4.47 12.24 4.03C13.5 3.62 14.54 2.4 16 2.4Z"/><path class="pkg-check__tick" d="M10.2 16.4L14.1 20.2L22 12.4"/></svg></span><span>Asistence s&nbsp;pojistnými událostmi</span></li>
+            <li class="is-inherited"><span class="package-card__check" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 32 32" fill="none"><path class="pkg-check__seal" d="M16 2.4C17.46 2.4 18.5 3.62 19.76 4.03C21.09 4.47 22.65 4.05 23.71 4.86C24.78 5.68 24.86 7.3 25.68 8.42C26.49 9.53 28 10.1 28.32 11.45C28.64 12.77 27.73 14.1 27.73 15.5C27.73 16.9 28.64 18.23 28.32 19.55C28 20.9 26.49 21.47 25.68 22.58C24.86 23.7 24.78 25.32 23.71 26.14C22.65 26.95 21.09 26.53 19.76 26.97C18.5 27.38 17.46 28.6 16 28.6C14.54 28.6 13.5 27.38 12.24 26.97C10.91 26.53 9.35 26.95 8.29 26.14C7.22 25.32 7.14 23.7 6.32 22.58C5.51 21.47 4 20.9 3.68 19.55C3.36 18.23 4.27 16.9 4.27 15.5C4.27 14.1 3.36 12.77 3.68 11.45C4 10.1 5.51 9.53 6.32 8.42C7.14 7.3 7.22 5.68 8.29 4.86C9.35 4.05 10.91 4.47 12.24 4.03C13.5 3.62 14.54 2.4 16 2.4Z"/><path class="pkg-check__tick" d="M10.2 16.4L14.1 20.2L22 12.4"/></svg></span><span>Garance EUCS</span></li>
+            <li><span class="package-card__check" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 32 32" fill="none"><path class="pkg-check__seal" d="M16 2.4C17.46 2.4 18.5 3.62 19.76 4.03C21.09 4.47 22.65 4.05 23.71 4.86C24.78 5.68 24.86 7.3 25.68 8.42C26.49 9.53 28 10.1 28.32 11.45C28.64 12.77 27.73 14.1 27.73 15.5C27.73 16.9 28.64 18.23 28.32 19.55C28 20.9 26.49 21.47 25.68 22.58C24.86 23.7 24.78 25.32 23.71 26.14C22.65 26.95 21.09 26.53 19.76 26.97C18.5 27.38 17.46 28.6 16 28.6C14.54 28.6 13.5 27.38 12.24 26.97C10.91 26.53 9.35 26.95 8.29 26.14C7.22 25.32 7.14 23.7 6.32 22.58C5.51 21.47 4 20.9 3.68 19.55C3.36 18.23 4.27 16.9 4.27 15.5C4.27 14.1 3.36 12.77 3.68 11.45C4 10.1 5.51 9.53 6.32 8.42C7.14 7.3 7.22 5.68 8.29 4.86C9.35 4.05 10.91 4.47 12.24 4.03C13.5 3.62 14.54 2.4 16 2.4Z"/><path class="pkg-check__tick" d="M10.2 16.4L14.1 20.2L22 12.4"/></svg></span><span>Hlídání termínů a&nbsp;povinností</span></li>
+            <li><span class="package-card__check" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 32 32" fill="none"><path class="pkg-check__seal" d="M16 2.4C17.46 2.4 18.5 3.62 19.76 4.03C21.09 4.47 22.65 4.05 23.71 4.86C24.78 5.68 24.86 7.3 25.68 8.42C26.49 9.53 28 10.1 28.32 11.45C28.64 12.77 27.73 14.1 27.73 15.5C27.73 16.9 28.64 18.23 28.32 19.55C28 20.9 26.49 21.47 25.68 22.58C24.86 23.7 24.78 25.32 23.71 26.14C22.65 26.95 21.09 26.53 19.76 26.97C18.5 27.38 17.46 28.6 16 28.6C14.54 28.6 13.5 27.38 12.24 26.97C10.91 26.53 9.35 26.95 8.29 26.14C7.22 25.32 7.14 23.7 6.32 22.58C5.51 21.47 4 20.9 3.68 19.55C3.36 18.23 4.27 16.9 4.27 15.5C4.27 14.1 3.36 12.77 3.68 11.45C4 10.1 5.51 9.53 6.32 8.42C7.14 7.3 7.22 5.68 8.29 4.86C9.35 4.05 10.91 4.47 12.24 4.03C13.5 3.62 14.54 2.4 16 2.4Z"/><path class="pkg-check__tick" d="M10.2 16.4L14.1 20.2L22 12.4"/></svg></span><span>Poradce na&nbsp;telefonu</span></li>
+          </ul>
+          <p class="package-card__desc"><strong>Pro klienty, kteří chtějí mít vše vyřešené</strong> — včetně garantovaného přístupu k&nbsp;poradci.</p>
+        </article>
+
+      </div>
+
+      <div class="packages-cta">
+        <p class="packages-cta__label">Líbí se Vám náš koncept spolupráce?</p>
+        <p class="packages-cta__sub">Připravíme Vám ukázkový finanční plán zdarma. Žádný závazek, jen konkrétní představa.</p>
+        <a href="#kontakt-form" class="btn btn--primary">Chci zkusit plán zdarma</a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===== Team — redesigned ===== -->
+  <section class="section team-section" id="kontakt">
+    <div class="container">
+
+      <div class="team-section__head">
+        <h2 class="h2 section__title team-section__title" id="lide">Kdo se o&nbsp;Vás ve&nbsp;Finkli postará</h2>
+        <p class="team-section__lead">
+          Za Finkli stojí konkrétní lidé. Nejdřív se podíváme na&nbsp;širší souvislosti, Vaše cíle a&nbsp;aktuální nastavení — až potom společně hledáme cestu, která dává smysl.
+        </p>
+      </div>
+
+      <div class="team-grid">
+
+        <article class="team-card">
+          <div class="team-card__photo-wrap">
+            <img src="assets/finkli_profilovka_jarda.jpg" alt="Jaroslav Nedvěd — partner ve Finkli" class="team-card__photo" />
+            <div class="team-card__photo-strip" aria-hidden="true"></div>
+          </div>
+          <div class="team-card__body">
+            <span class="team-card__role">Finanční poradce · EFA</span>
+            <h3 class="team-card__name">Jaroslav Nedvěd</h3>
+            <ul class="team-card__links">
+              <li><a href="mailto:jaroslav.nedved@finkli.cz" class="team-card__link">jaroslav.nedved@finkli.cz</a></li>
+              <li><a href="tel:+420739237615" class="team-card__link">+420&nbsp;739&nbsp;237&nbsp;615</a></li>
+            </ul>
+            <a href="mailto:jaroslav.nedved@finkli.cz?subject=Nez%C3%A1vazn%C3%A1%20konzultace%20ve%20Finkli" class="team-card__cta">
+              Domluvit schůzku
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </a>
+          </div>
+        </article>
+
+        <article class="team-card">
+          <div class="team-card__photo-wrap">
+            <img src="assets/finkli_profilovka_matej.jpg" alt="Matěj Krejčík — partner ve Finkli" class="team-card__photo" />
+            <div class="team-card__photo-strip" aria-hidden="true"></div>
+          </div>
+          <div class="team-card__body">
+            <span class="team-card__role">Finanční poradce</span>
+            <h3 class="team-card__name">Matěj Krejčík</h3>
+            <ul class="team-card__links">
+              <li><a href="mailto:matej.krejcik@finkli.cz" class="team-card__link">matej.krejcik@finkli.cz</a></li>
+              <li><a href="tel:+420777193373" class="team-card__link">+420&nbsp;777&nbsp;193&nbsp;373</a></li>
+            </ul>
+            <a href="mailto:matej.krejcik@finkli.cz?subject=Nez%C3%A1vazn%C3%A1%20konzultace%20ve%20Finkli" class="team-card__cta">
+              Domluvit schůzku
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </a>
+          </div>
+        </article>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===== Testimonials — redesigned ===== -->
+  <section class="testimonials-v2 section" id="reference">
+    <div class="container">
+
+      <div class="testimonials-v2__head">
+        <h2 class="h2 testimonials-v2__title">Klienti o&nbsp;nás říkají</h2>
+        <p class="testimonials-v2__lead">Nejlépe nás popíší lidé, se kterými spolupracujeme.</p>
+      </div>
+
+      <div class="testimonials-v2__grid">
+
+        <figure class="testimonial-v2">
+          <div class="testimonial-v2__stars">
+            <svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 1l1.9 3.8L14 5.4l-3 2.9.7 4.1L8 10.3l-3.7 2.1.7-4.1L2 5.4l4.1-.6L8 1z"/></svg>
+            <svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 1l1.9 3.8L14 5.4l-3 2.9.7 4.1L8 10.3l-3.7 2.1.7-4.1L2 5.4l4.1-.6L8 1z"/></svg>
+            <svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 1l1.9 3.8L14 5.4l-3 2.9.7 4.1L8 10.3l-3.7 2.1.7-4.1L2 5.4l4.1-.6L8 1z"/></svg>
+            <svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 1l1.9 3.8L14 5.4l-3 2.9.7 4.1L8 10.3l-3.7 2.1.7-4.1L2 5.4l4.1-.6L8 1z"/></svg>
+            <svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 1l1.9 3.8L14 5.4l-3 2.9.7 4.1L8 10.3l-3.7 2.1.7-4.1L2 5.4l4.1-.6L8 1z"/></svg>
+          </div>
+          <blockquote class="testimonial-v2__text">Po dlouhé době mám klidné spaní. Vím, že se nemusím tolik bát budoucnosti, protože mám plán. Zjistila jsem že i z mála se dá postupně něco vybudovat a naučila jsem se co a jak funguje. Matěj mi se vším pomohl, do ničeho mě nenutil, vše mi v klidu vysvětlil.</blockquote>
+          <figcaption class="testimonial-v2__footer">
+            <div class="testimonial-v2__avatar">K</div>
+            <div>
+              <span class="testimonial-v2__name">Kamila, 28 let</span>
+              <span class="testimonial-v2__from">Královéhradecký kraj</span>
+            </div>
+          </figcaption>
+        </figure>
+
+        <figure class="testimonial-v2 testimonial-v2--wide">
+          <div class="testimonial-v2__stars">
+            <svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 1l1.9 3.8L14 5.4l-3 2.9.7 4.1L8 10.3l-3.7 2.1.7-4.1L2 5.4l4.1-.6L8 1z"/></svg>
+            <svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 1l1.9 3.8L14 5.4l-3 2.9.7 4.1L8 10.3l-3.7 2.1.7-4.1L2 5.4l4.1-.6L8 1z"/></svg>
+            <svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 1l1.9 3.8L14 5.4l-3 2.9.7 4.1L8 10.3l-3.7 2.1.7-4.1L2 5.4l4.1-.6L8 1z"/></svg>
+            <svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 1l1.9 3.8L14 5.4l-3 2.9.7 4.1L8 10.3l-3.7 2.1.7-4.1L2 5.4l4.1-.6L8 1z"/></svg>
+            <svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 1l1.9 3.8L14 5.4l-3 2.9.7 4.1L8 10.3l-3.7 2.1.7-4.1L2 5.4l4.1-.6L8 1z"/></svg>
+          </div>
+          <blockquote class="testimonial-v2__text">Spolupráce s finanční klinikou mi přinesla něco, co je pro mě velmi cenné — klid a jistotu. Vždy jsem chtěla mít své finance nastavené tak, aby mi dávaly smysl nejen dnes, ale i do budoucna. Díky profesionální péči a lidskému přístupu Matěje vím, že jsou v dobrých rukou. Pokud hledáte partnera, kterému můžete své finance s důvěrou svěřit, mohu finanční kliniku upřímně doporučit.</blockquote>
+          <figcaption class="testimonial-v2__footer">
+            <div class="testimonial-v2__avatar">N</div>
+            <div>
+              <span class="testimonial-v2__name">Nikola, 32 let</span>
+              <span class="testimonial-v2__from">Praha</span>
+            </div>
+          </figcaption>
+        </figure>
+
+        <figure class="testimonial-v2 testimonial-v2--wide">
+          <div class="testimonial-v2__stars">
+            <svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 1l1.9 3.8L14 5.4l-3 2.9.7 4.1L8 10.3l-3.7 2.1.7-4.1L2 5.4l4.1-.6L8 1z"/></svg>
+            <svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 1l1.9 3.8L14 5.4l-3 2.9.7 4.1L8 10.3l-3.7 2.1.7-4.1L2 5.4l4.1-.6L8 1z"/></svg>
+            <svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 1l1.9 3.8L14 5.4l-3 2.9.7 4.1L8 10.3l-3.7 2.1.7-4.1L2 5.4l4.1-.6L8 1z"/></svg>
+            <svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 1l1.9 3.8L14 5.4l-3 2.9.7 4.1L8 10.3l-3.7 2.1.7-4.1L2 5.4l4.1-.6L8 1z"/></svg>
+            <svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 1l1.9 3.8L14 5.4l-3 2.9.7 4.1L8 10.3l-3.7 2.1.7-4.1L2 5.4l4.1-.6L8 1z"/></svg>
+          </div>
+          <blockquote class="testimonial-v2__text">S Matějem jsem za 2,5 roku stihla mnohem více než za 5 let předchozí bezcílné dřiny. Bez něj a veškeré pomoci, rad a znalostí, které mi dal a do teď dává, bych teď slepě čekala a vyšla vstříc maximálně nejistotě. Za několik let si s ním podám ruku a budu mu vděčná za realitu, která byla ještě pár let zpět pouze zbožným přáním.</blockquote>
+          <figcaption class="testimonial-v2__footer">
+            <div class="testimonial-v2__avatar">N</div>
+            <div>
+              <span class="testimonial-v2__name">Nikola, 28 let</span>
+              <span class="testimonial-v2__from">Praha</span>
+            </div>
+          </figcaption>
+        </figure>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===== Contact form ===== -->
+  <section class="section section--contact-form" id="kontakt-form">
+    <div class="container">
+      <article class="contact-form-card">
+        <div class="contact-form-card__layout" data-card-layout>
+
+          <header class="contact-form-card__head">
+            <h2 class="h2 contact-form-card__title">Pojďme se spojit</h2>
+            <p class="contact-form-card__text">
+              Chcete si udělat jasno ve&nbsp;financích nebo se jen nezávazně zeptat, jak by spolupráce mohla vypadat? Napište nám pár slov.
+            </p>
+            <p class="contact-form-card__text">
+              Společně se podíváme na&nbsp;to, co právě řešíte a&nbsp;jaký další krok může dávat smysl.
+            </p>
+
+            <label class="contact-form__field contact-form-card__subject">
+              <span class="contact-form__label">Předmět</span>
+              <select name="predmet" form="contact-form" class="contact-form__select" id="contact-subject">
+                <option value="Kontakt z webu">Kontakt z webu</option>
+                <option value="Plán zdarma">Plán zdarma</option>
+                <option value="Sjednání garance EUCS">Sjednání garance EUCS</option>
+              </select>
+            </label>
+
+            <img src="assets/handshake.png" alt="" class="contact-form-card__handshake" aria-hidden="true" />
+          </header>
+
+          <form class="contact-form" id="contact-form" novalidate>
+            <div class="contact-form__fields">
+              <label class="contact-form__field">
+                <span class="contact-form__label">Jméno</span>
+                <input type="text" name="name" required autocomplete="name" placeholder="Vaše jméno" />
+              </label>
+              <label class="contact-form__field">
+                <span class="contact-form__label">E-mail</span>
+                <input type="email" name="email" required autocomplete="email" placeholder="vas@email.cz" />
+              </label>
+              <label class="contact-form__field">
+                <span class="contact-form__label">Telefon&nbsp;<span class="contact-form__optional">(nepovinné)</span></span>
+                <input type="tel" name="phone" autocomplete="tel" placeholder="+420…" />
+              </label>
+              <label class="contact-form__field">
+                <span class="contact-form__label">Vaše zpráva</span>
+                <textarea name="message" rows="4" required placeholder="O&nbsp;čem si chcete promluvit?"></textarea>
+              </label>
+              <input type="checkbox" name="botcheck" style="display:none" tabindex="-1" autocomplete="off" aria-hidden="true" />
+              <button type="submit" class="btn btn--primary contact-form__submit">Odeslat</button>
+              <p class="contact-form__error" data-error hidden></p>
+              <p class="form-gdpr-note">Odesláním souhlasíte se zpracováním osobních údajů dle našich <a href="gdpr.html" target="_blank" class="form-gdpr-note__link">Zásad ochrany osobních údajů</a>.</p>
+            </div>
+          </form>
+
+        </div>
+
+        <div class="contact-form-card__thanks" data-card-thanks hidden>
+          <div class="contact-form__seal" aria-hidden="true">
+            <svg width="80" height="80" viewBox="0 0 80 80" fill="none">
+              <path d="M40 6C43.65 6 46.25 9.05 49.4 10.08C52.73 11.18 56.63 10.13 59.28 12.15C61.95 14.2 62.15 18.25 64.2 21.05C66.23 23.83 70 25.25 70.8 28.63C71.6 31.93 69.33 35.25 69.33 38.75C69.33 42.25 71.6 45.58 70.8 48.88C70 52.25 66.23 53.68 64.2 56.45C62.15 59.25 61.95 63.3 59.28 65.35C56.63 67.38 52.73 66.33 49.4 67.43C46.25 68.45 43.65 71.5 40 71.5C36.35 71.5 33.75 68.45 30.6 67.43C27.28 66.33 23.38 67.38 20.73 65.35C18.05 63.3 17.85 59.25 15.8 56.45C13.78 53.68 10 52.25 9.2 48.88C8.4 45.58 10.68 42.25 10.68 38.75C10.68 35.25 8.4 31.93 9.2 28.63C10 25.25 13.78 23.83 15.8 21.05C17.85 18.25 18.05 14.2 20.73 12.15C23.38 10.13 27.28 11.18 30.6 10.08C33.75 9.05 36.35 6 40 6Z" fill="#03D98C"/>
+              <path d="M25.5 41L35.25 50.5L55 31.5" stroke="#0B2E34" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <h3 class="contact-form__thanks-title">Děkujeme, zpráva je na&nbsp;cestě k&nbsp;nám.</h3>
+          <p class="contact-form__thanks-sub">Ozveme se Vám co&nbsp;nejdříve, zpravidla během následujícího pracovního dne.</p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ===== FAQ ===== -->
+  <section class="section section--faq" id="faq">
+    <div class="container">
+      <div class="section__head">
+        <h2 class="h2 section__title">Časté dotazy</h2>
+        <p class="lead">Otázky, které od&nbsp;Vás dostáváme nejčastěji.</p>
+      </div>
+
+      <div class="faq-list">
+
+        <details class="faq-item">
+          <summary class="faq-item__summary">
+            <span class="faq-item__question">Mohu Vaše služby využít i&nbsp;bez komplexní správy a&nbsp;bez balíčku?</span>
+            <span class="faq-item__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          </summary>
+          <div class="faq-item__answer">
+            <p>Ano, můžete. Pokud potřebujete pomoci s&nbsp;jednou konkrétní situací, rádi to&nbsp;vyřešíme i&nbsp;jednorázově. Otevřeně ale říkáme, že&nbsp;<strong>největší smysl dává komplexní správa a&nbsp;dlouhodobá spolupráce</strong>.</p>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary class="faq-item__summary">
+            <span class="faq-item__question">Jak často se&nbsp;budeme scházet na&nbsp;aktualizaci finančního plánu?</span>
+            <span class="faq-item__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          </summary>
+          <div class="faq-item__answer">
+            <p>Finanční plán standardně aktualizujeme <strong>jednou ročně</strong>. Jsme Vám ale k&nbsp;dispozici po&nbsp;celý rok — pokud nastane výraznější změna, projdeme plán i&nbsp;mimo tento termín.</p>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary class="faq-item__summary">
+            <span class="faq-item__question">Proč mají Finkli Silver a&nbsp;Finkli Silver+ stejnou cenu?</span>
+            <span class="faq-item__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          </summary>
+          <div class="faq-item__answer">
+            <p>Rozdíl je ve&nbsp;dvou službách: <strong>Garanci EUCS</strong> a&nbsp;<strong>Asistenci s&nbsp;nahlášením pojistných událostí</strong>. Asistenci dostáváte v Silver+ zdarma od&nbsp;nás, proto je cena balíčku stejná. Garance EUCS (149 Kč/měs.) jde přímo společnosti EUCS — cenu jsme záměrně oddělili, abyste viděli, za&nbsp;co a&nbsp;komu platíte.</p>
+          </div>
+        </details>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Footer ===== -->
+  <footer class="site-footer" id="site-footer">
+    <div class="container">
+      <div class="site-footer__grid">
+
+        <div class="site-footer__col site-footer__col--brand">
+          <a href="#" class="site-footer__brand" aria-label="Finkli — domů">
+            <img src="assets/finkli_logo_dark.svg" alt="Finkli" class="site-footer__logo" />
+          </a>
+          <p class="site-footer__claim">
+            Na finance se díváme jako na dlouhodobý proces, ne jednorázové rozhodnutí.
+          </p>
+          <p class="site-footer__copy"><a href="gdpr.html" class="site-footer__fp-link">Zásady zpracování osobních údajů</a></p>
+          <p class="site-footer__copy">© 2026 Finkli. Všechna práva vyhrazena.</p>
+        </div>
+
+        <nav class="site-footer__col" aria-label="Mapa webu">
+          <h4 class="site-footer__heading">Mapa webu</h4>
+          <ul class="site-footer__list">
+            <li><a href="#onas" class="site-footer__link">Přístup</a></li>
+            <li><a href="#balicky" class="site-footer__link">Balíčky</a></li>
+            <li><a href="#aplikace" class="site-footer__link">Aplikace</a></li>
+            <li><a href="#lide" class="site-footer__link">Lidé</a></li>
+            <li><a href="#reference" class="site-footer__link">Reference</a></li>
+            <li><a href="#faq" class="site-footer__link">FAQ</a></li>
+            <li><a href="#kontakt-form" class="site-footer__link">Kontakt</a></li>
+          </ul>
+        </nav>
+
+        <div class="site-footer__col">
+          <h4 class="site-footer__heading">Kontakty</h4>
+          <ul class="site-footer__list">
+            <li><a href="mailto:info@finkli.cz" class="site-footer__link">info@finkli.cz</a></li>
+            <li><a href="tel:+420739237615" class="site-footer__link">+420&nbsp;739&nbsp;237&nbsp;615</a></li>
+            <li><a href="#" class="site-footer__link" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
+            <li><a href="#" class="site-footer__link" target="_blank" rel="noopener noreferrer">Instagram</a></li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="footer-legal">
+      <div class="container">
+        <p class="footer-legal__text">
+          <strong>Finkli Strategy s.r.o.</strong>, IČO: 24397679, sídlo: Spojná 721, 273 02 Tuchlovice.
+          Finanční služby zde propagované a nabízené poskytujeme jako společnost Finkli Strategy s.r.o. prostřednictvím našich finančních poradců uvedených na tomto webu, a to v roli vázaného zástupce pro investičního/samostatného zprostředkovatele SAB servis s.r.o., IČ: 24704008, se sídlem Jungmannova 748/30, 110 00 Praha 1.
+          Naše oprávnění je možné ověřit na <a href="http://www.cnb.cz/cnb/jerrs" target="_blank" rel="noopener noreferrer" class="footer-legal__link">cnb.cz/cnb/jerrs</a>.
+          Detailní právní informace najdete na <a href="https://sabservis.cz/informace" target="_blank" rel="noopener noreferrer" class="footer-legal__link">sabservis.cz/informace</a>.
+        </p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js" defer></script>
+</body>
+</html>

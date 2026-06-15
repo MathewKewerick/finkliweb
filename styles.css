@@ -136,7 +136,7 @@ h1, h2, h3, p { margin: 0; }
 /* ---------- Typography scale (mobile-first, clamp scales up) ---------- */
 .h1 {
   font-size: clamp(38px, 7.5vw, 64px);
-  line-height: 1.02;
+  line-height: 1.13;
   letter-spacing: -0.035em;
   font-weight: 600;
   color: var(--brand-dark);
@@ -500,10 +500,9 @@ strong { font-weight: 600; }
 .hero {
   position: relative;
   overflow: hidden;
-  padding: 100px 0 44px;
-  min-height: 100svh;
-  display: flex;
-  align-items: center;
+  padding: 0;
+  min-height: auto;
+  display: block;
 }
 
 /* .hero__bg — no longer needed (body's drifting backdrop unifies all sections).
@@ -524,8 +523,9 @@ strong { font-weight: 600; }
   position: absolute;
   pointer-events: none;
   user-select: none;
-  display: block;
+  display: none;
   width: auto;
+  z-index: 1;
   /* Mobile defaults — F-tvar vykukuje zprava jako brand motiv na pozadí.
      Pozice a opacity nastavené tak, aby byl viditelný ale nerušil text. */
   height: 52vh;
@@ -572,14 +572,81 @@ strong { font-weight: 600; }
 .hero__inner {
   position: relative;
   width: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
-.hero__copy {
-  max-width: 720px;
+.hero__fold {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.hero__content {
+  display: grid;
+  grid-template-columns: 1fr 0.8fr;
+  column-gap: 48px;
+  row-gap: 0;
+  align-items: start;
+}
+
+/* Desktop: copy = row 1 col 1, image = col 2 span rows 1+2, actions = row 2 col 1 */
+.hero__copy        { grid-column: 1; grid-row: 1; padding: 18vh 0 0; }
+.hero__image-wrap  { grid-column: 2; grid-row: 1 / span 2; }
+.hero__actions     { grid-column: 1; grid-row: 2; padding-bottom: 40px; }
+
+.hero__image-wrap {
+  border-radius: 20px;
+  overflow: hidden;
+  transition: transform var(--hover-duration) var(--ease),
+              box-shadow var(--hover-duration) var(--ease);
+  cursor: pointer;
+  box-shadow: 0 8px 32px rgba(11, 46, 52, 0.08);
+  position: relative;
+  z-index: 2;
+  height: clamp(320px, 45vh, 500px);
+  align-self: center;
+  margin-top: 110px; /* ← upravit: kladné = dolů, záporné = nahoru */
+}
+
+.hero__image-wrap:hover {
+  transform: scale(var(--hover-scale));
+  box-shadow: 0 16px 48px rgba(11, 46, 52, 0.14);
+}
+
+.hero__image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero__image-wrap { transition: box-shadow var(--hover-duration) var(--ease); }
+  .hero__image-wrap:hover { transform: none; }
+}
+
+@media (max-width: 767px) {
+  /* Mobile: flex column — přirozené pořadí HTML: nadpis → sub → fotka → CTA */
+  .hero__content {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+  /* Reset desktop grid placement */
+  .hero__copy       { grid-column: unset; grid-row: unset; padding: 0; }
+  .hero__image-wrap { grid-column: unset; grid-row: unset; margin-top: 24px; height: auto; aspect-ratio: 4 / 3; max-height: none; }
+  .hero__actions    { grid-column: unset; grid-row: unset; padding-bottom: 0; margin-top: 24px; width: 100%; }
 }
 
 .hero__title {
   margin-bottom: 20px;
+}
+
+@media (max-width: 559px) {
+  .hero-br { display: none; }
 }
 
 .hero__sub {
@@ -601,30 +668,119 @@ strong { font-weight: 600; }
   gap: 10px;
 }
 
-@media (min-width: 560px) {
+@media (min-width: 768px) {
   .hero__actions {
     grid-template-columns: auto auto;
     justify-content: flex-start;
     gap: 12px;
+    margin-top: 4px;
+  }
+}
+
+/* ----- Trust bar ----- */
+.hero__trust {
+  width: 100%;
+  margin-top: clamp(32px, 6vh, 64px);
+  padding: 32px 0;
+}
+
+.hero__trust-inner {
+  display: flex;
+  align-items: flex-start;
+  gap: 48px;
+}
+
+.hero__trust-divider {
+  display: none;
+}
+
+.hero__trust-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.hero__trust-number-wrap {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  line-height: 1;
+}
+
+.hero__trust-number {
+  font-size: clamp(28px, 3.8vw, 42px);
+  font-weight: 600;
+  color: var(--brand-green);
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+
+.hero__trust-number--infinity {
+  font-size: clamp(32px, 4.2vw, 48px);
+}
+
+.hero__trust-number--dark {
+  color: var(--brand-dark);
+}
+
+.hero__trust-suffix {
+  font-size: clamp(20px, 2.6vw, 30px);
+  font-weight: 600;
+  color: var(--brand-green);
+  letter-spacing: -0.02em;
+  align-self: center;
+}
+
+.hero__trust-suffix--dark {
+  color: var(--brand-dark);
+}
+
+.hero__trust-label {
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--text-muted);
+  margin: 0;
+  max-width: 320px;
+}
+
+
+@media (max-width: 639px) {
+  .hero__trust {
+    margin-top: 16px;
+    padding: 32px 0;
+    margin-bottom: 24px;
+  }
+  .hero__trust-inner {
+    flex-direction: column;
+    gap: 28px;
+    align-items: center;
+  }
+  .hero__trust-item {
+    align-items: center;
+    text-align: center;
+  }
+  .hero__trust-number-wrap {
+    justify-content: center;
+  }
+  .hero__trust-label {
+    max-width: none;
   }
 }
 
 /* ----- In-hero situations block ("hook") ----- */
 .hero__situations {
-  /* Comfortable air between CTAs above and the situations title below.
-     Not so much that the section feels disconnected, but enough to clearly
-     mark a new beat. */
-  margin-top: 56px;
+  margin-top: 0;
   position: relative;
   z-index: 2; /* above hero deco */
 }
 
 @media (min-width: 768px) {
-  .hero__situations { margin-top: 72px; }
+  .hero__situations { margin-top: 80px; }
 }
 
 @media (min-width: 1024px) {
-  .hero__situations { margin-top: 84px; }
+  .hero__situations { margin-top: 100px; }
 }
 
 .hero__situations-title {
@@ -1093,53 +1249,36 @@ strong { font-weight: 600; }
    První viewport (100svh) obsahuje POUZE nadpis + subhead + 2 CTAs, vystředěné
    přirozeně. Diagnostika (chips) začne až pod foldem — uživatel musí scrollovat,
    ale na otevření vidí klidnou hero kompozici místo natlačené stěny obsahu. */
-@media (max-width: 559px) {
-  .hero {
-    /* Reset desktop centering — na mobilu řídí layout .hero__copy a .hero__situations */
-    padding: 0;
-    min-height: auto;
-    display: block;
-    align-items: stretch;
-  }
-
-  .hero__inner {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-  }
-
-  .hero__copy {
-    /* First viewport block — nadpis + subhead + 2 CTAs vystředěné svisle.
-       Min-height 100svh = na otevření vidíš přesně tento blok a nic víc.
-       Padding-top dělá vzduch od headeru (header je ~52px + 14px floating). */
-    min-height: 100svh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding: 96px 0 32px;
-  }
-
-  .hero__situations {
-    /* Diagnostika začne pod foldem; menší top margin než desktop, protože
-       už je oddělená přirozeným zlomem viewportu. */
-    margin-top: 32px;
-    padding-bottom: 32px;
-  }
-
+@media (max-width: 767px) {
   .hero__actions .btn {
     width: 100%;
     min-height: 52px;
   }
+
+  .hero__actions {
+    margin-bottom: 8px;
+  }
 }
 
-/* Tablet/desktop: balanced vertical rhythm — airy but compact enough
-   that the whole hero (claim, CTAs, situations title, hint, 3 chip rows)
-   still fits inside a single 100vh viewport */
+@media (max-width: 559px) {
+  .hero__copy {
+    padding: 18vh 0 0;
+  }
+
+  .hero__situations {
+    margin-top: 16px;
+    padding-bottom: 40px;
+  }
+}
+
+/* Tablet/desktop: situations sekce začíná pod foldem, hero copy vyplňuje 100svh */
 @media (min-width: 560px) {
-  .hero { padding: 112px 0 28px; }
+  .hero__copy { padding: 18vh 0 60px; }
+  .hero__situations { padding-bottom: 80px; }
 }
 @media (min-width: 1024px) {
-  .hero { padding: 124px 0 100px; }
+  .hero__copy { padding: 20vh 0 60px; }
+  .hero__situations { padding-bottom: 120px; }
 }
 
 /* ==========================================================================
@@ -1610,11 +1749,11 @@ strong { font-weight: 600; }
 }
 
 @media (min-width: 600px) {
-  .coop-pillars { grid-template-columns: repeat(3, 1fr); gap: 24px; }
+  .coop-pillars { grid-template-columns: repeat(3, 1fr); gap: 32px; }
 }
 
 @media (min-width: 1024px) {
-  .coop-pillars { gap: 32px; margin-top: 48px; }
+  .coop-pillars { gap: 48px; margin-top: 48px; }
 }
 
 .coop-pillar {
@@ -1952,6 +2091,13 @@ strong { font-weight: 600; }
    (handled by .areas-summary margin-top, matched to .areas grid gap).
    Section rhythm to the cycle block below lives on .areas-summary instead. */
 .section--coop .areas { margin-bottom: 0; }
+
+@media (min-width: 768px) {
+  .section--coop { padding-top: 80px; }
+}
+@media (min-width: 1024px) {
+  .section--coop { padding-top: 96px; }
+}
 
 /* ----- Cycle: intro head — left-aligned to match the rest of the page ----- */
 .cycle-head {
@@ -5380,7 +5526,6 @@ strong { font-weight: 600; }
   font-size: 15.5px;
   line-height: 1.7;
   color: var(--text-base);
-  font-style: italic;
   /* line-clamp — max ~10 řádků (JS detekuje přetečení a přidá "Přečíst celou recenzi") */
   display: -webkit-box;
   -webkit-line-clamp: 10;
@@ -5390,10 +5535,33 @@ strong { font-weight: 600; }
 
 .testimonial-card__author {
   display: flex;
-  flex-direction: column;
-  gap: 3px;
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
   padding-top: 16px;
   border-top: 1px solid var(--border-soft);
+}
+
+.testimonial-card__avatar {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--bg-mint-tint);
+  color: var(--brand-dark);
+  font-size: 16px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  user-select: none;
+}
+
+.testimonial-card__author-text {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
 }
 
 .testimonial-card__name {
@@ -5408,13 +5576,15 @@ strong { font-weight: 600; }
 }
 
 @media (max-width: 639px) {
-  .testimonial-card__quote p,
-  .testimonial-card__name,
-  .testimonial-card__role {
+  .testimonial-card__quote p {
     text-align: center;
   }
   .testimonial-card__author {
-    align-items: center;
+    justify-content: center;
+  }
+  .testimonial-card__name,
+  .testimonial-card__role {
+    text-align: left;
   }
 }
 

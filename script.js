@@ -847,6 +847,46 @@ const WEB3FORMS = {
   /* Inicializace — FAQ */
   initShareTray('shareBtnFaq', 'shareTrayFaq', 'shareWaFaq', 'shareFbFaq', 'shareEmailFaq', 'shareCopyFaq', 'shareCopyLabelFaq');
 
+  // ----- Trust bar: count-up animace -----
+  (function initTrustCountUp() {
+    var nums = document.querySelectorAll('.hero__trust-number[data-target]');
+    if (!nums.length) return;
+
+    var duration = 1400; // ms
+    var ease = function(t) { return 1 - Math.pow(1 - t, 3); }; // cubic ease-out
+
+    function animateNum(el) {
+      var target = parseInt(el.getAttribute('data-target'), 10);
+      var start = performance.now();
+      function step(now) {
+        var t = Math.min((now - start) / duration, 1);
+        el.textContent = Math.round(ease(t) * target);
+        if (t < 1) requestAnimationFrame(step);
+        else el.textContent = target;
+      }
+      requestAnimationFrame(step);
+    }
+
+    var observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          animateNum(entry.target);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.5 });
+
+    nums.forEach(function(el) { observer.observe(el); });
+  })();
+
+  // ----- Testimonials: avatar initials (automaticky z prvního písmene jména) -----
+  document.querySelectorAll('.testimonial-card__avatar').forEach(function (avatar) {
+    var nameEl = avatar.closest('.testimonial-card__author').querySelector('.testimonial-card__name');
+    if (!nameEl) return;
+    var firstLetter = nameEl.textContent.trim().charAt(0).toUpperCase();
+    avatar.textContent = firstLetter;
+  });
+
   // ----- Testimonials: line-clamp detekce + modal -----
   (function initTestimonialModal() {
     // Sestavíme modal DOM jednou (sdílený pro všechny karty)
