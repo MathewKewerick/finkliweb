@@ -1179,36 +1179,52 @@ const WEB3FORMS = {
     });
   })();
 
-  // ----- Předmět kontaktního formuláře — předvyplnění podle origine -----
+  // ----- Předmět + zpráva kontaktního formuláře — předvyplnění podle origine -----
   (function initContactSubject() {
     const select = document.getElementById('contact-subject');
     if (!select) return;
+
+    const MSG_EUCS = 'Dobrý den, líbí se mi služba Garance EUCS a chtěl bych se o ni dozvědět více, případně ji sjednat.';
+    const MSG_PLAN = 'Dobrý den, měl bych zájem o finanční plán zdarma na ukázku.';
 
     function setSubject(value) {
       select.value = value || 'Kontakt z webu';
     }
 
+    function setMessage(text) {
+      const textarea = document.querySelector('#contact-form [name="message"]');
+      if (!textarea) return;
+      textarea.value = text;
+    }
+
     // EUCS button → Sjednání garance EUCS
     document.querySelectorAll('.btn--eucs-report').forEach(function (btn) {
-      btn.addEventListener('click', function () { setSubject('Sjednání garance EUCS'); });
+      btn.addEventListener('click', function () {
+        setSubject('Sjednání garance EUCS');
+        setMessage(MSG_EUCS);
+      });
     });
 
     // Packages CTA "Plán zdarma" (line in #balicky) + sticky widget btn → Plán zdarma
-    // Identifikujeme je podle href="#kontakt-form" a přítomnosti třídy btn--primary
-    // mimo hlavní nav (kde je jen obecné "Kontakt")
     var planSelectors = [
       '#balicky a.btn--primary[href="#kontakt-form"]',
       '.cta-widget__btn',
     ];
     planSelectors.forEach(function (sel) {
       document.querySelectorAll(sel).forEach(function (btn) {
-        btn.addEventListener('click', function () { setSubject('Plán zdarma'); });
+        btn.addEventListener('click', function () {
+          setSubject('Plán zdarma');
+          setMessage(MSG_PLAN);
+        });
       });
     });
 
     // Dynamicky přidaný widget se vytvoří až po tomto kódu — použijeme delegaci na body
     document.body.addEventListener('click', function (e) {
-      if (e.target.closest('.cta-widget__btn')) { setSubject('Plán zdarma'); }
+      if (e.target.closest('.cta-widget__btn')) {
+        setSubject('Plán zdarma');
+        setMessage(MSG_PLAN);
+      }
     });
   })();
 
@@ -1225,7 +1241,7 @@ const WEB3FORMS = {
       '<button class="cta-widget__minimize" aria-label="Minimalizovat">−</button>' +
       '<div class="cta-widget__body">' +
         '<p class="cta-widget__title">Líbí se Vám náš koncept spolupráce?</p>' +
-        '<p class="cta-widget__sub">Připravíme Vám ukázkový finanční plán zdarma. Žádný závazek, jen konkrétní představa.</p>' +
+        '<p class="cta-widget__sub">Připravíme Vám ukázkový finanční plán zdarma na ukázku, pro větší představu, jak to celé vypadá. ☺️🙏🏼</p>' +
         '<a href="#kontakt-form" class="btn btn--primary cta-widget__btn">Chci zkusit plán zdarma</a>' +
       '</div>' +
       '<span class="cta-widget__pill">Plán zdarma <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12l14 0"/><path d="M15 16l4 -4"/><path d="M15 8l4 4"/></svg></span>';
