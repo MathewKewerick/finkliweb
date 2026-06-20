@@ -2957,9 +2957,9 @@ strong { font-weight: 600; }
   .package-card__brick { height: 68px; }
 }
 
-/* Tiny coordinated movement on card hover — the brick "tilts forward" */
+/* Coordinated scale on card hover — shodný pattern s area-card__icon */
 .package-card:hover .package-card__brick {
-  transform: scale(1.06) rotate(-2deg);
+  transform: scale(1.06) rotate(-3deg);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -3215,11 +3215,11 @@ strong { font-weight: 600; }
   font-size: 0.85em;
   line-height: 1;
   display: inline-block;
-  transition: transform var(--hover-duration) var(--ease);
+  transition: transform 0.38s cubic-bezier(0.4, 0, 0.4, 1);
 }
 
 .family-note:hover .family-note__heart {
-  transform: scale(1.15);
+  transform: scale(1.06);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -3252,11 +3252,12 @@ strong { font-weight: 600; }
   height: auto;
   display: block;
   align-self: flex-start;
+  will-change: transform;
   transition: transform var(--hover-duration) var(--ease);
 }
 
 .family-note:hover .family-note__icon {
-  transform: scale(1.04);
+  transform: scale(1.06);
 }
 
 @media (max-width: 559px) {
@@ -3380,11 +3381,12 @@ strong { font-weight: 600; }
   display: block;
   align-self: flex-start;
   filter: drop-shadow(0 12px 24px rgba(3, 217, 140, 0.20));
+  will-change: transform;
   transition: transform var(--hover-duration) var(--ease);
 }
 
 .eucs-note:hover .eucs-note__icon {
-  transform: scale(1.05);
+  transform: scale(1.06);
 }
 
 @media (max-width: 559px) {
@@ -4150,8 +4152,8 @@ strong { font-weight: 600; }
   width: 200px;
   height: auto;
   object-fit: contain;
+  will-change: transform;
   transition: transform var(--hover-duration) var(--ease);
-  transform-origin: center bottom;
 }
 
 .contact-form-card:hover .contact-form-card__handshake {
@@ -5973,5 +5975,79 @@ strong { font-weight: 600; }
 @media (prefers-reduced-motion: reduce) {
   .share-tray { transition: opacity 0.15s; }
   .share-tray__item:hover { transform: none; }
+}
+
+/* ==========================================================================
+   Section reveal — fade + rise on scroll
+   ========================================================================== */
+.section.will-animate {
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity 0.7s var(--ease), transform 0.7s var(--ease);
+}
+.section.will-animate.is-revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+@media (prefers-reduced-motion: reduce) {
+  .section.will-animate {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+
+/* ==========================================================================
+   Scroll-to-top tlačítko
+   ========================================================================== */
+.scroll-to-top {
+  position: fixed;
+  bottom: 28px;
+  left: 24px;
+  z-index: 890;
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(20px) saturate(140%);
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
+  border: 1px solid var(--border-soft);
+  box-shadow: 0 4px 18px rgba(11, 46, 52, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--brand-dark);
+  opacity: 0;
+  transform: translateY(12px) scale(0.94);
+  pointer-events: none;
+  transition:
+    opacity 0.32s var(--ease),
+    transform 0.32s var(--ease),
+    background 0.2s var(--ease);
+}
+.scroll-to-top.is-visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+.scroll-to-top:hover {
+  background: rgba(255, 255, 255, 0.95);
+  transform: scale(var(--hover-scale));
+}
+
+/* ==========================================================================
+   Lazy image fade-in
+   ========================================================================== */
+img[loading="lazy"] {
+  opacity: 0;
+  transition: opacity 0.45s ease, transform var(--hover-duration) var(--ease);
+}
+img[loading="lazy"].is-loaded {
+  opacity: 1;
+}
+@media (prefers-reduced-motion: reduce) {
+  img[loading="lazy"] { opacity: 1; transition: none; }
 }
 
