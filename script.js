@@ -844,8 +844,6 @@ const WEB3FORMS = {
 
   /* Inicializace — family note */
   initShareTray('shareBtn', 'shareTray', 'shareWa', 'shareFb', 'shareEmail', 'shareCopy', 'shareCopyLabel');
-  /* Inicializace — FAQ */
-  initShareTray('shareBtnFaq', 'shareTrayFaq', 'shareWaFaq', 'shareFbFaq', 'shareEmailFaq', 'shareCopyFaq', 'shareCopyLabelFaq');
 
   // ----- Trust bar: count-up animace -----
   (function initTrustCountUp() {
