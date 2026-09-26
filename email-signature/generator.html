@@ -141,6 +141,7 @@
     .preview-mail--dark .finkli-sig__position { color: rgba(244, 255, 249, 0.68) !important; }
     .preview-mail--dark .finkli-sig__link { color: #F4FFF9 !important; }
     .preview-mail--dark .finkli-sig__link--brand { color: #03D98C !important; }
+    .preview-mail--dark .finkli-sig__divider { border-top-color: rgba(255, 255, 255, 0.1) !important; }
     .preview-mail--dark .finkli-sig__logo-dark { display: none !important; }
     .preview-mail--dark .finkli-sig__logo-light { display: block !important; }
 
@@ -205,7 +206,7 @@
       </div>
       <div class="sig-editor__field sig-editor__field--full">
         <label class="sig-editor__label" for="in-position">Pozice</label>
-        <input class="sig-editor__input" id="in-position" type="text" value="Osobní poradce">
+        <input class="sig-editor__input" id="in-position" type="text" value="Osobní finanční poradce">
       </div>
       <div class="sig-editor__field">
         <label class="sig-editor__label" for="in-phone">Telefon</label>
@@ -247,13 +248,13 @@
             <img class="finkli-sig__photo"
                  src="https://finkli.vercel.app/assets/finkli_profilovka_matej.jpg"
                  width="100" height="120" alt="Matěj Krejčík"
-                 style="display:block; width:100px; height:120px; border-radius:16px; object-fit:cover; object-position:center 20%; border:0; outline:none; text-decoration:none; -ms-interpolation-mode:bicubic;">
+                 style="display:block; width:100px; height:120px; border-radius:16px; object-fit:cover; object-position:center 20%; border:1px solid rgba(255,255,255,0.14); outline:none; text-decoration:none; -ms-interpolation-mode:bicubic;">
           </td>
           <td valign="top" style="padding:2px 0 0 0; vertical-align:top; font-family:'Google Sans Flex','Helvetica Neue',Helvetica,Arial,sans-serif;">
             <div class="finkli-sig__name"
                  style="font-family:'Google Sans Flex','Helvetica Neue',Helvetica,Arial,sans-serif; font-size:18px; font-weight:600; color:#0B2E34; line-height:1.2; letter-spacing:-0.01em;">Matěj Krejčík</div>
             <div class="finkli-sig__position"
-                 style="font-family:'Google Sans Flex','Helvetica Neue',Helvetica,Arial,sans-serif; font-size:13px; font-weight:400; color:#4D6A6F; line-height:1.5; margin-top:3px;">Osobní poradce</div>
+                 style="font-family:'Google Sans Flex','Helvetica Neue',Helvetica,Arial,sans-serif; font-size:13px; font-weight:400; color:#4D6A6F; line-height:1.5; margin-top:3px;">Osobní finanční poradce</div>
             <table cellpadding="0" cellspacing="0" border="0" role="presentation"
                    style="border-collapse:collapse; font-family:'Google Sans Flex','Helvetica Neue',Helvetica,Arial,sans-serif; font-size:13px; color:#0B2E34; line-height:1.7; margin-top:12px;">
               <tr><td>
@@ -269,17 +270,22 @@
                    style="color:#03D98C; text-decoration:none; font-weight:500; font-family:'Google Sans Flex','Helvetica Neue',Helvetica,Arial,sans-serif;">finkli.cz</a>
               </td></tr>
             </table>
-            <a class="finkli-sig__logo-link" href="https://finkli.vercel.app"
-               style="display:inline-block; text-decoration:none; border:0; margin-top:16px;">
-              <img class="finkli-sig__logo-dark"
-                   src="https://finkli.vercel.app/assets/finkli_logo_dark.svg"
-                   height="22" alt="Finkli"
-                   style="display:block; height:22px; width:auto; border:0; outline:none; text-decoration:none;">
-              <img class="finkli-sig__logo-light"
-                   src="https://finkli.vercel.app/assets/finkli_logo_light.svg"
-                   height="22" alt="Finkli"
-                   style="display:none; height:22px; width:auto; border:0; outline:none; text-decoration:none;">
-            </a>
+            <table cellpadding="0" cellspacing="0" border="0" role="presentation" class="finkli-sig__divider"
+                   style="border-collapse:collapse; margin-top:13px; border-top:1px solid rgba(11,46,52,0.08);">
+              <tr><td style="font-size:0; line-height:0; padding-top:17px;">
+                <a class="finkli-sig__logo-link" href="https://finkli.vercel.app"
+                   style="display:inline-block; text-decoration:none; border:0;">
+                  <img class="finkli-sig__logo-dark"
+                       src="https://finkli.vercel.app/assets/finkli_logo_dark.svg"
+                       height="26" alt="Finkli"
+                       style="display:block; height:26px; width:auto; border:0; outline:none; text-decoration:none;">
+                  <img class="finkli-sig__logo-light"
+                       src="https://finkli.vercel.app/assets/finkli_logo_light.svg"
+                       height="26" alt="Finkli"
+                       style="display:none; height:26px; width:auto; border:0; outline:none; text-decoration:none;">
+                </a>
+              </td></tr>
+            </table>
           </td>
         </tr>
       </table>
@@ -306,13 +312,13 @@
             <img class="finkli-sig__photo"
                  src="https://finkli.vercel.app/assets/finkli_profilovka_matej.jpg"
                  width="100" height="120" alt="Matěj Krejčík"
-                 style="display:block; width:100px; height:120px; border-radius:16px; object-fit:cover; object-position:center 20%; border:0; outline:none; text-decoration:none;">
+                 style="display:block; width:100px; height:120px; border-radius:16px; object-fit:cover; object-position:center 20%; border:1px solid rgba(255,255,255,0.14); outline:none; text-decoration:none;">
           </td>
           <td valign="top" style="padding:2px 0 0 0; vertical-align:top;">
             <div class="finkli-sig__name"
                  style="font-family:'Google Sans Flex','Helvetica Neue',Helvetica,Arial,sans-serif; font-size:18px; font-weight:600; color:#0B2E34; line-height:1.2; letter-spacing:-0.01em;">Matěj Krejčík</div>
             <div class="finkli-sig__position"
-                 style="font-family:'Google Sans Flex','Helvetica Neue',Helvetica,Arial,sans-serif; font-size:13px; font-weight:400; color:#4D6A6F; line-height:1.5; margin-top:3px;">Osobní poradce</div>
+                 style="font-family:'Google Sans Flex','Helvetica Neue',Helvetica,Arial,sans-serif; font-size:13px; font-weight:400; color:#4D6A6F; line-height:1.5; margin-top:3px;">Osobní finanční poradce</div>
             <table cellpadding="0" cellspacing="0" border="0" role="presentation"
                    style="border-collapse:collapse; font-family:'Google Sans Flex','Helvetica Neue',Helvetica,Arial,sans-serif; font-size:13px; line-height:1.7; margin-top:12px;">
               <tr><td>
@@ -328,17 +334,22 @@
                    style="color:#03D98C; text-decoration:none; font-weight:500; font-family:'Google Sans Flex','Helvetica Neue',Helvetica,Arial,sans-serif;">finkli.cz</a>
               </td></tr>
             </table>
-            <a class="finkli-sig__logo-link" href="https://finkli.vercel.app"
-               style="display:inline-block; text-decoration:none; border:0; margin-top:16px;">
-              <img class="finkli-sig__logo-dark"
-                   src="https://finkli.vercel.app/assets/finkli_logo_dark.svg"
-                   height="22" alt="Finkli"
-                   style="display:block; height:22px; width:auto; border:0;">
-              <img class="finkli-sig__logo-light"
-                   src="https://finkli.vercel.app/assets/finkli_logo_light.svg"
-                   height="22" alt="Finkli"
-                   style="display:none; height:22px; width:auto; border:0;">
-            </a>
+            <table cellpadding="0" cellspacing="0" border="0" role="presentation" class="finkli-sig__divider"
+                   style="border-collapse:collapse; margin-top:13px; border-top:1px solid rgba(11,46,52,0.08);">
+              <tr><td style="font-size:0; line-height:0; padding-top:17px;">
+                <a class="finkli-sig__logo-link" href="https://finkli.vercel.app"
+                   style="display:inline-block; text-decoration:none; border:0;">
+                  <img class="finkli-sig__logo-dark"
+                       src="https://finkli.vercel.app/assets/finkli_logo_dark.svg"
+                       height="26" alt="Finkli"
+                       style="display:block; height:26px; width:auto; border:0;">
+                  <img class="finkli-sig__logo-light"
+                       src="https://finkli.vercel.app/assets/finkli_logo_light.svg"
+                       height="26" alt="Finkli"
+                       style="display:none; height:26px; width:auto; border:0;">
+                </a>
+              </td></tr>
+            </table>
           </td>
         </tr>
       </table>
@@ -372,7 +383,7 @@
   const DEFAULTS = {
     firstname: 'Matěj',
     lastname:  'Krejčík',
-    position:  'Osobní poradce',
+    position:  'Osobní finanční poradce',
     phone:     '+420 777 193 373',
     email:     'matej.krejcik@finkli.cz',
     photo:     'https://finkli.vercel.app/assets/finkli_profilovka_matej.jpg',
@@ -468,19 +479,21 @@
     .finkli-sig .finkli-sig__position { color: rgba(244,255,249,0.68) !important; }
     .finkli-sig .finkli-sig__link { color: #F4FFF9 !important; }
     .finkli-sig .finkli-sig__link--brand { color: #03D98C !important; }
+    .finkli-sig .finkli-sig__divider { border-top-color: rgba(255,255,255,0.1) !important; }
     .finkli-sig .finkli-sig__logo-dark { display: none !important; }
     .finkli-sig .finkli-sig__logo-light { display: block !important; }
   }
   [data-ogsc] .finkli-sig .finkli-sig__name { color: #F4FFF9 !important; }
   [data-ogsc] .finkli-sig .finkli-sig__position { color: rgba(244,255,249,0.68) !important; }
   [data-ogsc] .finkli-sig .finkli-sig__link { color: #F4FFF9 !important; }
+  [data-ogsc] .finkli-sig .finkli-sig__divider { border-top-color: rgba(255,255,255,0.1) !important; }
   [data-ogsc] .finkli-sig .finkli-sig__logo-dark { display: none !important; }
   [data-ogsc] .finkli-sig .finkli-sig__logo-light { display: block !important; }
 </style>
 <table class="finkli-sig" cellpadding="0" cellspacing="0" border="0" role="presentation" style="border-collapse:collapse; font-family:'Google Sans Flex','Helvetica Neue',Helvetica,Arial,sans-serif; color:#0B2E34;">
   <tr>
     <td valign="top" style="padding:0 22px 0 0; vertical-align:top;">
-      <img class="finkli-sig__photo" src="${photoA}" width="100" height="120" alt="${nameA}" style="display:block; width:100px; height:120px; border-radius:16px; object-fit:cover; object-position:center 20%; border:0; outline:none; text-decoration:none;">
+      <img class="finkli-sig__photo" src="${photoA}" width="100" height="120" alt="${nameA}" style="display:block; width:100px; height:120px; border-radius:16px; object-fit:cover; object-position:center 20%; border:1px solid rgba(255,255,255,0.14); outline:none; text-decoration:none;">
     </td>
     <td valign="top" style="padding:2px 0 0 0; vertical-align:top;">
       <div class="finkli-sig__name" style="font-family:'Google Sans Flex','Helvetica Neue',Helvetica,Arial,sans-serif; font-size:18px; font-weight:600; color:#0B2E34; line-height:1.2; letter-spacing:-0.01em;">${escapeText(name)}</div>
@@ -490,10 +503,14 @@
         <tr><td><a class="finkli-sig__link finkli-sig__link--email" href="${mhA}" style="color:#0B2E34; text-decoration:none; font-family:'Google Sans Flex','Helvetica Neue',Helvetica,Arial,sans-serif;">${emailT}</a></td></tr>
         <tr><td><a class="finkli-sig__link finkli-sig__link--brand" href="${weburlA}" style="color:#03D98C; text-decoration:none; font-weight:500; font-family:'Google Sans Flex','Helvetica Neue',Helvetica,Arial,sans-serif;">finkli.cz</a></td></tr>
       </table>
-      <a class="finkli-sig__logo-link" href="${weburlA}" style="display:inline-block; text-decoration:none; border:0; margin-top:16px;">
-        <img class="finkli-sig__logo-dark" src="${LOGO_DARK}" height="22" alt="Finkli" style="display:block; height:22px; width:auto; border:0;">
-        <img class="finkli-sig__logo-light" src="${LOGO_LIGHT}" height="22" alt="Finkli" style="display:none; height:22px; width:auto; border:0;">
-      </a>
+      <table cellpadding="0" cellspacing="0" border="0" role="presentation" class="finkli-sig__divider" style="border-collapse:collapse; margin-top:13px; border-top:1px solid rgba(11,46,52,0.08);">
+        <tr><td style="font-size:0; line-height:0; padding-top:17px;">
+          <a class="finkli-sig__logo-link" href="${weburlA}" style="display:inline-block; text-decoration:none; border:0;">
+            <img class="finkli-sig__logo-dark" src="${LOGO_DARK}" height="26" alt="Finkli" style="display:block; height:26px; width:auto; border:0;">
+            <img class="finkli-sig__logo-light" src="${LOGO_LIGHT}" height="26" alt="Finkli" style="display:none; height:26px; width:auto; border:0;">
+          </a>
+        </td></tr>
+      </table>
     </td>
   </tr>
 </table>`;

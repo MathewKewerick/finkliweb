@@ -22,6 +22,7 @@ const WEB3FORMS = {
   const menu = document.getElementById('mobile-menu');
   const closeBtn = document.querySelector('.mobile-menu__close');
   const heroDeco = document.querySelector('.hero__deco');
+  const heroVisual = document.querySelector('.hero__visual');
 
   // Respect user's reduced-motion preference
   const prefersReducedMotion =
@@ -43,6 +44,12 @@ const WEB3FORMS = {
     // Only apply while hero is still influencing layout
     if (heroDeco && !prefersReducedMotion && y < 1200) {
       heroDeco.style.setProperty('--parallax-y', `${y * 0.18}px`);
+    }
+
+    // Hero visual (finklihero graphic) parallax — even more subtle, just a
+    // gentle drift so the graphic feels alive without distracting from copy.
+    if (heroVisual && !prefersReducedMotion && y < 1200) {
+      heroVisual.style.setProperty('--parallax-y', `${y * 0.04}px`);
     }
 
     ticking = false;
@@ -84,6 +91,19 @@ const WEB3FORMS = {
       a.addEventListener('click', closeMenu);
     });
   }
+
+  // ----- Mobile "O nás" submenu toggle (accordion) -----
+  // Tap na šipku vedle "O nás" rozbalí/schová 3 pilíře, tap na samotný text
+  // "O nás" pořád normálně naviguje (a mobile menu se zavře jako u ostatních
+  // odkazů — closeMenu níže se váže jen na <a>, ne na toto tlačítko).
+  document.querySelectorAll('.mobile-menu__nav-toggle').forEach((toggle) => {
+    toggle.addEventListener('click', () => {
+      const submenu = document.getElementById(toggle.getAttribute('aria-controls'));
+      const isOpen = toggle.getAttribute('aria-expanded') === 'true';
+      toggle.setAttribute('aria-expanded', String(!isOpen));
+      if (submenu) submenu.classList.toggle('is-open', !isOpen);
+    });
+  });
 
   // Close on Esc
   document.addEventListener('keydown', (e) => {
@@ -742,40 +762,7 @@ const WEB3FORMS = {
   })();
   */
 
-  // ----- Bento cycle pulse (tablet/desktop only) -----
-  // Loop badge (krok 5) pulzuje každých 4,5 s — pevný interval, hover neruší.
-  // 1 s po badge pulzuje i karta 1 (Analýza) — vizuálně potvrzuje uzavření cyklu.
-  (function initBentoPulse() {
-    if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
-    if (prefersReducedMotion) return;
-
-    const badge = document.querySelector('.cycle-bento__loop');
-    const anal  = document.querySelector('.cycle-bento__row .cycle-bento__cell:first-child');
-    if (!badge || !anal) return;
-
-    const PULSE_MS = 680;   // délka pulzu (shodná s chipy)
-    const DELAY_MS = 1500;  // prodleva mezi badge a kartou Analýzy
-    const INTERVAL = 4500;  // pevný interval mezi cykly
-
-    function pulse() {
-      badge.classList.add('cycle-bento__loop--pulse');
-      setTimeout(() => badge.classList.remove('cycle-bento__loop--pulse'), PULSE_MS);
-
-      setTimeout(() => {
-        anal.classList.add('cycle-bento__cell--pulse');
-        setTimeout(() => anal.classList.remove('cycle-bento__cell--pulse'), PULSE_MS);
-      }, DELAY_MS);
-    }
-
-    // První pulz po 3 s, interval startuje AŽ po něm — jinak by setInterval
-    // tikal od spuštění a druhý pulz přišel za 1,5 s místo 4,5 s.
-    setTimeout(() => {
-      pulse();
-      setInterval(pulse, INTERVAL);
-    }, 3000);
-  })();
-
-  /* ---- Share tray (Poslat dál) — sdílená inicializační funkce ---- */
+/* ---- Share tray (Poslat dál) — sdílená inicializační funkce ---- */
   function initShareTray(btnId, trayId, waId, fbId, emailId, copyId, copyLabelId) {
     const btn  = document.getElementById(btnId);
     const tray = document.getElementById(trayId);
@@ -941,54 +928,84 @@ const WEB3FORMS = {
 
     closeBtn.addEventListener('click', closeModal);
 
-    // Pro každou testimonial kartu: zjistíme, zda text přeteče přes line-clamp
+    // Pro každou testimonial kartu: zjistíme, zda text přeteče přes line-clamp.
+    // Přetečení se může se změnou šířky okna (mobil ↔ desktop) měnit, proto se
+    // kontrola opakuje i při resize — odkaz "Přečíst celou recenzi" se má
+    // zobrazit jen tam, kde se recenze opravdu nevejde.
     document.querySelectorAll('.testimonial-card').forEach(function (card) {
       const p = card.querySelector('.testimonial-card__quote p');
       if (!p) return;
 
-      // Počkáme na vykreslení layoutu, pak porovnáme výšky
-      requestAnimationFrame(function () {
-        if (p.scrollHeight <= p.clientHeight + 2) return; // Nepřetéká — link nepotřebujeme
+      const quote = card.querySelector('.testimonial-card__quote');
+      const fullText = p.textContent;
+      const name = (card.querySelector('.testimonial-card__name') || {}).textContent || '';
+      const role = (card.querySelector('.testimonial-card__role') || {}).textContent || '';
+      let btn = null;
 
-        var fullText = p.textContent;
-        var name = (card.querySelector('.testimonial-card__name') || {}).textContent || '';
-        var role = (card.querySelector('.testimonial-card__role') || {}).textContent || '';
+      function setExpandable(isExpandable) {
+        if (card._isExpandable === isExpandable) return; // beze změny
+        card._isExpandable = isExpandable;
 
-        var btn = document.createElement('button');
-        btn.className   = 'testimonial-read-more';
-        btn.textContent = 'Přečíst celou recenzi →';
-        btn.setAttribute('tabindex', '-1'); // fokus přebírá karta, ne button samotný
-        btn.setAttribute('aria-hidden', 'true');
+        if (isExpandable) {
+          if (!btn) {
+            btn = document.createElement('button');
+            btn.className   = 'testimonial-read-more';
+            btn.textContent = 'Přečíst celou recenzi →';
+            btn.setAttribute('tabindex', '-1'); // fokus přebírá karta, ne button samotný
+            btn.setAttribute('aria-hidden', 'true');
 
-        // Klik na tlačítko — stopPropagation, aby se nespustil i card listener
-        btn.addEventListener('click', function (e) {
-          e.stopPropagation();
-          openModal(fullText, name, role, card);
-        });
+            // Klik na tlačítko — stopPropagation, aby se nespustil i card listener
+            btn.addEventListener('click', function (e) {
+              e.stopPropagation();
+              openModal(fullText, name, role, card);
+            });
 
-        // Klik kdekoliv na kartě otevře modal
-        card.classList.add('is-expandable');
-        card.addEventListener('click', function () {
-          openModal(fullText, name, role, card);
-        });
-        // Klávesnice: Enter / Space na kartě
-        card.setAttribute('role', 'button');
-        card.setAttribute('tabindex', '0');
-        card.setAttribute('aria-label', 'Přečíst celou recenzi — ' + name);
-        card.addEventListener('keydown', function (e) {
-          if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
-            openModal(fullText, name, role, card);
+            // Vložíme odkaz za <blockquote>, před <figcaption>
+            if (quote && quote.nextSibling) {
+              card.insertBefore(btn, quote.nextSibling);
+            } else {
+              card.appendChild(btn);
+            }
           }
-        });
-
-        // Vložíme odkaz za <blockquote>, před <figcaption>
-        var quote = card.querySelector('.testimonial-card__quote');
-        if (quote && quote.nextSibling) {
-          card.insertBefore(btn, quote.nextSibling);
+          btn.style.display = '';
+          card.classList.add('is-expandable');
+          card.setAttribute('role', 'button');
+          card.setAttribute('tabindex', '0');
+          card.setAttribute('aria-label', 'Přečíst celou recenzi — ' + name);
         } else {
-          card.appendChild(btn);
+          if (btn) btn.style.display = 'none';
+          card.classList.remove('is-expandable');
+          card.removeAttribute('role');
+          card.removeAttribute('tabindex');
+          card.removeAttribute('aria-label');
         }
+      }
+
+      // Klik kdekoliv na kartě otevře modal, ale jen pokud recenze skutečně přetéká
+      card.addEventListener('click', function () {
+        if (card._isExpandable) openModal(fullText, name, role, card);
+      });
+      // Klávesnice: Enter / Space na kartě
+      card.addEventListener('keydown', function (e) {
+        if (card._isExpandable && (e.key === 'Enter' || e.key === ' ')) {
+          e.preventDefault();
+          openModal(fullText, name, role, card);
+        }
+      });
+
+      function check() {
+        setExpandable(p.scrollHeight > p.clientHeight + 2);
+      }
+
+      requestAnimationFrame(check);
+      if (document.fonts && document.fonts.ready) {
+        document.fonts.ready.then(check);
+      }
+
+      let resizeTimer;
+      window.addEventListener('resize', function () {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(check, 200);
       });
     });
   })();
@@ -1026,28 +1043,7 @@ const WEB3FORMS = {
     }, INTERVAL);
   })();
 
-  // ----- Mobilní chip pulse -----
-  // Stejný rytmus jako desktop badge, ale bez podmínky hover:hover.
-  (function initMobileChipPulse() {
-    if (prefersReducedMotion) return;
-    const mobileChip = document.querySelector('.cycle-steps__loop');
-    if (!mobileChip) return;
-
-    const PULSE_MS = 680;
-    const INTERVAL = 4500;
-
-    function pulse() {
-      mobileChip.classList.add('cycle-steps__loop--pulse');
-      setTimeout(() => mobileChip.classList.remove('cycle-steps__loop--pulse'), PULSE_MS);
-    }
-
-    setTimeout(() => {
-      pulse();
-      setInterval(pulse, INTERVAL);
-    }, 3000);
-  })();
-
-  // ----- Advisor profile modal -----
+// ----- Advisor profile modal -----
   (function initAdvisorModal() {
     const overlay = document.createElement('div');
     overlay.className = 'advisor-modal-overlay';
@@ -1183,7 +1179,7 @@ const WEB3FORMS = {
     if (!select) return;
 
     const MSG_EUCS = 'Dobrý den, líbí se mi služba Garance EUCS a chtěl bych se o ni dozvědět více, případně ji sjednat.';
-    const MSG_PLAN = 'Dobrý den, měl bych zájem o finanční plán zdarma na ukázku.';
+    const MSG_PLAN = 'Dobrý den, mám zájem o spolupráci a rád bych využil nabídku prvního měsíce.';
 
     function setSubject(value) {
       select.value = value || 'Kontakt z webu';
@@ -1195,6 +1191,17 @@ const WEB3FORMS = {
       textarea.value = text;
     }
 
+    // Ruční přepnutí předmětu přímo v selectu (ne kliknutím na tlačítko) —
+    // ať se zpráva přizpůsobí i tak, ne jen při příchodu z konkrétního CTA.
+    const MESSAGE_BY_SUBJECT = {
+      'První měsíc': MSG_PLAN,
+      'Sjednání garance EUCS': MSG_EUCS,
+      'Kontakt z webu': '',
+    };
+    select.addEventListener('change', function () {
+      setMessage(MESSAGE_BY_SUBJECT[select.value] || '');
+    });
+
     // EUCS button → Sjednání garance EUCS
     document.querySelectorAll('.btn--eucs-report').forEach(function (btn) {
       btn.addEventListener('click', function () {
@@ -1203,7 +1210,7 @@ const WEB3FORMS = {
       });
     });
 
-    // Packages CTA "Plán zdarma" (line in #balicky) + sticky widget btn → Plán zdarma
+    // Packages CTA "První měsíc" (line in #balicky) + sticky widget btn → První měsíc
     var planSelectors = [
       '#balicky a.btn--primary[href="#kontakt-form"]',
       '.cta-widget__btn',
@@ -1211,7 +1218,7 @@ const WEB3FORMS = {
     planSelectors.forEach(function (sel) {
       document.querySelectorAll(sel).forEach(function (btn) {
         btn.addEventListener('click', function () {
-          setSubject('Plán zdarma');
+          setSubject('První měsíc');
           setMessage(MSG_PLAN);
         });
       });
@@ -1220,9 +1227,24 @@ const WEB3FORMS = {
     // Dynamicky přidaný widget se vytvoří až po tomto kódu — použijeme delegaci na body
     document.body.addEventListener('click', function (e) {
       if (e.target.closest('.cta-widget__btn')) {
-        setSubject('Plán zdarma');
+        setSubject('První měsíc');
         setMessage(MSG_PLAN);
       }
+    });
+
+    // Všechny ostatní odkazy na formulář (header, mobilní menu, patička, hero
+    // atd.) — vrátí výchozí předmět a smažou předvyplněnou zprávu, ať tam
+    // nezůstane text z dřívějšího kliknutí na EUCS/První měsíc tlačítko.
+    document.querySelectorAll('a[href="#kontakt-form"]').forEach(function (btn) {
+      var isEucs = btn.classList.contains('btn--eucs-report');
+      var isPlanPackage = btn.matches('#balicky a.btn--primary[href="#kontakt-form"]');
+      var isCtaWidget = btn.classList.contains('cta-widget__btn');
+      if (isEucs || isPlanPackage || isCtaWidget) return; // tyhle mají vlastní logiku výš
+
+      btn.addEventListener('click', function () {
+        setSubject('Kontakt z webu');
+        setMessage('');
+      });
     });
   })();
 
@@ -1234,15 +1256,15 @@ const WEB3FORMS = {
     const widget = document.createElement('div');
     widget.className = 'cta-widget';
     widget.setAttribute('role', 'complementary');
-    widget.setAttribute('aria-label', 'Nezávazný finanční plán zdarma');
+    widget.setAttribute('aria-label', 'Nabídka pro nové klienty');
     widget.innerHTML =
       '<button class="cta-widget__minimize" aria-label="Minimalizovat">−</button>' +
       '<div class="cta-widget__body">' +
-        '<p class="cta-widget__title">Líbí se Vám náš koncept spolupráce?</p>' +
-        '<p class="cta-widget__sub">Připravíme Vám ukázkový finanční plán zdarma na ukázku, pro větší představu, jak to celé vypadá. ☺️🙏🏼</p>' +
-        '<a href="#kontakt-form" class="btn btn--primary cta-widget__btn">Chci zkusit plán zdarma</a>' +
+        '<p class="cta-widget__title">První měsíc spolupráce neúčtujeme</p>' +
+        '<p class="cta-widget__sub">Nově příchozím klientům účtujeme spolupráci až od druhého měsíce. Budete tak mít dost času poznat, jak funguje, a pokud by Vám nesedla, můžete ji v prvním měsíci kdykoliv ukončit bez závazků.</p>' +
+        '<a href="#kontakt-form" class="btn btn--primary cta-widget__btn">Chci začít spolupráci</a>' +
       '</div>' +
-      '<span class="cta-widget__pill">Plán zdarma <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12l14 0"/><path d="M15 16l4 -4"/><path d="M15 8l4 4"/></svg></span>';
+      '<span class="cta-widget__pill">První měsíc <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12l14 0"/><path d="M15 16l4 -4"/><path d="M15 8l4 4"/></svg></span>';
     document.body.appendChild(widget);
 
     const minBtn = widget.querySelector('.cta-widget__minimize');
@@ -1354,6 +1376,109 @@ const WEB3FORMS = {
         img.addEventListener('load', markLoaded);
         img.addEventListener('error', markLoaded); // fade-in i při chybě (broken image)
       }
+    });
+  })();
+
+  // ----- Propojovací šipky v diagramu cyklu (Realizace -> Pece a servis -> Analyza) -----
+  // Pozice šipek počítáme z reálně vykreslené polohy karet, ne napevno,
+  // protože výška karty "Péče a servis" se mění podle délky textu a šířky okna.
+  // Šipky tak vždy trefí skutečný svislý střed karty, ne jen odhad.
+  (function initCycleArrows() {
+    var frame = document.querySelector('.cycle-bento');
+    var wrap = document.querySelector('.cycle-bento__arrows');
+    var svg = document.querySelector('.cycle-bento__arrows-svg');
+    if (!frame || !wrap || !svg) return;
+
+    var pathRight = svg.querySelector('.cycle-bento__arrow--right');
+    var pathLeft = svg.querySelector('.cycle-bento__arrow--left');
+    if (!pathRight || !pathLeft) return;
+
+    function update() {
+      if (getComputedStyle(wrap).display === 'none') return; // < 768px, šipky skryté
+
+      var row = frame.querySelector('.cycle-bento__row');
+      var cells = row ? row.querySelectorAll('.cycle-bento__cell') : [];
+      var cardRealizace = cells[3];
+      var cardAnalyza = cells[0];
+      var cardPece = frame.querySelector('.cycle-bento__cell--wide');
+      if (!cardRealizace || !cardAnalyza || !cardPece) return;
+
+      var frameRect = frame.getBoundingClientRect();
+      var rRect = cardRealizace.getBoundingClientRect();
+      var aRect = cardAnalyza.getBoundingClientRect();
+      var pRect = cardPece.getBoundingClientRect();
+
+      svg.setAttribute('viewBox', '0 0 ' + frameRect.width + ' ' + frameRect.height);
+
+      var peceCenterY = (pRect.top + pRect.height / 2) - frameRect.top;
+      var peceRightX = pRect.right - frameRect.left;
+      var peceLeftX = pRect.left - frameRect.left;
+
+      var realizaceX = (rRect.left + rRect.width * 0.5) - frameRect.left;
+      var realizaceBottomY = rRect.bottom - frameRect.top;
+
+      var analyzaX = (aRect.left + aRect.width * 0.5) - frameRect.left;
+      var analyzaBottomY = aRect.bottom - frameRect.top;
+
+      // Malá mezera na obou koncích, ať se čára nedotýká/nepřekrývá s kartami,
+      // a jednoduchý otevřený "hrot" (dvě čárky, žádná vyplněná trojúhelníková
+      // šipka) na konci, orientovaný podle směru, kterým čára do karty vchází.
+      var GAP = 22;
+      var CHEVRON = 9;
+
+      function chevron(tipX, tipY, ux, uy) {
+        var backX = tipX - ux * CHEVRON;
+        var backY = tipY - uy * CHEVRON;
+        var perpX = -uy * CHEVRON;
+        var perpY = ux * CHEVRON;
+        var ax = backX + perpX, ay = backY + perpY;
+        var bx = backX - perpX, by = backY - perpY;
+        return ' M' + ax + ',' + ay + ' L' + tipX + ',' + tipY + ' L' + bx + ',' + by;
+      }
+
+      // ----- Šipka Realizace -> Péče a servis (vstup zprava) -----
+      var rStartY = realizaceBottomY + GAP;
+      var rTipX = peceRightX + GAP;
+      pathRight.setAttribute(
+        'd',
+        'M' + realizaceX + ',' + rStartY +
+        ' L' + realizaceX + ',' + peceCenterY +
+        ' L' + rTipX + ',' + peceCenterY +
+        chevron(rTipX, peceCenterY, -1, 0)
+      );
+
+      // ----- Šipka Péče a servis -> Analýza (vstup zdola) -----
+      var lStartX = peceLeftX - GAP;
+      var lTipY = analyzaBottomY + GAP;
+      pathLeft.setAttribute(
+        'd',
+        'M' + lStartX + ',' + peceCenterY +
+        ' L' + analyzaX + ',' + peceCenterY +
+        ' L' + analyzaX + ',' + lTipY +
+        chevron(analyzaX, lTipY, 0, -1)
+      );
+    }
+
+    var scheduled = false;
+    function scheduleUpdate() {
+      if (scheduled) return;
+      scheduled = true;
+      requestAnimationFrame(function () {
+        scheduled = false;
+        update();
+      });
+    }
+
+    scheduleUpdate();
+    window.addEventListener('resize', scheduleUpdate);
+    window.addEventListener('load', scheduleUpdate);
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(scheduleUpdate);
+    }
+    // Ikonky se dokreslí až po loadu, což může nepatrně změnit výšku karet.
+    document.querySelectorAll('.cycle-bento__icon').forEach(function (img) {
+      if (img.complete) return;
+      img.addEventListener('load', scheduleUpdate);
     });
   })();
 

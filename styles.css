@@ -8,7 +8,9 @@
   /* Brand */
   --brand-dark: #0B2E34;
   --brand-green: #03D98C;
+  --brand-green-hover: #03C580;
   --brand-yellow: #FBD028;
+  --brand-yellow-hover: #E6BC1F;
 
   /* Surfaces */
   --bg-base: #F4FFF9;
@@ -214,7 +216,7 @@ strong { font-weight: 600; }
   max-width: 760px;
   padding: 9px 14px 9px 22px;
 
-  background: rgba(255, 255, 255, 0.82);
+  background: rgba(255, 255, 255, 0.97);
   backdrop-filter: saturate(140%) blur(18px);
   -webkit-backdrop-filter: saturate(140%) blur(18px);
   border: 1px solid var(--border-soft);
@@ -316,21 +318,13 @@ strong { font-weight: 600; }
   font-size: 13.5px;
   font-weight: 600;
   border-radius: 10px;
-  /* Uses global --hover-scale / --hover-duration */
-  transition:
-    transform var(--hover-duration) var(--ease),
-    box-shadow var(--hover-duration) var(--ease);
+  /* Minimal hover — just a background shift, no scale/shadow/glow */
+  transition: background var(--hover-duration) var(--ease);
   white-space: nowrap;
 }
 
 .header__cta:hover {
-  transform: scale(var(--hover-scale));
-  box-shadow: 0 10px 24px rgba(3, 217, 140, 0.28);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .header__cta { transition: box-shadow 0.2s var(--ease); }
-  .header__cta:hover { transform: none !important; }
+  background: var(--brand-green-hover);
 }
 
 /* Mobile (<1100px): nav je skrytý → bez tohoto pravidla by se CTA Kontakt
@@ -453,19 +447,13 @@ strong { font-weight: 600; }
   font-weight: 600;
   border-radius: 12px;
   border: 1px solid transparent;
-  /* Visual-only scale on hover — controlled by --hover-scale / --hover-duration in :root */
+  /* Minimal hover — background/color/border shift only, no scale/shadow/glow */
   transition:
-    transform var(--hover-duration) var(--ease),
     background var(--hover-duration) var(--ease),
     border-color var(--hover-duration) var(--ease),
-    box-shadow var(--hover-duration) var(--ease),
     color var(--hover-duration) var(--ease);
   white-space: nowrap;
   min-height: 50px;
-}
-
-.btn:hover {
-  transform: scale(var(--hover-scale));
 }
 
 .btn--primary {
@@ -475,23 +463,18 @@ strong { font-weight: 600; }
 }
 
 .btn--primary:hover {
-  box-shadow: 0 14px 32px rgba(3, 217, 140, 0.28);
+  background: var(--brand-green-hover);
 }
 
 .btn--secondary {
-  background: var(--bg-white);
+  background: transparent;
   color: var(--brand-dark);
-  border-color: var(--border-soft);
+  border-color: rgba(11, 46, 52, 0.18);
 }
 
 .btn--secondary:hover {
-  background: var(--bg-mint-soft);
-  box-shadow: var(--shadow-sm);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .btn { transition: background 0.2s var(--ease), box-shadow 0.2s var(--ease); }
-  .btn:hover { transform: none !important; }
+  background: var(--bg-white);
+  border-color: var(--bg-white);
 }
 
 /* ==========================================================================
@@ -585,8 +568,8 @@ strong { font-weight: 600; }
 
 .hero__content {
   display: grid;
-  grid-template-columns: 1fr 0.8fr;
-  column-gap: 48px;
+  grid-template-columns: 1fr 0.95fr;
+  column-gap: 40px;
   align-items: center;
 }
 
@@ -599,52 +582,79 @@ strong { font-weight: 600; }
 .hero__left {
   display: flex;
   flex-direction: column;
+  max-width: 620px;
 }
 
-.hero__image-wrap {
-  border-radius: 20px;
-  overflow: hidden;
-  transition: transform var(--hover-duration) var(--ease),
-              box-shadow var(--hover-duration) var(--ease);
-  cursor: pointer;
-  box-shadow: 0 8px 32px rgba(11, 46, 52, 0.08);
+/* Hero visual — brandová 3D grafika (assets/finklihero.png), bez rámečku/karty,
+   plave jako přirozená součást kompozice vedle textu, ne jako fotka v boxu. */
+.hero__visual {
+  --parallax-y: 0px;
+  --shift-x: 0px;
   position: relative;
   z-index: 2;
-  height: clamp(320px, 45vh, 500px);
-  align-self: center;
-  margin-top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: translate3d(var(--shift-x), var(--parallax-y), 0);
+  will-change: transform;
 }
 
-.hero__image-wrap:hover {
-  transform: scale(var(--hover-scale));
-  box-shadow: 0 16px 48px rgba(11, 46, 52, 0.14);
-}
-
-.hero__image {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center center;
+@media (min-width: 768px) {
+  .hero__visual { --shift-x: 28px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .hero__image-wrap { transition: box-shadow var(--hover-duration) var(--ease); }
-  .hero__image-wrap:hover { transform: none; }
+  .hero__visual {
+    --parallax-y: 0px !important;
+    transform: none !important;
+  }
+}
+
+.hero__graphic {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: 460px;
+  object-fit: contain;
+}
+
+@media (min-width: 1280px) {
+  .hero__graphic { max-width: 520px; }
 }
 
 @media (max-width: 767px) {
-  /* Mobile: flex column — pořadí: nadpis → sub → fotka → CTA */
-  .hero__content {
-    display: flex;
-    flex-direction: column;
-    gap: 0;
+  /* Mobile hero pořadí: nadpis/popisek/CTA -> trust bar (čísla, důvěra)
+     -> grafika (dekorativní, jde poslední, ať se k důležitým informacím
+     nemusí scrollovat přes ilustraci).
+     Trik: "rozpustíme" wrapper divy (.container, .hero__content) přes
+     display:contents, takže .hero__left, .hero__visual a .hero__trust
+     se stanou přímými flex-dětmi .hero__fold a jde je přeskládat
+     pomocí order. Gutter (padding), co dřív dodával .container, si
+     .hero__left a .hero__visual musí obstarat samy. */
+  .hero__fold > .container { display: contents; }
+  .hero__content { display: contents; }
+
+  .hero__left {
+    order: 1;
+    max-width: none;
+    width: 100%;
+    padding-left: var(--gutter);
+    padding-right: var(--gutter);
   }
-  /* display: contents zpřístupní copy a actions jako přímé flex děti → order pak určí pořadí */
-  .hero__left       { display: contents; }
-  .hero__copy       { order: 1; padding: 0; }
-  .hero__image-wrap { order: 2; margin-top: 24px; height: auto; aspect-ratio: 4 / 3; max-height: none; }
-  .hero__actions    { order: 3; padding-bottom: 0; margin-top: 24px; width: 100%; }
+
+  .hero__trust { order: 2; }
+
+  .hero__visual {
+    order: 3;
+    width: 100%;
+    margin-top: 8px;
+    padding-left: var(--gutter);
+    padding-right: var(--gutter);
+    /* Paralaxa na mobilu vypnutá — viz níže. */
+    transform: none !important;
+  }
+
+  .hero__graphic { max-width: 300px; margin: 0 auto; }
 }
 
 .hero__title {
@@ -1310,20 +1320,22 @@ strong { font-weight: 600; }
    to preserve that ~220px desktop gap, while everything else stays tight. */
 .section--packages {
   padding-bottom: 64px;
+  padding-top: 64px;
 }
 
 .section--myplann {
   padding-top: 64px;
+  padding-bottom: 64px;
 }
 
 @media (min-width: 768px) {
-  .section--packages { padding-bottom: 96px; }
-  .section--myplann  { padding-top: 96px; }
+  .section--packages { padding-bottom: 96px; padding-top: 96px; }
+  .section--myplann  { padding-top: 96px; padding-bottom: 96px; }
 }
 
 @media (min-width: 1024px) {
-  .section--packages { padding-bottom: 110px; }
-  .section--myplann  { padding-top: 110px; }
+  .section--packages { padding-bottom: 110px; padding-top: 110px; }
+  .section--myplann  { padding-top: 110px; padding-bottom: 110px; }
 }
 
 .section__head {
@@ -1589,7 +1601,7 @@ strong { font-weight: 600; }
   .cycle-steps__item {
     position: relative;
     display: block;
-    padding: 22px 18px 24px;
+    padding: 60px 18px 26px;
     text-align: center;
     background: rgba(255, 255, 255, 0.55);
     border: 1px solid rgba(11, 46, 52, 0.06);
@@ -1607,23 +1619,13 @@ strong { font-weight: 600; }
     box-shadow: 0 10px 28px rgba(3, 217, 140, 0.12);
   }
 
-  /* Head row: number → ikona, vertikálně centrované */
-  .cycle-steps__head {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 18px;
-    margin-bottom: 12px;
-  }
-
-  .cycle-steps__icon {
-    width: 52px;
-    height: 52px;
-    object-fit: contain;
-    display: block;
-  }
-
+  /* Číslo — samostatný badge v levém horním rohu karty (shodné s desktop
+     .cycle-bento__num), oddělené od hlavičky ikonka+nadpis. */
   .cycle-steps__num {
+    position: absolute;
+    top: 16px;
+    left: 50%;
+    transform: translateX(-50%);
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -1639,15 +1641,29 @@ strong { font-weight: 600; }
     box-shadow: 0 4px 12px rgba(3, 217, 140, 0.22);
   }
 
-  .cycle-steps__item--accent .cycle-steps__num {
-    color: var(--brand-dark);
+  /* Hlavička kroku — ikonka pevně vlevo, nadpis na střed karty (zrcadlový
+     sloupec vpravo, shodná technika jako .coop-pillar__head / .area-card__left). */
+  .cycle-steps__head {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+
+  .cycle-steps__icon {
+    width: 34px;
+    height: 34px;
+    object-fit: contain;
+    display: block;
+    flex-shrink: 0;
   }
 
   .cycle-steps__title {
-    margin: 0 0 8px;
-    font-size: 18px;
-    font-weight: 600;
-    line-height: 1.25;
+    margin: 0;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 1.3;
     color: var(--brand-dark);
   }
 
@@ -1657,8 +1673,8 @@ strong { font-weight: 600; }
 
   .cycle-steps__text {
     margin: 0;
-    font-size: 14.5px;
-    line-height: 1.55;
+    font-size: 16px;
+    line-height: 1.65;
     color: var(--text-base);
   }
 
@@ -1675,46 +1691,6 @@ strong { font-weight: 600; }
     color: var(--brand-green);
   }
 
-  /* ----- Loop note: chip styl shodný s desktop verzí ----- */
-  .cycle-steps__loop {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 7px;
-    width: fit-content;
-    margin: 0 auto;
-    padding: 7px 14px;
-    border: 1px solid rgba(3, 217, 140, 0.35);
-    border-radius: 10px;
-    background: rgba(221, 251, 240, 0.5);
-    color: var(--text-muted);
-    font-size: 13px;
-    font-weight: 500;
-    line-height: 1.4;
-    list-style: none;
-  }
-
-  .cycle-steps__loop-icon {
-    font-size: 14px;
-    line-height: 1;
-    color: var(--brand-green);
-    font-weight: 600;
-  }
-
-  /* Pulse mobilního chipu — přidáno/odebráno přes JS */
-  .cycle-steps__loop {
-    transition:
-      background var(--hover-duration) var(--ease),
-      border-color var(--hover-duration) var(--ease),
-      transform var(--hover-duration) var(--ease);
-  }
-
-  .cycle-steps__loop--pulse {
-    background: var(--bg-mint-tint);
-    border-color: rgba(3, 217, 140, 0.6);
-    transform: scale(1.02);
-    transition-duration: 0.42s;
-  }
 }
 
 /* ==========================================================================
@@ -1731,16 +1707,40 @@ strong { font-weight: 600; }
    3. styles.css → odstraň tuto =Section: Cycle Bento Grid= sekci.
    ========================================================================== */
 
-/* Na mobilu schované — .cycle-steps přebírá pod 560px */
+/* Na mobilu schované — .cycle-steps přebírá pod 560px.
+   Zelený rámec kolem celého diagramu — jednotící "karta karet", zatímco
+   jednotlivé kroky uvnitř jsou obyčejné bílé (viz .cycle-bento__cell). */
 .cycle-bento {
   display: none;
+  position: relative;
+  padding: 20px;
+}
+
+@media (min-width: 768px) {
+  .cycle-bento {
+    padding: 32px;
+  }
 }
 
 /* Bento jako full-width child gridu .coop-card--wide */
 .coop-card--wide .cycle-bento {
   grid-column: 1 / -1;
-  margin: 44px 0 0;
+  /* Bez vlastní horní mezery navíc, odstup od textu nahoře je teď stejný
+     jako od ostatních hran diagramu, drží ho jen padding .cycle-bento
+     samotného (viz výše), ne extra margin. */
+  margin: 0;
   width: 100%;
+  /* Dole není po diagramu už nic dalšího, takže spodní odsazení karty
+     .coop-card--wide (padding karty samotné) stačí samo o sobě, vlastní
+     padding-bottom diagramu by se s ním jinak sečetl a dole by vznikla
+     zbytečně velká mezera navíc. */
+  padding-bottom: 0;
+  /* Stejný důvod i po stranách, jinak by padding diagramu (viz .cycle-bento
+     výše) navíc zúžil karty oproti nadpisu/textu nad nimi a oproti ostatním
+     kartám na webu, které se zarovnávají na stejnou levou linii. Boční
+     odsazení stačí to, co má karta .coop-card--wide sama o sobě. */
+  padding-left: 0;
+  padding-right: 0;
 }
 
 /* ----- 3 pilíře (Dlouhodobá spolupráce / Péče / Plán) ----- */
@@ -1748,71 +1748,186 @@ strong { font-weight: 600; }
   grid-column: 1 / -1;
   display: grid;
   grid-template-columns: 1fr;
-  gap: 28px;
+  gap: 20px;
   margin-top: 40px;
 }
 
 @media (min-width: 600px) {
-  .coop-pillars { grid-template-columns: repeat(3, 1fr); gap: 32px; }
+  .coop-pillars { grid-template-columns: repeat(3, 1fr); }
+}
+
+@media (min-width: 768px) {
+  .coop-pillars { gap: 24px; }
 }
 
 @media (min-width: 1024px) {
-  .coop-pillars { gap: 48px; margin-top: 48px; }
+  .coop-pillars { gap: 28px; margin-top: 48px; }
 }
 
 .coop-pillar {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  text-align: center;
-  gap: 12px;
+  align-items: flex-start;
+  gap: 14px;
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid rgba(11, 46, 52, 0.05);
+  border-radius: 16px;
+  padding: 24px;
 }
 
-@media (min-width: 600px) {
-  .coop-pillar {
-    align-items: flex-start;
-    text-align: left;
-  }
+/* Ikonka + nadpis tvoří jeden vizuální celek ("hlavička" karty), místo aby
+   ikonka visela osamoceně nad malým textem — to byl hlavní důvod, proč
+   karty působily nesourodě. Text a tlačítko jedou pod hlavičkou přes celou
+   šířku, doleva. */
+.coop-pillar__head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
 }
 
 .coop-pillar__icon {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 48px;
-  height: 48px;
-  border-radius: 14px;
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
   background: rgba(3, 217, 140, 0.12);
   color: var(--brand-green);
   flex-shrink: 0;
 }
 
 .coop-pillar__icon svg {
-  width: 24px;
-  height: 24px;
+  width: 21px;
+  height: 21px;
   flex-shrink: 0;
 }
 
 .coop-pillar__title {
   margin: 0;
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 700;
   line-height: 1.3;
   color: var(--brand-dark);
 }
 
 .coop-pillar__text {
+  align-self: flex-start;
+  width: 100%;
   margin: 0;
-  font-size: 13.5px;
+  font-size: 16px;
   line-height: 1.65;
+  text-align: left;
   color: var(--text-muted);
 }
 
-/* Oblasti (subsection-head + areas + areas-summary) embedded inside coop-card--wide */
-/* =AREAS-INSIDE-CSS= REVERT: remove these 3 rules if areas are moved back outside */
+/* "Přečíst více" — zatím jen vizuální, bez JS chování (to doděláme, až
+   vyřešíme, co se má po kliknutí stát). Coordinated hover: hover na celé
+   kartě (.coop-pillar), NE na tlačítku samotném, vybarví tohle tlačítko.
+   Žádný jiný hover efekt (žádný zoom/scale karty) zatím záměrně není. */
+.coop-pillar__more {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  /* auto top margin = přilepené ke spodku karty (kartičky jsou v gridu
+     stejně vysoké), takže tlačítka sedí v jedné linii bez ohledu na
+     délku textu nad nimi */
+  margin-top: auto;
+  padding: 7px 14px;
+  border: none;
+  border-radius: 10px;
+  background: transparent;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--text-muted);
+  transition: color var(--hover-duration) var(--ease);
+}
+
+/* Fill sweeps in from the left instead of the background just popping in —
+   flat solid color, no shadow/glow/gradient, just a smoother "najezd". */
+.coop-pillar__more::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--brand-green);
+  border-radius: inherit;
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform var(--hover-duration) var(--ease);
+}
+
+.coop-pillar__more-icon {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
+.coop-pillar:hover .coop-pillar__more {
+  color: var(--brand-dark);
+}
+
+.coop-pillar:hover .coop-pillar__more::before {
+  transform: scaleX(1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .coop-pillar__more,
+  .coop-pillar__more::before { transition: none; }
+}
+
+/* Mobil: stejná konvence jako zbytek webu (.coop-card__title, .coop-card p,
+   .area-card atd.) — texty i tlačítko na kartičkách jsou na střed, tlačítko
+   navíc vyplní celou šířku karty. Nad 639px zůstává ikonka na střed a text
+   doleva, jak bylo domluveno dřív. */
+@media (max-width: 639px) {
+  /* Ikonka zůstává přišpendlená vlevo. Aby se nadpis opravdu centroval na
+     střed KARTY (ne jen ve zbylém prostoru vedle ikonky, což vizuálně
+     vychyluje text doprava), použijeme grid se zrcadlovým neviditelným
+     sloupcem napravo o stejné šířce jako ikonka — střední sloupec (text)
+     pak vyjde přesně na střed karty. */
+  .coop-pillar__head {
+    display: grid;
+    grid-template-columns: 42px 1fr 42px;
+    column-gap: 14px;
+    align-items: center;
+  }
+
+  .coop-pillar__icon {
+    grid-column: 1;
+  }
+
+  .coop-pillar__title {
+    grid-column: 2;
+    text-align: center;
+  }
+
+  .coop-pillar__text {
+    align-self: center;
+    text-align: center;
+  }
+
+  .coop-pillar__more {
+    align-self: stretch;
+    justify-content: center;
+    width: 100%;
+  }
+}
+
+/* Oblasti (subsection-head + areas + areas-summary) — Tři oblasti je teď vlastní
+   samostatná karta (coop-cards > coop-card--wide), ne embedded uvnitř jiné karty.
+   Tyto grid-column overrides pořád platí, jen margin-top na headu je 0,
+   protože subsection-head je teď první prvek v kartě (žádná mezera nad ní navíc,
+   jen běžný padding karty jako u ostatních karet). */
 .coop-card--wide .subsection-head {
   grid-column: 1 / -1;
-  margin-top: 80px;
+  margin-top: 0;
   margin-bottom: 26px;
   padding-top: 0;
 }
@@ -1842,14 +1957,6 @@ strong { font-weight: 600; }
   .cycle-bento { display: block; }
 }
 
-@media (min-width: 768px) {
-  .coop-card--wide .cycle-bento { margin-top: 52px; }
-}
-
-@media (min-width: 1024px) {
-  .coop-card--wide .cycle-bento { margin-top: 60px; }
-}
-
 /* ----- Řada kroků 1–4 ----- */
 .cycle-bento__row {
   display: grid;
@@ -1858,9 +1965,11 @@ strong { font-weight: 600; }
   margin-bottom: 14px;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 1024px) {
+  /* EXPERIMENT: karty 1-4 přes celou šířku pod sebou (ne ve 4 sloupcích).
+     REVERT: grid-template-columns: repeat(4, 1fr); */
   .cycle-bento__row {
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: 1fr;
     gap: 16px;
     margin-bottom: 16px;
   }
@@ -1870,13 +1979,13 @@ strong { font-weight: 600; }
 .cycle-bento__cell {
   position: relative;
   overflow: hidden;
-  background: rgba(255, 255, 255, 0.55);
+  background: rgba(255, 255, 255, 0.72);
   border: 1px solid rgba(11, 46, 52, 0.05);
   border-radius: 20px;
   backdrop-filter: blur(20px) saturate(140%);
   -webkit-backdrop-filter: blur(20px) saturate(140%);
   box-shadow: 0 6px 22px rgba(11, 46, 52, 0.025);
-  padding: 60px 24px 30px;
+  padding: 72px 24px 32px;
   transition:
     background var(--hover-duration) var(--ease),
     border-color var(--hover-duration) var(--ease),
@@ -1897,38 +2006,107 @@ strong { font-weight: 600; }
 
 /* Hover jen na malých kartách 1–4 */
 .cycle-bento__row .cycle-bento__cell:hover {
-  background: rgba(255, 255, 255, 0.72);
   border-color: rgba(3, 217, 140, 0.16);
   box-shadow: 0 18px 44px rgba(3, 217, 140, 0.10);
-  transform: scale(var(--hover-scale));
 }
 
 .cycle-bento__row .cycle-bento__cell:hover::after {
   opacity: 1;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .cycle-bento__row .cycle-bento__cell:hover { transform: none; }
+/* Karta 5 (mimo .cycle-bento__row) — stejný hover jako kroky 1-4 */
+.cycle-bento__cell--wide:hover {
+  border-color: rgba(3, 217, 140, 0.16);
+  box-shadow: 0 18px 44px rgba(3, 217, 140, 0.10);
 }
 
-/* ----- Krok 5 — wide accent karta, vše centrované ----- */
-.cycle-bento__cell--accent {
-  background: rgba(221, 251, 240, 0.65);
-  border: 2px solid var(--brand-green);
-  box-shadow: 0 8px 28px rgba(3, 217, 140, 0.10);
-  text-align: center;
-  padding-top: 28px;
+.cycle-bento__cell--wide:hover::after {
+  opacity: 1;
 }
 
-.cycle-bento__cell--accent::after {
-  display: none;
+/* ----- Krok 5 — teď obyčejná bílá karta jako 1–4, jen širší a vycentrovaná
+   (viz .cycle-bento__cell--wide níže). Zvýraznění "Finkli difference" teď
+   nese zelený rámec celého diagramu (.cycle-bento) a propojovací šipky,
+   ne barva jedné karty. ----- */
+
+/* Na fallback šířce (560–767px, 2sloupcová mřížka) zůstává karta 5 přes
+   celou šířku, beze změny barvy — šipky a zúžení na 2 sloupce přichází
+   až od 768px, kdy je i hlavní řádek 4sloupcový (viz media query níže). */
+.cycle-bento__cell--wide {
+  width: 100%;
+  /* Krok 5 je nadstandard navíc oproti běžné praxi, jemně zelený nádech
+     pozadí + zelený nadpis, shodné s mobilní variantou (.cycle-steps__item--accent). */
+  background: rgba(221, 251, 240, 0.85);
+  border-color: rgba(3, 217, 140, 0.22);
 }
 
-.cycle-bento__cell--accent:hover {
-  background: rgba(221, 251, 240, 0.88);
-  border-color: rgba(3, 217, 140, 0.40);
-  box-shadow: 0 18px 48px rgba(3, 217, 140, 0.18);
-  transform: none;
+@media (min-width: 1024px) {
+  /* EXPERIMENT: karta 5 stejně široká jako 1-4, jen další v řadě pod sebou.
+     REVERT: width: 50%; margin: 64px auto 0; */
+  .cycle-bento__cell--wide {
+    width: 100%;
+    margin: 16px auto 0;
+  }
+}
+
+@media (min-width: 1024px) {
+  /* EXPERIMENT: karty jsou teď přes celou šířku, takže obsah (číslo, ikona
+     s nadpisem, text) jede v jednom řádku vedle sebe místo pod sebou, ať
+     karta zabírá míň místa na výšku.
+     REVERT: smazat celý tento blok (vlastnosti níže se vrátí na svoje
+     základní/menší-breakpointová pravidla). */
+  .cycle-bento__cell {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    padding: 24px 32px;
+  }
+
+  /* Vyšší specificita (2 třídy) záměrně, ať tahle pravidla spolehlivě
+     přebijí základní .cycle-bento__num/__head/__text bez ohledu na
+     pořadí v souboru. */
+  .cycle-bento__cell .cycle-bento__icon-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    background: rgba(3, 217, 140, 0.12);
+    flex-shrink: 0;
+  }
+
+  .cycle-bento__cell .cycle-bento__icon-wrap .cycle-bento__icon {
+    width: 24px;
+    height: 24px;
+  }
+
+  /* Číslo je teď malý odznak přesahující roh ikonky, ne samostatný čtvereček
+     vedle ní, ikonka a číslo tak tvoří jeden "identifikátor kroku". Trochu
+     větší než původní návrh, ať jde číslice pohodlně přečíst. */
+  .cycle-bento__cell .cycle-bento__num {
+    position: absolute;
+    top: -8px;
+    left: -8px;
+    min-width: 0;
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    border-radius: 50%;
+    font-size: 13px;
+    box-shadow: 0 2px 6px rgba(3, 217, 140, 0.35);
+  }
+
+  .cycle-bento__cell .cycle-bento__head {
+    flex: 0 0 auto;
+    min-width: 200px;
+    margin-bottom: 0;
+  }
+
+  .cycle-bento__cell .cycle-bento__text {
+    flex: 1;
+  }
 }
 
 /* ----- Číselný badge — green pill, top-left (shodný styl s area-card__number) ----- */
@@ -1951,123 +2129,103 @@ strong { font-weight: 600; }
   box-shadow: 0 4px 12px rgba(3, 217, 140, 0.22);
 }
 
-/* V accent kartě — badge centrovaný, ne absolute */
-.cycle-bento__cell--accent .cycle-bento__num {
-  position: static;
-  color: #ffffff;
-  margin: 0 auto 16px;
-}
-
-/* ----- Ikona — centrovaná v kartě ----- */
+/* ----- Ikona — v řádku vedle nadpisu (.cycle-bento__head), ne osamoceně nad ním ----- */
 .cycle-bento__icon {
   display: block;
-  width: 48px;
-  height: 48px;
+  width: 34px;
+  height: 34px;
   object-fit: contain;
-  margin: 0 auto 18px;
   flex-shrink: 0;
   position: relative;
   z-index: 1;
 }
 
-/* Accent header — nadpis + ikona na jednom řádku, centrované */
-.cycle-bento__accent-header {
+/* Hlavička kroku — ikonka + nadpis na jednom řádku (shodné s .area-card__left) */
+.cycle-bento__head {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 10px;
-  margin-bottom: 12px;
+  gap: 12px;
+  margin-bottom: 16px;
 }
 
-.cycle-bento__accent-header .cycle-bento__title {
-  margin: 0;
+/* Obalovač ikonky + čísla. Pod 1024px "neexistuje" (display: contents), takže
+   ikonka a číslo se chovají přesně jako předtím (číslo pluje nad celou kartou).
+   Od 1024px (viz media query níže) se z něj stane vlastní barevný box a číslo se
+   do něj vloží jako malý odznak v rohu, ať tvoří s ikonkou jeden vizuální celek. */
+.cycle-bento__icon-wrap {
+  display: contents;
 }
 
-/* Ikona v accent header řádku — inline vedle nadpisu */
-.cycle-bento__cell--accent .cycle-bento__icon {
-  width: 34px;
-  height: 34px;
-  margin: 0;
-  flex-shrink: 0;
-}
-
-/* ----- Nadpis kroku ----- */
+/* ----- Nadpis kroku — sjednoceno s .coop-pillar__title / .area-card__title ----- */
 .cycle-bento__title {
-  margin: 0 0 10px;
-  font-size: 18px;
-  font-weight: 600;
-  line-height: 1.2;
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.3;
   color: var(--brand-dark);
   position: relative;
   z-index: 1;
 }
 
-.cycle-bento__cell--accent .cycle-bento__title {
-  color: var(--brand-green);
+/* ----- Šipky uzavírající smyčku (Realizace → Péče a servis → Analýza) -----
+   Vidět jen od 768px, kdy je karta 5 zúžená na 2 sloupce a šipky mají kam
+   vést. Pod 768px (2sloup. mřížka + karta 5 přes celou šířku) schované. */
+.cycle-bento__arrows {
+  display: none;
 }
 
-/* ----- Popis kroku ----- */
+@media (min-width: 1024px) {
+  /* EXPERIMENT: šipky dočasně vypnuté (karty jedou pod sebou, není mezi
+     čím vést šipku). REVERT: display: block; (a zbytek pravidel níže beze
+     změny). */
+  .cycle-bento__arrows {
+    display: none;
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+  }
+
+  .cycle-bento__arrows-svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+
+  .cycle-bento__arrow {
+    opacity: 1;
+  }
+}
+
+/* ----- Popis kroku — sjednoceno s .coop-pillar__text / .area-card__text ----- */
 .cycle-bento__text {
   margin: 0;
-  font-size: 13.5px;
-  line-height: 1.6;
+  font-size: 16px;
+  line-height: 1.65;
   color: var(--text-muted);
   position: relative;
   z-index: 1;
 }
 
-
-/* ----- Smyčka — odlehčený chip, sekundární element karty ----- */
-.cycle-bento__loop {
-  display: flex;
-  align-items: center;
-  width: fit-content;
-  margin: 16px auto 0;
-  gap: 7px;
-  padding: 7px 14px;
-  font-size: 13px;
-  font-weight: 400;
-  color: var(--text-soft);
-  background: rgba(221, 251, 240, 0.5);
-  border: 1px solid rgba(3, 217, 140, 0.35);
-  border-radius: 10px;
-  position: relative;
-  z-index: 1;
-  cursor: default;
-  transition:
-    transform var(--hover-duration) var(--ease),
-    box-shadow var(--hover-duration) var(--ease),
-    background var(--hover-duration) var(--ease),
-    border-color var(--hover-duration) var(--ease);
-}
-
-.cycle-bento__loop-icon {
-  color: var(--brand-green);
+/* Prokliková na podstránku uvnitř textu kroku — stejný vzor jako .eucs-note__link. */
+.cycle-bento__link {
+  color: var(--brand-dark);
   font-weight: 600;
-  line-height: 1;
+  text-decoration: underline;
+  text-decoration-color: var(--brand-green);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
+  transition:
+    color var(--hover-duration) var(--ease),
+    text-decoration-thickness var(--hover-duration) var(--ease);
 }
 
-/* Auto-pulse badge */
-.cycle-bento__loop--pulse {
-  transform: scale(1.012);
-  background: var(--bg-mint-tint);
-  border-color: var(--brand-green);
-  box-shadow: 0 6px 18px rgba(3, 217, 140, 0.18);
-  transition-duration: 0.42s;
+.cycle-bento__link:hover {
+  color: var(--brand-green);
+  text-decoration-thickness: 3px;
 }
 
-/* Auto-pulse karta Analýzy — jemný nádech, ne plná zelená */
-.cycle-bento__cell--pulse {
-  background: var(--bg-mint-card) !important;
-  border-color: var(--brand-green) !important;
-  box-shadow: 0 8px 22px rgba(3, 217, 140, 0.11) !important;
-  transform: scale(1.018);
-  transition-duration: 0.55s !important;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .cycle-bento__loop--pulse { transform: none !important; }
-}
 
 /* ----- Schování SVG kolečka (bento přebírá na tabletu/desktopu) -----
    REVERT: odstraň třídu "cycle-figure--hidden" z <figure> v index.html. */
@@ -2079,11 +2237,35 @@ strong { font-weight: 600; }
    Left-aligned to match hero rhythm and overall site consistency. */
 .subsection-head {
   text-align: left;
-  max-width: 760px;
   margin: 0 0 28px;
 }
 
 .subsection-head__title { margin: 0; }
+
+.subsection-head__lead {
+  margin: 10px 0 0;
+  font-size: 16px;
+  line-height: 1.65;
+  color: var(--text-base);
+}
+
+/* Prokliková na podstránku uvnitř lead textu — stejný vzor jako .faq-item__link. */
+.subsection-head__link {
+  color: var(--brand-dark);
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-color: var(--brand-green);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
+  transition:
+    color var(--hover-duration) var(--ease),
+    text-decoration-thickness var(--hover-duration) var(--ease);
+}
+
+.subsection-head__link:hover {
+  color: var(--brand-green);
+  text-decoration-thickness: 3px;
+}
 
 @media (min-width: 768px) {
   .subsection-head { margin-bottom: 36px; }
@@ -2398,7 +2580,7 @@ strong { font-weight: 600; }
 .area-card {
   position: relative;
   overflow: hidden;
-  padding: 36px 28px 32px;
+  padding: 24px 28px 32px;
   background: rgba(255, 255, 255, 0.55);
   border: 1px solid rgba(11, 46, 52, 0.05);
   border-radius: 20px;
@@ -2435,42 +2617,17 @@ strong { font-weight: 600; }
 }
 
 @media (min-width: 1024px) {
-  .area-card { padding: 44px 32px 36px; }
+  .area-card { padding: 24px 32px 36px; }
 }
 
-/* Number badge (01 / 02 / 03) — top-left, solid brand green pill with white digit. */
-.area-card__number {
-  position: absolute;
-  top: 20px;
-  left: 20px;
-  z-index: 2;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 40px;
-  padding: 6px 12px;
-  background: var(--brand-green);
-  color: #ffffff;
-  font-size: 14px;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  border-radius: 12px;
-  box-shadow: 0 6px 16px rgba(3, 217, 140, 0.20);
-}
-
-@media (min-width: 1024px) {
-  .area-card__number { top: 24px; left: 24px; }
-}
-
-/* Icon — centered, slightly larger than original */
+/* Icon — sedí v řádku vedle nadpisu (.area-card__left), ne osamoceně nad ním */
 .area-card__icon {
   position: relative;
   z-index: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 12px 0 24px;
-  height: 110px;
+  height: 52px;
   transition: transform var(--hover-duration) var(--ease);
 }
 
@@ -2480,19 +2637,17 @@ strong { font-weight: 600; }
   display: block;
 }
 
-.area-card:hover .area-card__icon {
-  transform: scale(1.06);
-}
 
-/* Title (Přání a cíle / Ochrana / Financování) — clean text, no border */
+
+/* Title (Přání a cíle / Ochrana / Financování) — sjednoceno s .coop-pillar__title
+   (kartičky ve vrchní sekci) — 16px, řez místo velikosti dělá hierarchii */
 .area-card__title {
   position: relative;
   z-index: 1;
   margin: 0 0 6px;
-  font-size: 24px;
-  font-weight: 600;
-  line-height: 1.2;
-  letter-spacing: -0.015em;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.3;
   color: var(--brand-dark);
 }
 
@@ -2507,19 +2662,10 @@ strong { font-weight: 600; }
   margin-bottom: 18px;
 }
 
-/* Hair-line divider — thinned, left-aligned */
+/* Hair-line divider mezi ikonkou+nadpisem a textem — odstraněno na přání,
+   necháváme jen skryté, ať je HTML beze změny a jde to snadno vrátit. */
 .area-card__divider {
-  position: relative;
-  z-index: 1;
-  width: 56px;
-  height: 1px;
-  margin: 0 0 18px;
-  background: rgba(11, 46, 52, 0.15);
-  transition: background var(--hover-duration) var(--ease);
-}
-
-.area-card:hover .area-card__divider {
-  background: var(--brand-green);
+  display: none;
 }
 
 /* Body text — matches .coop-card p and .cycle-head__text (16 px) for consistency */
@@ -2534,16 +2680,42 @@ strong { font-weight: 600; }
 
 /* Mobile compaction */
 @media (max-width: 559px) {
-  .area-card { padding: 32px 22px 28px; }
-  .area-card__number { top: 16px; left: 16px; min-width: 36px; padding: 5px 10px; font-size: 13px; }
-  .area-card__icon { height: 92px; margin: 10px 0 20px; }
-  .area-card__title { font-size: 22px; }
+  .area-card { padding: 24px 22px 28px; }
+  .area-card__icon { height: 46px; }
   .area-card__sub { font-size: 14px; margin-bottom: 14px; }
   .area-card__divider { margin-bottom: 14px; }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .area-card:hover .area-card__icon { transform: none; }
+/* Ikonka na řádku vlevo od nadpisu+oblasti (jako u .coop-pillar__head),
+   karty zůstávají 3 vedle sebe (žádná změna .areas gridu) — jen se mění,
+   co je NAD divider čárou: dřív ikonka nahoře na střed, teď ikonka+nadpis
+   v jednom řádku. Text zůstává celou šířkou pod divider čárou beze změny. */
+.area-card__left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  /* nahrazuje mezeru, co dřív dělala .area-card__divider před smazáním */
+  margin-bottom: 18px;
+}
+
+
+.area-card__left .area-card__icon {
+  margin: 0;
+  flex-shrink: 0;
+}
+
+.area-card__heading {
+  display: flex;
+  flex-direction: column;
+}
+
+.area-card__heading .area-card__title {
+  margin: 0 0 2px;
+}
+
+.area-card__heading .area-card__sub {
+  margin-bottom: 0;
 }
 
 /* ----- Areas summary — wide glass strip under the 3 area cards.
@@ -2783,16 +2955,31 @@ strong { font-weight: 600; }
   font-size: 16px;
   line-height: 1.65;
   color: var(--text-base);
-  max-width: 940px;
 }
 
 .packages-head__lead + .packages-head__lead {
   margin-top: 14px;
 }
 
+.packages-head__link {
+  color: var(--brand-dark);
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-color: var(--brand-green);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
+  transition:
+    color var(--hover-duration) var(--ease),
+    text-decoration-thickness var(--hover-duration) var(--ease);
+}
+
+.packages-head__link:hover {
+  color: var(--brand-green);
+  text-decoration-thickness: 3px;
+}
+
 @media (min-width: 768px) {
   .packages-head { margin-bottom: 60px; }
-  .packages-head__lead { font-size: 17px; }
 }
 
 /* Grid: 1 col mobile → 3 cols desktop, stretch to equal heights */
@@ -2833,6 +3020,7 @@ strong { font-weight: 600; }
 
 .packages-cta__sub {
   margin: 0 0 8px;
+  max-width: 560px;
   font-size: 16px;
   color: var(--text-muted);
 }
@@ -2861,7 +3049,8 @@ strong { font-weight: 600; }
 }
 
 .package-card:hover {
-  transform: scale(var(--hover-scale));
+  /* Bez zoomu, karty nejsou klikací, hover zvětšení by naznačovalo
+     interaktivitu, která tu není. Zvýraznění nese jen barva/stín. */
   background: rgba(255, 255, 255, 0.72);
   border-color: rgba(3, 217, 140, 0.16);
   box-shadow: 0 18px 44px rgba(3, 217, 140, 0.10);
@@ -2884,17 +3073,13 @@ strong { font-weight: 600; }
   }
 }
 
-/* Hover: deepen the green halo. Keep dark bg (don't shift to glass). */
+/* Hover: deepen the green halo. Keep dark bg (don't shift to glass).
+   Beze změny velikosti, karta je i tak permanentně mírně zvětšená (viz
+   base .package-card--featured výše), navíc hover zoom nedává smysl. */
 .package-card--featured:hover {
   background: var(--brand-dark);
   border-color: rgba(3, 217, 140, 0.50);
   box-shadow: 0 24px 60px rgba(3, 217, 140, 0.28);
-}
-
-@media (min-width: 768px) {
-  .package-card--featured:hover {
-    transform: scale(var(--hover-scale));
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -3030,7 +3215,7 @@ strong { font-weight: 600; }
   display: flex;
   align-items: flex-start;
   gap: 12px;
-  font-size: 15px;
+  font-size: 16px;
   line-height: 1.5;
   font-weight: 600;
   color: var(--brand-dark);
@@ -3113,6 +3298,9 @@ strong { font-weight: 600; }
   padding: 18px 20px;
   background: rgba(11, 46, 52, 0.04);
   border-radius: 14px;
+  /* Vědomá výjimka ze standardních 16px, tohle je vedlejší poznámka v úzkém
+     sloupci karty, ne hlavní odstavec, při 16px se v téhle šířce lámalo
+     hodně řádků a působilo to nahuštěně. */
   font-size: 14px;
   line-height: 1.6;
   color: var(--text-muted);
@@ -3141,7 +3329,7 @@ strong { font-weight: 600; }
   .package-card { padding: 26px 22px; }
   .package-card__badge { font-size: 12px; padding: 6px 12px; top: -12px; }
   .package-card__amount { font-size: 26px; }
-  .package-card__items li { font-size: 14.5px; }
+  .package-card__items li { font-size: 15px; }
   .package-card__brick { height: 48px; }
   .package-card__desc { padding: 14px 16px; }
 }
@@ -3252,12 +3440,6 @@ strong { font-weight: 600; }
   height: auto;
   display: block;
   align-self: flex-start;
-  will-change: transform;
-  transition: transform var(--hover-duration) var(--ease);
-}
-
-.family-note:hover .family-note__icon {
-  transform: scale(1.06);
 }
 
 @media (max-width: 559px) {
@@ -3273,10 +3455,6 @@ strong { font-weight: 600; }
 
 @media (min-width: 1024px) {
   .family-note__icon { max-width: 240px; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .family-note:hover .family-note__icon { transform: none; }
 }
 
 /* ----- EUCS note — explainer for "Garance EUCS" in Silver+ / Gold -----
@@ -3381,12 +3559,6 @@ strong { font-weight: 600; }
   display: block;
   align-self: flex-start;
   filter: drop-shadow(0 12px 24px rgba(3, 217, 140, 0.20));
-  will-change: transform;
-  transition: transform var(--hover-duration) var(--ease);
-}
-
-.eucs-note:hover .eucs-note__icon {
-  transform: scale(1.06);
 }
 
 @media (max-width: 559px) {
@@ -3402,10 +3574,6 @@ strong { font-weight: 600; }
 
 @media (min-width: 1024px) {
   .eucs-note__icon { max-width: 240px; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .eucs-note:hover .eucs-note__icon { transform: none; }
 }
 
 /* =Section: myPlann= ========================================================
@@ -3447,13 +3615,9 @@ strong { font-weight: 600; }
 
 .myplann__text {
   margin: 0;
-  font-size: 17px;
-  line-height: 1.7;
+  font-size: 16px;
+  line-height: 1.65;
   color: var(--text-base);
-}
-
-@media (min-width: 768px) {
-  .myplann__text { font-size: 18px; }
 }
 
 .myplann__text + .myplann__text {
@@ -3501,11 +3665,10 @@ strong { font-weight: 600; }
 /* Smart store button — brand-yellow for visual contrast */
 .btn--store-smart {
   background: var(--brand-yellow);
-  box-shadow: 0 8px 22px rgba(251, 208, 40, 0.28);
 }
 
 .btn--store-smart:hover {
-  box-shadow: 0 14px 32px rgba(251, 208, 40, 0.40);
+  background: var(--brand-yellow-hover);
 }
 
 /* Mobile: full-width buttons stacked, easier touch targets */
@@ -3680,7 +3843,6 @@ strong { font-weight: 600; }
 
 /* ----- Heading area inside the card ----- */
 .contact-card__head {
-  max-width: 760px;
   margin: 0 0 36px;
 }
 
@@ -3698,13 +3860,13 @@ strong { font-weight: 600; }
 
 .contact-card__lead {
   margin: 0;
-  font-size: 17px;
-  line-height: 1.7;
+  font-size: 18px;
+  line-height: 1.6;
   color: var(--text-base);
 }
 
 @media (min-width: 768px) {
-  .contact-card__lead { font-size: 18px; }
+  .contact-card__lead { font-size: 19px; }
 }
 
 /* ----- 2-col grid of people (inside the card) ----- */
@@ -3732,15 +3894,13 @@ strong { font-weight: 600; }
   gap: 20px;
   align-items: stretch;
   padding: 24px;
-  background: rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.6);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border: 1px solid rgba(11, 46, 52, 0.05);
   border-radius: 20px;
   box-shadow: 0 4px 24px rgba(11, 46, 52, 0.06);
-  transition:
-    transform var(--hover-duration) var(--ease),
-    box-shadow var(--hover-duration) var(--ease);
+  transition: box-shadow var(--hover-duration) var(--ease);
 }
 
 .contact-person {
@@ -3748,14 +3908,8 @@ strong { font-weight: 600; }
   outline: none;
 }
 
-
 .contact-person:hover {
   box-shadow: 0 6px 20px rgba(11, 46, 52, 0.07);
-  transform: scale(var(--hover-scale));
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .contact-person:hover { transform: none; }
 }
 
 /* ----- Advisor profile modal ----- */
@@ -4141,9 +4295,13 @@ strong { font-weight: 600; }
   margin-top: 16px;
 }
 
-.contact-form-card__subject {
-  margin-top: 28px;
-  max-width: 280px;
+/* Předmět zůstává funkční na pozadí (nastavuje se automaticky podle toho,
+   odkud se klient na formulář prokliknul), ale klientům ho zbytečně
+   nezobrazujeme, nic si tam nevybírají a jen by to formulář zahlcovalo.
+   Selektor musí mít vyšší specificitu než .contact-form__field (display:flex),
+   jinak by ho přebilo podle pořadí v souboru. */
+.contact-form-card__subject.contact-form__field {
+  display: none;
 }
 
 .contact-form-card__handshake {
@@ -4356,19 +4514,67 @@ strong { font-weight: 600; }
 }
 
 
-/* ----- CTA — dual button, viewport-aware via (hover) media query ----- */
+/* ----- CTA — dual link, viewport-aware via (hover) media query.
+   Stejný "text link + zelený sweep-fill zleva" vzor jako .coop-pillar__more,
+   ať tlačítko na kartě poradce nepůsobí jako hlavní akce, jen jako tichý
+   odkaz. Fill se spouští hoverem na celé kartě (.contact-person:hover), ne
+   jen na samotném odkazu, protože celá karta je klikací. ----- */
 .contact-person__cta {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
   align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   margin-top: 0;
-  font-size: 13px;
   padding: 7px 14px;
+  border: none;
+  border-radius: 10px;
+  background: transparent;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--text-muted);
+  transition: color var(--hover-duration) var(--ease);
 }
 
-/* Default = touch device / no hover capability → show tel: button */
+.contact-person__cta::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--brand-green);
+  border-radius: inherit;
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform var(--hover-duration) var(--ease);
+}
+
+.contact-person__cta-icon {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
+.contact-person:hover .contact-person__cta {
+  color: var(--brand-dark);
+}
+
+.contact-person:hover .contact-person__cta::before {
+  transform: scaleX(1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .contact-person__cta,
+  .contact-person__cta::before { transition: none; }
+}
+
+/* Default = touch device / no hover capability → show tel: link */
 .contact-person__cta--desktop { display: none; }
 .contact-person__cta--mobile  { display: inline-flex; }
 
-/* Mouse-capable device → show mailto: button */
+/* Mouse-capable device → show mailto: link */
 @media (hover: hover) and (pointer: fine) {
   .contact-person__cta--desktop { display: inline-flex; }
   .contact-person__cta--mobile  { display: none; }
@@ -4864,6 +5070,37 @@ strong { font-weight: 600; }
   gap: 10px;
 }
 
+/* Mapa webu — kompletní seznam sekcí i podstránek je delší, tak od 640px
+   (kdy má sloupec dost šířky) plyne do 2 sloupců, ať zbytečně neroste
+   na výšku vůči sloupci Kontakty vedle něj. */
+.site-footer__list--sitemap {
+  display: block;
+}
+
+.site-footer__list--sitemap li {
+  margin-bottom: 10px;
+}
+
+.site-footer__list--sitemap li:last-child {
+  margin-bottom: 0;
+}
+
+@media (min-width: 640px) {
+  .site-footer__list--sitemap {
+    column-count: 2;
+    column-gap: 20px;
+  }
+
+  .site-footer__list--sitemap li {
+    break-inside: avoid;
+  }
+
+  /* Nadpis "Mapa webu" vycentrovat nad oba sloupce odkazů pod ním. */
+  .site-footer__heading--sitemap {
+    text-align: center;
+  }
+}
+
 .site-footer__link {
   display: inline-block;
   color: var(--text-base);
@@ -4952,16 +5189,27 @@ strong { font-weight: 600; }
   /* ---- Area cards (V jakých oblastech Vám pomáháme) ---- */
   .area-card {
     text-align: center;
-    padding-top: 56px;  /* room for number badge above centered content */
   }
 
-  .area-card__number {
-    left: 50%;
-    transform: translateX(-50%);
+  /* Stejný trik jako u .coop-pillar__head — ikonka napevno vlevo, zrcadlový
+     neviditelný sloupec napravo stejně široký, ať se nadpis+oblast opravdu
+     centrují na střed karty, ne jen ve dvojici s ikonkou (což ji posouvalo
+     stranou). */
+  .area-card__left {
+    display: grid;
+    grid-template-columns: 46px 1fr 46px;
+    column-gap: 10px;
+    justify-content: initial;
   }
 
   .area-card__icon {
+    grid-column: 1;
     justify-content: center;
+  }
+
+  .area-card__heading {
+    grid-column: 2;
+    align-items: center;
   }
 
   .area-card__divider {
@@ -5020,17 +5268,6 @@ strong { font-weight: 600; }
   .contact-card__title,
   .contact-card__lead {
     text-align: center;
-  }
-
-  /* Předmět — full width, left aligned on mobile */
-  .contact-form-card__subject {
-    max-width: 100%;
-    margin-top: 20px;
-    text-align: left;
-  }
-
-  .contact-form-card__subject .contact-form__label {
-    text-align: left;
   }
 
   .contact-form-card__handshake {
@@ -5240,6 +5477,24 @@ strong { font-weight: 600; }
   color: var(--text-base);
 }
 
+/* Prokliková na podstránku uvnitř odpovědi — stejný vzor jako .eucs-note__link. */
+.faq-item__link {
+  color: var(--brand-dark);
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-color: var(--brand-green);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
+  transition:
+    color var(--hover-duration) var(--ease),
+    text-decoration-thickness var(--hover-duration) var(--ease);
+}
+
+.faq-item__link:hover {
+  color: var(--brand-green);
+  text-decoration-thickness: 3px;
+}
+
 /* ---- Smooth open animation (where supported) ---- */
 @supports (interpolate-size: allow-keywords) {
   .faq-item {
@@ -5355,12 +5610,6 @@ strong { font-weight: 600; }
   display: block;
   width: 100%;
   text-align: center;
-}
-
-/* Override scale hover inside widget — backdrop-filter clips scaled children */
-.cta-widget .btn--primary:hover {
-  transform: none;
-  box-shadow: 0 4px 18px rgba(3, 217, 140, 0.45);
 }
 
 .cta-widget__pill {
@@ -5491,20 +5740,13 @@ strong { font-weight: 600; }
   flex-direction: column;
   gap: 24px;
   transition:
-    transform var(--hover-duration) var(--ease),
     background var(--hover-duration) var(--ease),
     box-shadow var(--hover-duration) var(--ease);
 }
 
 .testimonial-card:hover {
-  transform: scale(var(--hover-scale));
   background: rgba(255, 255, 255, 0.75);
   box-shadow: 0 12px 32px rgba(11, 46, 52, 0.06);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .testimonial-card { transition: background var(--hover-duration) var(--ease); }
-  .testimonial-card:hover { transform: none; }
 }
 
 /* Dekorativní uvozovka v pozadí */
@@ -5710,7 +5952,6 @@ strong { font-weight: 600; }
   font-size: 16px;
   line-height: 1.75;
   color: var(--text-base);
-  font-style: italic;
 }
 
 .testimonial-modal__author {
@@ -5836,8 +6077,8 @@ strong { font-weight: 600; }
 }
 
 .family-note__share:hover {
-  transform: scale(var(--hover-scale));
-  background: rgba(3, 217, 140, 0.1);
+  /* Bez zoomu, prázdný obrys přes celý zezelená (stejný princip jako .btn--primary). */
+  background: var(--brand-green);
   border-color: var(--brand-green);
 }
 
@@ -5872,20 +6113,14 @@ strong { font-weight: 600; }
   border-color: rgba(3, 217, 140, 0.55);
   box-shadow: none;
   transition:
-    transform var(--hover-duration) var(--ease),
     background var(--hover-duration) var(--ease),
     border-color var(--hover-duration) var(--ease);
 }
 
 .btn--eucs-report:hover {
-  transform: scale(var(--hover-scale));
-  background: rgba(3, 217, 140, 0.1);
+  /* Bez zoomu, prázdný obrys přes celý zezelená (stejný princip jako .btn--primary). */
+  background: var(--brand-green);
   border-color: var(--brand-green);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .btn--eucs-report { transition: box-shadow 0.2s var(--ease); }
-  .btn--eucs-report:hover { transform: none; }
 }
 
 /* Prompt věta nad share tlačítkem */
@@ -6051,3 +6286,448 @@ img[loading="lazy"].is-loaded {
   img[loading="lazy"] { opacity: 1; transition: none; }
 }
 
+
+/* ==========================================================================
+   =Section: Header nav dropdown (O nás)=
+   "O nás" v hlavním menu má dropdown se 3 pilíři (Dlouhodobá spolupráce,
+   Plán před produktem, Pravidelná péče a servis) — každý vede na vlastní
+   podstránku. Otevírá se na hover i na focus (klávesnice). Na mobilu je
+   dropdown zbytečný, mobile menu (celoobrazovkový overlay) pilíře jen
+   vypisuje jako další položky hned pod "O nás" — viz .mobile-menu__subnav-link.
+   ========================================================================== */
+.header__nav-item {
+  position: relative;
+}
+
+.header__nav-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.header__nav-chevron {
+  transition: transform var(--hover-duration) var(--ease);
+}
+
+.header__nav-item:hover .header__nav-chevron,
+.header__nav-item:focus-within .header__nav-chevron {
+  transform: rotate(180deg);
+}
+
+/* Outer wrapper sedí HNED pod trigger linkem (top: 100%, žádná mezera) —
+   padding-top je neviditelný "můstek", pořád součást stejného hoverovatelného
+   boxu, takže myš při sjíždění z odkazu do dropdownu nikdy neopustí hover
+   chain a panel se neschová uprostřed cesty. Vizuální kartu (bílé sklo)
+   nese až vnitřní .header__dropdown__panel. */
+.header__dropdown {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  padding-top: 10px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--hover-duration) var(--ease);
+  z-index: 10;
+}
+
+.header__nav-item:hover .header__dropdown,
+.header__nav-item:focus-within .header__dropdown {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.header__dropdown__panel {
+  min-width: 232px;
+  padding: 8px;
+  background: rgba(255, 255, 255, 0.98);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--r-lg);
+  backdrop-filter: blur(20px) saturate(140%);
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
+  box-shadow: var(--shadow-lg);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.header__dropdown a {
+  padding: 10px 14px;
+  border-radius: 9px;
+  font-size: 13px;
+  color: var(--brand-dark);
+  white-space: normal;
+  transition: background 0.2s var(--ease);
+}
+
+.header__dropdown a:hover {
+  background: var(--bg-mint-tint);
+}
+
+.header__dropdown a.is-active {
+  color: var(--brand-green);
+  font-weight: 600;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .header__nav-chevron,
+  .header__dropdown { transition: opacity 0.2s var(--ease); }
+}
+
+/* Mobile menu: "O nás" má skutečný rozbalovací dropdown (accordion), ne jen
+   plochý seznam — viz JS toggle v script.js. Tap na šipku rozbalí/schová
+   3 pilíře, tap na text "O nás" normálně naviguje a menu se zavře jako
+   u ostatních odkazů (closeMenu se váže jen na <a>, ne na tlačítko šipky). */
+.mobile-menu__nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+/* .mobile-menu__nav-row má šířku jen podle textu "O nás" (šipka je mimo
+   flow, position: absolute), takže se text vycentruje na stejné ose jako
+   ostatní položky menu a šipka k němu drží pevný odstup, ne aby ho posouvala. */
+.mobile-menu__nav-row {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.mobile-menu__nav-toggle {
+  position: absolute;
+  top: 50%;
+  left: 100%;
+  transform: translateY(-50%);
+  margin-left: 2px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border: none;
+  background: transparent;
+  color: var(--brand-dark);
+  border-radius: 10px;
+  transition: background 0.2s var(--ease);
+}
+
+.mobile-menu__nav-toggle:active {
+  background: var(--bg-mint-tint);
+}
+
+.mobile-menu__nav-chevron {
+  transition: transform 0.25s var(--ease);
+}
+
+.mobile-menu__nav-toggle[aria-expanded="true"] .mobile-menu__nav-chevron {
+  transform: rotate(180deg);
+}
+
+.mobile-menu__submenu {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s var(--ease);
+}
+
+.mobile-menu__submenu.is-open {
+  max-height: 260px;
+}
+
+.mobile-menu__subnav-link {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  font-size: 16px;
+  font-weight: 400;
+  color: var(--text-muted);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mobile-menu__nav-chevron,
+  .mobile-menu__submenu { transition: none; }
+}
+
+/* ==========================================================================
+   =Section: Pillar hero (podstránky pilířů)=
+   Podstránky "Dlouhodobá spolupráce", "Plán před produktem" a "Pravidelná
+   péče a servis" (dlouhodoba-spoluprace.html, plan-pred-produktem.html,
+   pravidelna-pece-a-servis.html). Prozatím obsahují jen tuto sekci, žádný
+   další obsah pod tím zatím není (přibude později). Header zůstává stejný
+   floating card jako na homepage, beze změny. Zeleného pozadí je jen tolik,
+   kolik je této sekce, ne celá stránka.
+   ========================================================================== */
+.pillar-hero {
+  /* Pevná výška přes celý viewport, ať mají všechny 3 podstránky pilířů
+     stejnou výšku barevného pásu bez ohledu na délku textu — jinak by
+     patička při přepínání mezi podstránkami skákala nahoru/dolů podle
+     toho, jak dlouhý je zrovna text. */
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  background: var(--brand-dark);
+  /* Top padding jen tak velký, aby to properly čistilo floating header
+     (na mobilu ~70px od horního okraje) + malá rezerva. */
+  padding: 104px 0 64px;
+  color: #fff;
+}
+
+
+
+@media (min-width: 768px) {
+  .pillar-hero { padding: 168px 0 88px; }
+}
+
+.pillar-hero__breadcrumb {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 24px;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+@media (min-width: 768px) {
+  .pillar-hero__breadcrumb { margin-bottom: 32px; }
+}
+
+.pillar-hero__breadcrumb a {
+  display: inline-flex;
+  align-items: center;
+  color: rgba(255, 255, 255, 0.75);
+  transition: color 0.2s var(--ease);
+}
+
+.pillar-hero__breadcrumb a:hover {
+  color: #fff;
+}
+
+.pillar-hero__breadcrumb svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* Vodorovný přepínač pilířů — rychlé přeskočení mezi podstránkami bez
+   nutnosti otevírat dropdown v headeru. Aktivní pilíř je podtržený
+   brand-green, stejný princip jako coordinated hover jinde na webu, jen
+   tady je to trvalý stav (is-active), ne hover. */
+.pillar-hero__tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 4px;
+  margin-bottom: 28px;
+  padding-bottom: 2px;
+}
+
+@media (min-width: 768px) {
+  .pillar-hero__tabs { margin-bottom: 36px; }
+}
+
+.pillar-hero__tab {
+  padding: 10px 10px 13px;
+  font-size: 14px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.65);
+  border-bottom: 2px solid transparent;
+  transition: color 0.2s var(--ease), border-color 0.2s var(--ease);
+  white-space: nowrap;
+}
+
+.pillar-hero__tab:hover {
+  color: #fff;
+}
+
+.pillar-hero__tab.is-active {
+  color: #fff;
+  font-weight: 600;
+  border-bottom-color: var(--brand-green);
+}
+
+/* Tlačítko zpět na hlavní stránku — na konci sekce */
+.pillar-hero__back {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 40px;
+  padding: 12px 20px;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: var(--r-md);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  transition:
+    background var(--hover-duration) var(--ease),
+    color var(--hover-duration) var(--ease),
+    border-color var(--hover-duration) var(--ease);
+}
+
+.pillar-hero__back svg {
+  width: 16px;
+  height: 16px;
+}
+
+.pillar-hero__back:hover {
+  background: #fff;
+  color: var(--brand-dark);
+  border-color: #fff;
+}
+
+@media (min-width: 768px) {
+  .pillar-hero__back { margin-top: 52px; }
+}
+
+@media (max-width: 639px) {
+  .pillar-hero__back {
+    display: flex;
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+.pillar-hero__breadcrumb [aria-current="page"] {
+  color: var(--brand-green);
+  font-weight: 600;
+}
+
+.pillar-hero__title {
+  color: #fff;
+  max-width: 760px;
+}
+
+.pillar-hero__body {
+  margin-top: 36px;
+}
+
+@media (min-width: 900px) {
+  .pillar-hero__body {
+    display: grid;
+    grid-template-columns: 1fr 1.7fr;
+    column-gap: 56px;
+  }
+
+  /* Podstránka Pravidelná péče a servis má oba sloupce plné textu (ne jen
+     odsazení + text), takže tam chceme stejně široké sloupce, ne poměr
+     odvozený z layoutu ostatních dvou pilířů. Dělicí čáru tu proto
+     nekreslíme borderem sloupce (ten by sedel u kraje gridové mezery, ne
+     uprostřed), ale samostatnou čárou přesně uprostřed mezery mezi sloupci. */
+  .pillar-hero__body:has(.pillar-hero__text--aside) {
+    grid-template-columns: 1fr 1fr;
+    position: relative;
+  }
+
+  .pillar-hero__body:has(.pillar-hero__text--aside)::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: rgba(255, 255, 255, 0.28);
+    transform: translateX(-50%);
+  }
+
+  .pillar-hero__body:has(.pillar-hero__text--aside) .pillar-hero__text {
+    border-left: none;
+  }
+
+  .pillar-hero__text--aside {
+    padding-right: 32px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .pillar-hero__body {
+    grid-template-columns: 1fr 1.9fr;
+    column-gap: 72px;
+  }
+
+  .pillar-hero__body:has(.pillar-hero__text--aside) {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .pillar-hero__text--aside {
+    padding-right: 40px;
+  }
+}
+
+.pillar-hero__text,
+.pillar-hero__text--aside {
+  font-size: 16px;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.pillar-hero__text p,
+.pillar-hero__text--aside p {
+  margin: 0 0 20px;
+}
+
+.pillar-hero__text p:last-child,
+.pillar-hero__text--aside p:last-child {
+  margin-bottom: 0;
+}
+
+/* Malý štítek nad každým sloupcem (jen řez a barva, ne velikost), ať je
+   hned jasné, o čem který sloupec je, ať už na stránku přijdete odkudkoliv. */
+.pillar-hero__col-label {
+  font-size: 15px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--brand-green);
+  margin-bottom: 12px !important;
+}
+
+/* Odkaz v textu pilířů, na tmavém pozadí, obdoba .packages-head__link. */
+.pillar-hero__link {
+  color: #fff;
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-color: var(--brand-green);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
+  transition: color var(--hover-duration) var(--ease), text-decoration-thickness var(--hover-duration) var(--ease);
+}
+
+.pillar-hero__link:hover {
+  color: var(--brand-green);
+  text-decoration-thickness: 3px;
+}
+
+@media (min-width: 900px) {
+  .pillar-hero__text {
+    grid-column: 2;
+    border-left: 1px solid rgba(255, 255, 255, 0.28);
+    padding-left: 32px;
+  }
+
+  /* Druhý (levý) sloupec — jen na podstránce Pravidelná péče a servis, kde
+     tělo textu rozdělujeme na dva sloupce. Sedí v gridu vlevo, zarovnaný
+     pod nadpis, bez borderu, ten drží pravý sloupec (viz výše). */
+  .pillar-hero__text--aside {
+    grid-column: 1;
+  }
+}
+
+@media (min-width: 1200px) {
+  .pillar-hero__text { padding-left: 40px; }
+}
+
+@media (max-width: 639px) {
+  .pillar-hero__title,
+  .pillar-hero__text,
+  .pillar-hero__text--aside {
+    text-align: center;
+  }
+
+  .pillar-hero__breadcrumb,
+  .pillar-hero__tabs {
+    justify-content: center;
+    text-align: center;
+  }
+}

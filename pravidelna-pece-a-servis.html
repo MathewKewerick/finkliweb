@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="cs">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Pravidelná péče a servis — Finkli</title>
+  <meta name="title"       content="Pravidelná péče a servis — Finkli" />
+  <meta name="description" content="Péče o finance je proces, ne jednorázová událost. Zjistěte, jak ve Finkli funguje dlouhodobá péče a servis." />
+  <meta name="theme-color" content="#03D98C" />
+
+  <!-- Open Graph / Facebook / LinkedIn / iMessage / Slack / Discord -->
+  <meta property="og:type"         content="website" />
+  <meta property="og:url"          content="https://finkli.cz/pravidelna-pece-a-servis.html" />
+  <meta property="og:title"        content="Pravidelná péče a servis — Finkli" />
+  <meta property="og:description"  content="Péče o finance je proces, ne jednorázová událost. Zjistěte, jak ve Finkli funguje dlouhodobá péče a servis." />
+  <meta property="og:image"        content="https://finkli.cz/og/finkli-og-home.jpg" />
+  <meta property="og:image:width"  content="1134" />
+  <meta property="og:image:height" content="593" />
+  <meta property="og:image:alt"    content="Finkli — finance s plánem, systémem a péčí v čase." />
+  <meta property="og:locale"       content="cs_CZ" />
+  <meta property="og:site_name"    content="Finkli" />
+
+  <!-- X (Twitter) -->
+  <meta name="twitter:card"        content="summary_large_image" />
+  <meta name="twitter:url"         content="https://finkli.cz/pravidelna-pece-a-servis.html" />
+  <meta name="twitter:title"       content="Pravidelná péče a servis — Finkli" />
+  <meta name="twitter:description" content="Péče o finance je proces, ne jednorázová událost. Zjistěte, jak ve Finkli funguje dlouhodobá péče a servis." />
+  <meta name="twitter:image"       content="https://finkli.cz/og/finkli-og-home.jpg" />
+  <meta name="twitter:image:alt"   content="Finkli — finance s plánem, systémem a péčí v čase." />
+
+  <!-- Favicon · Apple touch icon -->
+  <link rel="icon"            type="image/svg+xml" href="/assets/ikona_favicon.svg" />
+  <link rel="apple-touch-icon" href="/assets/apple-touch-icon-180.png" />
+
+  <!-- Google Sans Flex -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:opsz,wght@8..144,100..1000&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- ===== Header (stejný jako na homepage, jen odkazy míří zpět na index.html) ===== -->
+  <header class="header" id="site-header">
+    <div class="header__inner">
+      <a href="index.html" class="header__brand" aria-label="Finkli — domů">
+        <img src="assets/finkli_logo_dark.svg" alt="Finkli" class="header__logo" />
+      </a>
+
+      <nav class="header__nav" aria-label="Hlavní">
+        <div class="header__nav-item">
+          <a href="index.html#onas" class="header__nav-link">
+            O nás
+            <svg class="header__nav-chevron" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M6 9l6 6 6-6" />
+            </svg>
+          </a>
+          <div class="header__dropdown">
+            <div class="header__dropdown__panel">
+              <a href="dlouhodoba-spoluprace.html">Dlouhodobá spolupráce</a>
+              <a href="plan-pred-produktem.html">Plán před produktem</a>
+              <a href="pravidelna-pece-a-servis.html" class="is-active" aria-current="page">Pravidelná péče a servis</a>
+              <a href="tri-oblasti-jeden-celek.html">Tři oblasti, jeden celek</a>
+              <a href="index.html#pristup">Průběh spolupráce</a>
+            </div>
+          </div>
+        </div>
+        <a href="index.html#aplikace">Aplikace</a>
+        <a href="index.html#balicky">Balíčky</a>
+        <a href="index.html#reference">Reference</a>
+        <a href="index.html#lide">Lidé</a>
+        <a href="index.html#faq">FAQ</a>
+      </nav>
+
+      <a href="index.html#kontakt-form" class="header__cta header__cta--desktop" data-desktop>Kontakt</a>
+
+      <button class="header__burger" type="button" aria-label="Otevřít menu" aria-controls="mobile-menu" aria-expanded="false">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- ===== Mobile menu overlay ===== -->
+  <div class="mobile-menu" id="mobile-menu" aria-hidden="true">
+    <div class="mobile-menu__top">
+      <a href="index.html" class="header__brand" aria-label="Finkli — domů">
+        <img src="assets/finkli_logo_dark.svg" alt="Finkli" class="header__logo" />
+      </a>
+      <button class="mobile-menu__close" type="button" aria-label="Zavřít menu">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </button>
+    </div>
+
+    <nav class="mobile-menu__nav" aria-label="Mobilní">
+      <div class="mobile-menu__nav-item">
+        <div class="mobile-menu__nav-row">
+          <a href="index.html#onas">O nás</a>
+          <button type="button" class="mobile-menu__nav-toggle" aria-expanded="false" aria-controls="mobile-onas-submenu" aria-label="Rozbalit pilíře spolupráce">
+            <svg class="mobile-menu__nav-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M6 9l6 6 6-6" />
+          </svg>
+          </button>
+        </div>
+        <div class="mobile-menu__submenu" id="mobile-onas-submenu">
+          <a href="dlouhodoba-spoluprace.html" class="mobile-menu__subnav-link">Dlouhodobá spolupráce</a>
+          <a href="plan-pred-produktem.html" class="mobile-menu__subnav-link">Plán před produktem</a>
+          <a href="pravidelna-pece-a-servis.html" class="mobile-menu__subnav-link">Pravidelná péče a servis</a>
+          <a href="tri-oblasti-jeden-celek.html" class="mobile-menu__subnav-link">Tři oblasti, jeden celek</a>
+          <a href="index.html#pristup" class="mobile-menu__subnav-link">Průběh spolupráce</a>
+        </div>
+      </div>
+      <a href="index.html#aplikace">Aplikace</a>
+      <a href="index.html#balicky">Balíčky</a>
+      <a href="index.html#lide">Lidé</a>
+      <a href="index.html#reference">Reference</a>
+      <a href="index.html#faq">FAQ</a>
+    </nav>
+
+    <a href="index.html#kontakt-form" class="mobile-menu__cta">Kontakt</a>
+  </div>
+
+  <!-- ===== Pillar hero — zatím jediný obsah této podstránky ===== -->
+  <section class="pillar-hero">
+    <div class="container">
+      <nav class="pillar-hero__tabs" aria-label="Pilíře spolupráce">
+        <a href="dlouhodoba-spoluprace.html" class="pillar-hero__tab">Dlouhodobá spolupráce</a>
+        <a href="plan-pred-produktem.html" class="pillar-hero__tab">Plán před produktem</a>
+        <a href="pravidelna-pece-a-servis.html" class="pillar-hero__tab is-active" aria-current="page">Pravidelná péče a servis</a>
+        <a href="tri-oblasti-jeden-celek.html" class="pillar-hero__tab">Tři oblasti, jeden celek</a>
+      </nav>
+
+      <nav class="pillar-hero__breadcrumb" aria-label="Drobečková navigace">
+        <a href="index.html" aria-label="Domů">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true">
+            <polygon points="12,3 21,11 21,21 3,21 3,11" />
+          </svg>
+        </a>
+        <span aria-hidden="true">/</span>
+        <a href="index.html#onas">O nás</a>
+        <span aria-hidden="true">/</span>
+        <span aria-current="page">Pravidelná péče a servis</span>
+      </nav>
+
+      <h1 class="h1 pillar-hero__title">Pravidelná péče a servis</h1>
+
+      <div class="pillar-hero__body">
+        <div class="pillar-hero__text--aside">
+          <p class="pillar-hero__col-label">Jak spolupráce probíhá</p>
+          <p>Důležitou součástí spolupráce je výroční schůzka. Probíhá jednou za rok, buď od začátku spolupráce, nebo od poslední výroční schůzky. Společně na ní zhodnotíme uplynulý rok, co jsme řešili, jak se Vaše situace vyvíjela, a jestli spolupráce pořád dává smysl oběma stranám. Pokud ano, pokračujeme aktualizací <a href="plan-pred-produktem.html" class="pillar-hero__link">plánu</a>, příjmů, výdajů i cílů na další rok. Pokud ne, spolupráci ukončíme, ať už se tak rozhodnete Vy, nebo my.</p>
+          <p>V průběhu roku se ale nemusíte držet zpátky, pokud potřebujete cokoliv probrat nebo jen poradit, ozvěte se kdykoliv. Stejně tak ale nečekáme jen na Váš podnět. Náš systém nás sám upozorní, například pár měsíců před výročím pojistky na auto nebo na nemovitost, a my tehdy porovnáme aktuální nabídky na trhu. Pokud najdeme výrazně lepší řešení, ozveme se Vám. Pokud ne, necháme stávající smlouvu beze změny a nikdy Vás netlačíme do nové jen kvůli změně.</p>
+        </div>
+        <div class="pillar-hero__text">
+          <p class="pillar-hero__col-label">Jak financujeme péči</p>
+          <p>Aby mohla spolupráce takto fungovat po celý rok, potřebuje to i odpovídající zázemí. Za sjednané smlouvy dostáváme od institucí provize, jednorázové i následné, na skutečně kvalitní a dlouhodobou péči ale samy nestačí. Proto si za servis platíte pevný měsíční poplatek, který kryje nadstandardní péči a celý tým lidí okolo nás, asistentky i specialisty, kteří se o Vás starají spolu s námi. Součástí tohoto zázemí je i <a href="index.html#aplikace" class="pillar-hero__link">aplikace myPlann</a>, kde Vám po celý rok držíme aktuální přehled o smlouvách, majetku i zápisech ze schůzek.</p>
+          <p>Odměna finančního poradce bývá často vnímaná jako něco, co klient neplatí. Provize od institucí totiž mohou působit dojmem, že je služba zdarma. Tak to ale není. Provize jsou odměnou za čas strávený s Vámi při nastavení produktu a za administrativu spojenou se sjednáním smlouvy. Následné provize sice existují také, ale ani zdaleka nepokryjí čas, tým lidí okolo Vás a další náklady, které dlouhodobá a kvalitní spolupráce vyžaduje.</p>
+          <p>Stejně jako u lékaře, právníka, notáře nebo řemeslníka, i za naši službu proto platíte. Právě díky tomu, že provize od institucí dostáváme, nemusí být měsíční částka tak vysoká, aby pokryla úplně všechny náklady. Jejich menší část totiž hradí právě i následné provize. Jeden zdroj bez druhého by dlouhodobě a kvalitně nefungoval, oba se navzájem doplňují.</p>
+        </div>
+      </div>
+
+        <a href="index.html#onas" class="pillar-hero__back">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M5 12h14" />
+            <path d="M11 18l-6-6 6-6" />
+          </svg>
+          Zpět na hlavní stránku
+        </a>
+    </div>
+  </section>
+
+  <footer class="site-footer" id="site-footer">
+    <div class="container">
+      <div class="site-footer__grid">
+
+        <!-- Column 1: Brand -->
+        <div class="site-footer__col site-footer__col--brand">
+          <a href="index.html" class="site-footer__brand" aria-label="Finkli — domů">
+            <img src="assets/finkli_logo_dark.svg" alt="Finkli" class="site-footer__logo" />
+          </a>
+          <p class="site-footer__claim">
+            Naší službou je dlouhodobá péče o&nbsp;Vaše finance.
+          </p>
+          <p class="site-footer__copy"><a href="gdpr.html" class="site-footer__fp-link">Zásady zpracování osobních údajů</a></p>
+          <p class="site-footer__copy site-footer__copy--fp"><a href="finklipoint.html" class="site-footer__fp-link">Přihlášení do portálu FinkliPoint</a></p>
+          <p class="site-footer__copy">© 2026 Finkli. Všechna práva vyhrazena.</p>
+        </div>
+
+        <!-- Column 2: Mapa webu — stejné položky jako header nav -->
+        <nav class="site-footer__col" aria-label="Mapa webu">
+          <h4 class="site-footer__heading site-footer__heading--sitemap">Mapa webu</h4>
+          <ul class="site-footer__list site-footer__list--sitemap">
+            <li><a href="index.html#onas" class="site-footer__link">O nás</a></li>
+            <li><a href="index.html#pristup" class="site-footer__link">Průběh spolupráce</a></li>
+            <li><a href="index.html#aplikace" class="site-footer__link">Aplikace</a></li>
+            <li><a href="index.html#balicky" class="site-footer__link">Balíčky</a></li>
+            <li><a href="index.html#reference" class="site-footer__link">Reference</a></li>
+            <li><a href="index.html#lide" class="site-footer__link">Lidé</a></li>
+            <li><a href="index.html#faq" class="site-footer__link">FAQ</a></li>
+            <li><a href="index.html#kontakt-form" class="site-footer__link">Kontakt</a></li>
+            <li><a href="dlouhodoba-spoluprace.html" class="site-footer__link">Dlouhodobá spolupráce</a></li>
+            <li><a href="plan-pred-produktem.html" class="site-footer__link">Plán před produktem</a></li>
+            <li><a href="pravidelna-pece-a-servis.html" class="site-footer__link">Pravidelná péče a servis</a></li>
+            <li><a href="tri-oblasti-jeden-celek.html" class="site-footer__link">Tři oblasti, jeden celek</a></li>
+          </ul>
+        </nav>
+
+        <!-- Column 3: Kontakty -->
+        <div class="site-footer__col">
+          <h4 class="site-footer__heading">Kontakty</h4>
+          <ul class="site-footer__list">
+            <li><a href="mailto:info@finkli.cz" class="site-footer__link">info@finkli.cz</a></li>
+            <li><a href="tel:+420739237615" class="site-footer__link">+420&nbsp;739&nbsp;237&nbsp;615</a></li>
+            <li><a href="#" class="site-footer__link" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
+            <li><a href="#" class="site-footer__link" target="_blank" rel="noopener noreferrer">Instagram</a></li>
+          </ul>
+        </div>
+
+
+      </div>
+    </div>
+
+    <!-- Legal strip -->
+    <div class="footer-legal">
+      <div class="container">
+        <p class="footer-legal__text">
+          <strong>Finkli Strategy s.r.o.</strong>, IČO: 24397679, sídlo: Spojná 721, 273 02 Tuchlovice.
+          Finanční služby zde propagované a nabízené poskytujeme jako společnost Finkli Strategy s.r.o. prostřednictvím našich finančních poradců uvedených na tomto webu, a to v roli vázaného zástupce pro investičního/samostatného zprostředkovatele SAB servis s.r.o., IČ: 24704008, se sídlem Jungmannova 748/30, 110 00 Praha 1, v následujících finančních oblastech: investice podle zákona č. 256/2004 Sb., spotřebitelské úvěry dle zákona č. 257/2016 Sb., pojištění dle zákona č. 170/2018 Sb., doplňkové penzijní spoření dle zákona č. 427/2011 Sb. Naše oprávnění je možné ověřit v Seznamu regulovaných a registrovaných subjektů finančního trhu České národní banky na <a href="http://www.cnb.cz/cnb/jerrs" target="_blank" rel="noopener noreferrer" class="footer-legal__link">cnb.cz/cnb/jerrs</a>, kde také najdete aktuální informace a podrobnosti o naší registraci a rozsahu našeho oprávnění.
+          Detailní právní informace k nabízeným službám a produktům (včetně reklamačního řádu, možnosti podání stížnosti, řešení sporů, orgánu dohledu, udržitelnosti atd.) najdete na <a href="https://sabservis.cz/informace" target="_blank" rel="noopener noreferrer" class="footer-legal__link">sabservis.cz/informace</a>.
+        </p>
+      </div>
+    </div>
+
+  </footer>
+
+  <script src="script.js" defer></script>
+</body>
+</html>
